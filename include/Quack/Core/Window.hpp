@@ -16,9 +16,12 @@ public:
     bool create(int width, int height, const char* title);
     [[nodiscard]] bool isOpen() const;
     void update() const;
+    void close();
     bool destroy();
 private:
     GLFWwindow* p_window;
+
+    friend class Engine;
 };
 
 #endif //QUACK_WINDOW_HPP

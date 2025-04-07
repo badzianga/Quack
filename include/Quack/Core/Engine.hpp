@@ -14,6 +14,7 @@ public:
 
     bool create();
     void start();
+    void stop();
     bool destroy();
 
     virtual void onCreate() = 0;

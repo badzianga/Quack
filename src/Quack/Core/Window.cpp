@@ -49,6 +49,10 @@ void Window::update() const {
     glfwSwapBuffers(p_window);
 }
 
+void Window::close() {
+    glfwSetWindowShouldClose(p_window, true);
+}
+
 bool Window::destroy() {
     glfwDestroyWindow(p_window);
     p_window = nullptr;
