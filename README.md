@@ -32,5 +32,14 @@ int main() {
 
     return 0;
 }
-
 ```
+
+## Future improvements
+- Error handling
+- Logger
+- Time scaling
+- Fixed timestep
+- Mouse inputs
+- Action mapping
+- Mouse delta
+- Gamepad support
