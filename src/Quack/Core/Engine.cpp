@@ -1,4 +1,5 @@
 #include "Quack/Core/Engine.hpp"
+#include "Quack/Core/Time.hpp"
 
 bool Engine::create() {
     m_window.create(1024, 768, "Quack Engine");
@@ -10,6 +11,8 @@ bool Engine::create() {
 
 void Engine::start() {
     while (m_window.isOpen()) {
+        Time::update();
+
         this->onUpdate();
 
         m_window.update();

@@ -28,7 +28,9 @@ add_executable(Quack main.cpp
         src/Quack/Core/Engine.cpp
         include/Quack/Core/Engine.hpp
         src/Quack/Core/Window.cpp
-        include/Quack/Core/Window.hpp)
+        include/Quack/Core/Window.hpp
+        src/Quack/Core/Time.cpp
+        include/Quack/Core/Time.hpp)
 
 target_include_directories(Quack PRIVATE include)
 target_link_libraries(Quack PRIVATE glad glfw)
