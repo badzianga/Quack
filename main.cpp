@@ -1,19 +1,12 @@
 #include "Quack/Core/Engine.hpp"
-#include <iostream>
 
 class Application final : public Engine {
 public:
-    void onCreate() override {
-        std::cout << "Application created\n";
-    }
+    void onCreate() override {}
 
-    void onUpdate() override {
-        std::cout << "Application updated\n";
-    }
+    void onUpdate() override {}
 
-    void onDestroy() override {
-        std::cout << "Application destroyed\n";
-    }
+    void onDestroy() override {}
 };
 
 int main() {

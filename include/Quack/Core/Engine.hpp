@@ -1,5 +1,6 @@
 #ifndef QUACK_ENGINE_HPP
 #define QUACK_ENGINE_HPP
+#include "Quack/Core/Window.hpp"
 
 class Engine {
 public:
@@ -18,6 +19,8 @@ public:
     virtual void onCreate() = 0;
     virtual void onUpdate() = 0;
     virtual void onDestroy() = 0;
+private:
+    Window m_window;
 };
 
 #endif //QUACK_ENGINE_HPP
