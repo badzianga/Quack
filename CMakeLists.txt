@@ -24,6 +24,12 @@ if(NOT glfw_POPULATED)
     set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
 endif()
 
+FetchContent_Declare(glm GIT_REPOSITORY https://github.com/g-truc/glm.git GIT_TAG 1.0.1)
+FetchContent_GetProperties(glm)
+if(NOT glm_POPULATED)
+    FetchContent_MakeAvailable(glm)
+endif()
+
 add_executable(Quack main.cpp
         src/Quack/Core/Engine.cpp
         include/Quack/Core/Engine.hpp
@@ -36,7 +42,13 @@ add_executable(Quack main.cpp
         include/Quack/Core/Keyboard.hpp
         src/Quack/Graphics/Renderer.cpp
         include/Quack/Graphics/Renderer.hpp
+        src/Quack/Graphics/Shader.cpp
+        include/Quack/Graphics/Shader.hpp
+        src/Quack/Utils/FileIO.cpp
+        include/Quack/Utils/FileIO.hpp
 )
 
 target_include_directories(Quack PRIVATE include)
-target_link_libraries(Quack PRIVATE glad glfw)
+target_link_libraries(Quack PRIVATE glad glfw glm)
+
+file(COPY resources DESTINATION "${CMAKE_BINARY_DIR}")
