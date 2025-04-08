@@ -1,5 +1,5 @@
-#ifndef QUACK_KEY_HPP
-#define QUACK_KEY_HPP
+#ifndef QUACK_KEYBOARD_HPP
+#define QUACK_KEYBOARD_HPP
 
 namespace Keyboard {
 
@@ -126,6 +126,6 @@ enum class Key {
     Menu           = 348,
 };
 
-}
+} // Keyboard
 
-#endif //QUACK_KEY_HPP
+#endif //QUACK_KEYBOARD_HPP
