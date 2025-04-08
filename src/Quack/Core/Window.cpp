@@ -44,9 +44,8 @@ bool Window::isOpen() const {
 }
 
 void Window::update() const {
-    glfwPollEvents();
-
     glfwSwapBuffers(p_window);
+    glfwPollEvents();
 }
 
 void Window::close() {
