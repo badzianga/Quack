@@ -10,6 +10,7 @@ public:
     Renderer& operator=(Renderer&&) = delete;
 
     static void clear(float red, float green, float blue, float alpha);
+    static void drawTestTriangle();
 };
 
 #endif //RENDERER_HPP

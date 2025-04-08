@@ -9,6 +9,8 @@ public:
     void onUpdate() override {
         Renderer::clear(0.2f, 0.3f, 0.3f, 1.0f);
 
+        Renderer::drawTestTriangle();
+
         if (Input::isKeyPressed(Keyboard::Key::Escape) || Input::isKeyPressed(Keyboard::Key::Q)) {
             stop();
         }
