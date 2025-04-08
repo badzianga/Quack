@@ -1,6 +1,6 @@
 #include "Quack/Core/Engine.hpp"
 #include "Quack/Core/Input.hpp"
-#include "src/Quack/Graphics/Renderer.hpp"
+#include "Quack/Graphics/Renderer.hpp"
 
 class Application final : public Engine {
 public:

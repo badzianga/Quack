@@ -35,7 +35,7 @@ add_executable(Quack main.cpp
         include/Quack/Core/Input.hpp
         include/Quack/Core/Keyboard.hpp
         src/Quack/Graphics/Renderer.cpp
-        src/Quack/Graphics/Renderer.hpp
+        include/Quack/Graphics/Renderer.hpp
 )
 
 target_include_directories(Quack PRIVATE include)
