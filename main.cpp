@@ -6,7 +6,7 @@ public:
     void onCreate() override {}
 
     void onUpdate() override {
-        if (Input::isKeyPressed(Key::Escape) || Input::isKeyPressed(Key::Q)) {
+        if (Input::isKeyPressed(Keyboard::Key::Escape) || Input::isKeyPressed(Keyboard::Key::Q)) {
             stop();
         }
     }

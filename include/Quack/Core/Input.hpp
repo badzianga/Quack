@@ -1,6 +1,6 @@
 #ifndef QUACK_INPUT_HPP
 #define QUACK_INPUT_HPP
-#include "Quack/Core/Key.hpp"
+#include "Quack/Core/Keyboard.hpp"
 #include <unordered_map>
 
 struct GLFWwindow;
@@ -12,9 +12,9 @@ public:
     Input& operator=(const Input&) = delete;
     Input& operator=(Input&&) = delete;
 
-    static bool isKeyPressed(Key key);
-    static bool isKeyReleased(Key key);
-    static bool isKeyDown(Key key);
+    static bool isKeyPressed(Keyboard::Key key);
+    static bool isKeyReleased(Keyboard::Key key);
+    static bool isKeyDown(Keyboard::Key key);
 private:
     Input();
 

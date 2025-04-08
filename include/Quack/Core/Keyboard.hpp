@@ -1,6 +1,8 @@
 #ifndef QUACK_KEY_HPP
 #define QUACK_KEY_HPP
 
+namespace Keyboard {
+
 enum class Key {
     Space          = 32,
     Apostrophe     = 39,
@@ -123,5 +125,7 @@ enum class Key {
     RightSuper     = 347,
     Menu           = 348,
 };
+
+}
 
 #endif //QUACK_KEY_HPP

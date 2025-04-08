@@ -9,7 +9,7 @@ void Input::init(GLFWwindow* window) {
     s_instance.p_window = window;
 }
 
-bool Input::isKeyPressed(Key key) {
+bool Input::isKeyPressed(Keyboard::Key key) {
     int keyCode = static_cast<int>(key);
     if (glfwGetKey(s_instance.p_window, keyCode) == GLFW_PRESS) {
         bool wasPressed = s_instance.m_keyPreviousState[keyCode];
@@ -20,12 +20,12 @@ bool Input::isKeyPressed(Key key) {
     return false;
 }
 
-bool Input::isKeyReleased(Key key) {
+bool Input::isKeyReleased(Keyboard::Key key) {
     int keyCode = static_cast<int>(key);
     return glfwGetKey(s_instance.p_window, keyCode) == GLFW_RELEASE && s_instance.m_keyPreviousState[keyCode];
 }
 
-bool Input::isKeyDown(Key key) {
+bool Input::isKeyDown(Keyboard::Key key) {
     int keyCode = static_cast<int>(key);
     return glfwGetKey(s_instance.p_window, keyCode) == GLFW_PRESS;
 }
