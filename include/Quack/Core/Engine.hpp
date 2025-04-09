@@ -17,6 +17,8 @@ public:
     void stop();
     bool destroy();
 
+    void setWindowClearColor(float red, float green, float blue, float alpha);
+
     virtual void onCreate() = 0;
     virtual void onUpdate() = 0;
     virtual void onDestroy() = 0;

@@ -1,7 +1,6 @@
 #include "Quack/Core/Engine.hpp"
 #include "Quack/Core/Input.hpp"
 #include "Quack/Graphics/Mesh.hpp"
-#include "Quack/Graphics/Renderer.hpp"
 #include "Quack/Graphics/Shader.hpp"
 
 class Application final : public Engine {
@@ -18,11 +17,11 @@ public:
             }
         );
         shader.create("resources/shaders/position.vert", "resources/shaders/position.frag");
+
+        setWindowClearColor(0.2f, 0.3f, 0.3f, 1.f);
     }
 
     void onUpdate() override {
-        Renderer::clear(0.2f, 0.3f, 0.3f, 1.0f);
-
         mesh.draw(shader);
 
         if (Input::isKeyPressed(Keyboard::Key::Escape) || Input::isKeyPressed(Keyboard::Key::Q)) {

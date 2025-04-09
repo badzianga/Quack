@@ -18,6 +18,8 @@ public:
     void update() const;
     void close();
     bool destroy();
+    void setClearColor(float r, float g, float b, float a) const;
+    void clear() const;
 private:
     GLFWwindow* p_window;
 

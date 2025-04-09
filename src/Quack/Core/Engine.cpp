@@ -14,6 +14,7 @@ bool Engine::create() {
 void Engine::start() {
     while (m_window.isOpen()) {
         Time::update();
+        m_window.clear();
 
         this->onUpdate();
 
@@ -31,4 +32,8 @@ bool Engine::destroy() {
     this->onDestroy();
 
     return true;
+}
+
+void Engine::setWindowClearColor(float red, float green, float blue, float alpha) {
+    m_window.setClearColor(red, green, blue, alpha);
 }

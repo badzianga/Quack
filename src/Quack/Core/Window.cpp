@@ -58,3 +58,13 @@ bool Window::destroy() {
 
     return true;
 }
+
+void Window::setClearColor(float r, float g, float b, float a) const {
+    (void) p_window;
+    glClearColor(r, g, b, a);
+}
+
+void Window::clear() const {
+    (void) p_window;
+    glClear(GL_COLOR_BUFFER_BIT);
+}
