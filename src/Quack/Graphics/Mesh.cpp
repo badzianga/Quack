@@ -1,7 +1,5 @@
 #include "Quack/Graphics/Mesh.hpp"
 
-#include <iostream>
-#include <ostream>
 #include <glad/glad.h>
 
 Mesh::Mesh() : m_vao(0), m_vbo(0), m_ebo(0) {}
@@ -20,15 +18,15 @@ bool Mesh::create(std::initializer_list<Vertex> vertices, std::initializer_list<
     glBufferData(
         GL_ARRAY_BUFFER,
         static_cast<int>(m_vertices.size() * sizeof(Vertex)),
-        &m_vertices.front(),
+        m_vertices.data(),
         GL_STATIC_DRAW
     );
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(
         GL_ELEMENT_ARRAY_BUFFER,
-        static_cast<int>(indices.size() * sizeof(uint32_t)),
-        &m_indices.front(),
+        static_cast<int>(m_indices.size() * sizeof(uint32_t)),
+        m_indices.data(),
         GL_STATIC_DRAW
     );
 
@@ -57,9 +55,7 @@ void Mesh::draw(const Shader& shader) const {
 
     shader.use();
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    // glDrawElements(GL_TRIANGLES, static_cast<int>(m_indices.size()), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, static_cast<int>(m_indices.size()), GL_UNSIGNED_INT, nullptr);
 
     glBindVertexArray(0);
 }
