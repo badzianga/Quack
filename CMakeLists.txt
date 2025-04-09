@@ -47,6 +47,8 @@ add_executable(Quack main.cpp
         src/Quack/Graphics/Mesh.cpp
         include/Quack/Graphics/Mesh.hpp
         include/Quack/Graphics/Vertex.hpp
+        include/Quack/Core.hpp
+        include/Quack/Graphics.hpp
 )
 
 target_include_directories(Quack PRIVATE include)
