@@ -1,5 +1,5 @@
 #include "Quack/Graphics/Mesh.hpp"
-
+#include "Quack/Utils/Logger.hpp"
 #include <glad/glad.h>
 
 Mesh::Mesh() : m_vao(0), m_vbo(0), m_ebo(0) {}
@@ -35,6 +35,14 @@ bool Mesh::create(std::initializer_list<Vertex> vertices, std::initializer_list<
 
     glBindVertexArray(0);
 
+    Logger::debug(
+        "Mesh created with "
+        + std::to_string(m_vertices.size())
+        + " vertices and "
+        + std::to_string(m_indices.size())
+        + " indices"
+    );
+
     return true;
 }
 
@@ -46,6 +54,8 @@ bool Mesh::destroy() {
     m_vao = 0;
     m_vbo = 0;
     m_ebo = 0;
+
+    Logger::debug("Mesh destroyed");
 
     return true;
 }

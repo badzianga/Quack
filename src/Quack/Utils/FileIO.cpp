@@ -1,6 +1,6 @@
 #include "Quack/Utils/FileIO.hpp"
+#include "Quack/Utils/Logger.hpp"
 #include <fstream>
-#include <iostream>
 #include <sstream>
 
 std::string FileIO::read(const char* filename) {
@@ -12,9 +12,8 @@ std::string FileIO::read(const char* filename) {
         stream << file.rdbuf();
         file.close();
     }
-    catch (std::ifstream::failure& error) {
-        std::cerr << "File " << filename << " not successfully read: " << error.what() << '\n';
-        exit(-1);
+    catch (std::ifstream::failure&) {
+        Logger::error("Failed to open file: " + std::string(filename));
     }
     return stream.str();
 }

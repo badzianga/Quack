@@ -33,6 +33,8 @@ private:
     std::unordered_map<const char*, int32_t> m_uniformLocationCache;
 
     int32_t getUniformLocation(const char* name);
+    static bool checkCompileErrors(uint32_t shaderID, const std::string& type);
+    static bool checkLinkErrors(uint32_t programID);
 };
 
 #endif //QUACK_SHADER_HPP

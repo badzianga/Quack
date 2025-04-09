@@ -1,5 +1,6 @@
 #include "Quack/Graphics/Shader.hpp"
 #include "Quack/Utils/FileIO.hpp"
+#include "Quack/Utils/Logger.hpp"
 #include <glad/glad.h>
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -7,23 +8,32 @@
 Shader::Shader() : m_id(0) {}
 
 bool Shader::create(const char* vertexPath, const char* fragmentPath) {
-    m_id = glCreateProgram();
-
     std::string vertexShaderString = FileIO::read(vertexPath);
     const char* vertexShaderSource = vertexShaderString.c_str();
     uint32_t vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     glCompileShader(vertexShader);
+    if (checkCompileErrors(vertexShader, "Vertex")) {
+        Logger::debug("Vertex shader compiled successfully");
+    }
 
     std::string fragmentShaderString = FileIO::read(fragmentPath);
     const char* fragmentShaderSource = fragmentShaderString.c_str();
     uint32_t fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
     glCompileShader(fragmentShader);
+    if (checkCompileErrors(vertexShader, "Fragment")) {
+        Logger::debug("Fragment shader compiled successfully");
+    }
+
+    m_id = glCreateProgram();
 
     glAttachShader(m_id, vertexShader);
     glAttachShader(m_id, fragmentShader);
     glLinkProgram(m_id);
+    if (checkLinkErrors(m_id)) {
+        Logger::debug("Shader program linked successfully");
+    }
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
@@ -34,6 +44,8 @@ bool Shader::create(const char* vertexPath, const char* fragmentPath) {
 bool Shader::destroy() {
     glDeleteProgram(m_id);
     m_id = 0;
+
+    Logger::debug("Shader program destroyed");
 
     return true;
 }
@@ -82,4 +94,28 @@ int32_t Shader::getUniformLocation(const char *name) {
     int32_t location = glGetUniformLocation(m_id, name);
     m_uniformLocationCache[name] = location;
     return location;
+}
+
+bool Shader::checkCompileErrors(uint32_t shaderID, const std::string& type) {
+    int success;
+    glGetShaderiv(shaderID, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[1024];
+        glGetShaderInfoLog(shaderID, 1024, nullptr, infoLog);
+        Logger::error(type + " shader compilation error: " + std::string(infoLog));
+        return false;
+    }
+    return true;
+}
+
+bool Shader::checkLinkErrors(uint32_t programID) {
+    int success;
+    glGetProgramiv(programID, GL_LINK_STATUS, &success);
+    if (!success) {
+        char infoLog[1024];
+        glGetProgramInfoLog(programID, 1024, nullptr, infoLog);
+        Logger::error("Shader program compilation error: " + std::string(infoLog));
+        return false;
+    }
+    return true;
 }

@@ -1,12 +1,25 @@
 #include "Quack/Core/Window.hpp"
+#include "Quack/Utils/Logger.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <cstdio>
+#include <cstring>
 
 Window::Window() : p_window(nullptr) {}
 
 bool Window::create(int width, int height, const char* title) {
+    if (width < 0 || height < 0) {
+        width = DEFAULT_WIDTH;
+        height = DEFAULT_HEIGHT;
+        Logger::warn("Invalid width/height of the window. Setting to default 1024x768...");
+    }
+    if (title == nullptr || std::strlen(title) == 0) {
+        title = DEFAULT_TITLE;
+        Logger::warn("Invalid window title. Setting to default...");
+    }
+
     if (!glfwInit()) {
+        Logger::error("Failed to initialize GLFW3");
         return false;
     }
 
@@ -16,12 +29,14 @@ bool Window::create(int width, int height, const char* title) {
 
     p_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
     if (!p_window) {
+        Logger::error("Failed to create GLFW window");
         glfwTerminate();
         return false;
     }
 
     glfwMakeContextCurrent(p_window);
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+        Logger::error("Failed to initialize GLAD");
         glfwDestroyWindow(p_window);
         glfwTerminate();
         return false;
@@ -29,12 +44,14 @@ bool Window::create(int width, int height, const char* title) {
 
     glViewport(0, 0, width, height);
 
-    std::printf("OpenGL API %s\n", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
-    std::printf(
-        "Using Device: %s - %s\n",
-        reinterpret_cast<const char*>(glGetString(GL_VENDOR)),
-        reinterpret_cast<const char*>(glGetString(GL_RENDERER))
+    Logger::info(std::string("OpenGL API ") + std::string(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
+    Logger::info(
+        std::string("Using Device: ")
+        + std::string(reinterpret_cast<const char*>(glGetString(GL_VENDOR)))
+        + " - "
+        + std::string(reinterpret_cast<const char*>(glGetString(GL_RENDERER)))
     );
+    Logger::debug("Window created");
 
     return true;
 }
@@ -50,12 +67,14 @@ void Window::update() const {
 
 void Window::close() {
     glfwSetWindowShouldClose(p_window, true);
+    Logger::debug("Window closed");
 }
 
 bool Window::destroy() {
     glfwDestroyWindow(p_window);
     p_window = nullptr;
 
+    Logger::debug("Window destroyed");
     return true;
 }
 
