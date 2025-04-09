@@ -40,8 +40,6 @@ add_executable(Quack main.cpp
         src/Quack/Core/Input.cpp
         include/Quack/Core/Input.hpp
         include/Quack/Core/Keyboard.hpp
-        src/Quack/Graphics/Renderer.cpp
-        include/Quack/Graphics/Renderer.hpp
         src/Quack/Graphics/Shader.cpp
         include/Quack/Graphics/Shader.hpp
         src/Quack/Utils/FileIO.cpp
