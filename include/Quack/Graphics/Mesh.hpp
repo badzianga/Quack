@@ -12,9 +12,9 @@ public:
     ~Mesh() = default;
 
     Mesh(const Mesh&) = delete;
-    Mesh(Mesh&&) = delete;
+    Mesh(Mesh&& other) noexcept;
     Mesh& operator=(const Mesh&) = delete;
-    Mesh& operator=(Mesh&&) = delete;
+    Mesh& operator=(Mesh&& other) noexcept;
 
     bool create(std::initializer_list<Vertex> vertices, std::initializer_list<uint32_t> indices);
     bool destroy();

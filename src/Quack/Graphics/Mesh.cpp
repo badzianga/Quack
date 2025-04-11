@@ -1,8 +1,40 @@
 #include "Quack/Graphics/Mesh.hpp"
+
+#include <utility>
+
 #include "Quack/Utils/Logger.hpp"
 #include <glad/glad.h>
 
 Mesh::Mesh() : m_vao(0), m_vbo(0), m_ebo(0) {}
+
+Mesh::Mesh(Mesh&& other) noexcept
+    : m_vao(std::exchange(other.m_vao, 0)),
+      m_vbo(std::exchange(other.m_vbo, 0)),
+      m_ebo(std::exchange(other.m_ebo, 0)) {
+
+    m_vertices = std::move(other.m_vertices);
+    m_indices = std::move(other.m_indices);
+
+    other.m_vertices.clear();
+    other.m_indices.clear();
+
+    Logger::debug("Mesh object moved using constructor");
+}
+
+Mesh& Mesh::operator=(Mesh&& other) noexcept {
+    m_vao = std::exchange(other.m_vao, 0);
+    m_vbo = std::exchange(other.m_vbo, 0);
+    m_ebo = std::exchange(other.m_ebo, 0);
+
+    m_vertices = std::move(other.m_vertices);
+    m_indices = std::move(other.m_indices);
+
+    other.m_vertices.clear();
+    other.m_indices.clear();
+
+    Logger::debug("Mesh object moved using assignment operator");
+    return *this;
+}
 
 bool Mesh::create(std::initializer_list<Vertex> vertices, std::initializer_list<uint32_t> indices) {
     m_vertices = vertices;

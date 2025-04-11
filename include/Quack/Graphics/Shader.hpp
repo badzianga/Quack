@@ -10,13 +10,13 @@ public:
     Shader();
     ~Shader() = default;
 
+    Shader(const Shader&) = delete;
+    Shader(Shader&& other) noexcept;
+    Shader& operator=(const Shader&) = delete;
+    Shader& operator=(Shader&& other) noexcept;
+
     bool create(const char* vertexPath, const char* fragmentPath);
     bool destroy();
-
-    Shader(const Shader&) = delete;
-    Shader& operator=(const Shader&) = delete;
-    Shader(Shader&&) = delete;
-    Shader& operator=(Shader&&) = delete;
 
     void use() const;
     void set(const char* name, int value);

@@ -1,4 +1,7 @@
 #include "Quack/Graphics/Shader.hpp"
+
+#include <utility>
+
 #include "Quack/Utils/FileIO.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include <glad/glad.h>
@@ -6,6 +9,25 @@
 #include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader() : m_id(0) {}
+
+Shader::Shader(Shader&& other) noexcept
+    : m_id(std::exchange(other.m_id, 0)),
+      m_uniformLocationCache(std::move(other.m_uniformLocationCache)) {
+
+    other.m_uniformLocationCache.clear();
+
+    Logger::debug("Shader object moved using constructor");
+}
+
+Shader& Shader::operator=(Shader&& other) noexcept {
+    m_id = std::exchange(other.m_id, 0);
+    m_uniformLocationCache = std::move(other.m_uniformLocationCache);
+
+    other.m_uniformLocationCache.clear();
+
+    Logger::debug("Shader object moved using assignment operator");
+    return *this;
+}
 
 bool Shader::create(const char* vertexPath, const char* fragmentPath) {
     std::string vertexShaderString = FileIO::read(vertexPath);
