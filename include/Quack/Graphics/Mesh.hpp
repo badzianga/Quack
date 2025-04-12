@@ -9,7 +9,7 @@
 class Mesh {
 public:
     Mesh();
-    ~Mesh() = default;
+    ~Mesh();
 
     Mesh(const Mesh&) = delete;
     Mesh(Mesh&& other) noexcept;

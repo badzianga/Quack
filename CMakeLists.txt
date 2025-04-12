@@ -52,6 +52,11 @@ add_executable(Quack main.cpp
         include/Quack/Utils/LogLevel.hpp
         src/Quack/Utils/Logger.cpp
         include/Quack/Utils/Logger.hpp
+        include/Quack/Scene/TransformComponent.hpp
+        include/Quack/Scene/GameObject.hpp
+        include/Quack/Scene/Component.hpp
+        include/Quack/Scene/Scene.hpp
+        include/Quack/Scene/MeshRendererComponent.hpp
 )
 
 target_include_directories(Quack PRIVATE include)

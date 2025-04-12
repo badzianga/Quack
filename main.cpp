@@ -1,12 +1,17 @@
 #include "Quack/Core/Engine.hpp"
 #include "Quack/Core/Input.hpp"
-#include "Quack/Graphics/Mesh.hpp"
-#include "Quack/Graphics/Shader.hpp"
+#include "Quack/Scene/MeshRendererComponent.hpp"
+#include "Quack/Scene/Scene.hpp"
 
 class Application final : public Engine {
 public:
     void onCreate() override {
-        mesh.create(
+        setWindowClearColor(0.2f, 0.3f, 0.3f, 1.f);
+
+        GameObject* triangle = scene.createGameObject("Triangle");
+        auto* meshRendererComponent = triangle->addComponent<MeshRendererComponent>();
+
+        meshRendererComponent->mesh.create(
             {
                 {{-0.5f, -0.5f, 0.0f}},
                 {{0.5f, -0.5f, 0.0f}},
@@ -16,13 +21,13 @@ public:
                 0, 1, 2
             }
         );
-        shader.create("resources/shaders/position.vert", "resources/shaders/position.frag");
+        meshRendererComponent->shader.create("resources/shaders/position.vert", "resources/shaders/position.frag");
 
-        setWindowClearColor(0.2f, 0.3f, 0.3f, 1.f);
+        scene.startAllGameObjects();
     }
 
     void onUpdate() override {
-        mesh.draw(shader);
+        scene.updateAllGameObjects();
 
         if (Input::isKeyPressed(Keyboard::Key::Escape) || Input::isKeyPressed(Keyboard::Key::Q)) {
             stop();
@@ -30,12 +35,9 @@ public:
     }
 
     void onDestroy() override {
-        shader.destroy();
-        mesh.destroy();
     }
 private:
-    Shader shader;
-    Mesh mesh;
+    Scene scene;
 };
 
 int main() {

@@ -5,28 +5,37 @@ Quack Engine is a currently developed small 3D game engine created using C++ and
 ## Usage Example
 ```C++
 #include <Quack/Core/Engine.hpp>
-#include <Quack/Graphics/Mesh.hpp>
-#include <Quack/Graphics/Shader.hpp>
+#include <Quack/Scene/MeshRendererComponent.hpp>
+#include <Quack/Scene/Scene.hpp>
 
 class Application final : public Engine {
 public:
-    Mesh triangleMesh;
-    Shader shader;
+    Scene scene;
 
     // Called just after engine initialization
     void onCreate() override {
+        // Create a game object
+        GameObject* triangle = scene.createGameObject("Triangle");
+        // Connect a MeshRendererComponent to created object, which will render on every update
+        auto* meshRendererComponent = triangle->addComponent<MeshRendererComponent>();
+
         // Create a mesh with 3 position vertices and 3 indices
-        triangleMesh.create(
+        meshRendererComponent->mesh.create(
             {
                 {{-0.5f, -0.5f, 0.0f}},
                 {{0.5f, -0.5f, 0.0f}},
                 {{0.0f,  0.5f, 0.0f}}
             },
-            {0, 1, 2}
+            {
+                0, 1, 2
+            }
         );
         
         // Create a shader program
-        shader.create("resources/shaders/position.vert", "resources/shaders/position.frag");
+        meshRendererComponent->shader.create("resources/shaders/position.vert", "resources/shaders/position.frag");
+
+        // Start all game objects added to scene
+        scene.startAllGameObjects();
 
         // Set window clear color (RGBA)
         setWindowClearColor(0.2f, 0.3f, 0.3f, 1.f);
@@ -34,16 +43,12 @@ public:
 
     // Called every frame between clearing and updating
     void onUpdate() override {
-        // Draw a defined mesh on the screen
-        triangleMesh.draw(shader);
+        // Update all objects added to the scene
+        scene.updateAllGameObjects();
     }
 
     // Called just before engine destruction
-    void onDestroy() override {
-        // Free resources
-        shader.destroy();
-        triangleMesh.destroy();
-    }
+    void onDestroy() override {}
 };
 
 int main() {
