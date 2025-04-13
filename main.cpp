@@ -8,7 +8,11 @@ public:
     void onCreate() override {
         setWindowClearColor(0.2f, 0.3f, 0.3f, 1.f);
 
+        GameObject* camera = scene.createGameObject("Camera");
+        camera->addComponent<CameraComponent>();
+
         GameObject* triangle = scene.createGameObject("Triangle");
+        triangle->getComponent<TransformComponent>()->position = glm::vec3(0, 0, -2);
         auto* meshRendererComponent = triangle->addComponent<MeshRendererComponent>();
 
         meshRendererComponent->mesh.create(
@@ -21,7 +25,7 @@ public:
                 0, 1, 2
             }
         );
-        meshRendererComponent->shader.create("resources/shaders/position.vert", "resources/shaders/position.frag");
+        meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
 
         scene.startAllGameObjects();
     }

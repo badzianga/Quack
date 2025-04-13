@@ -5,6 +5,7 @@ Quack Engine is a currently developed small 3D game engine created using C++ and
 ## Usage Example
 ```C++
 #include <Quack/Core/Engine.hpp>
+#include <Quack/Scene/CameraComponent.hpp>
 #include <Quack/Scene/MeshRendererComponent.hpp>
 #include <Quack/Scene/Scene.hpp>
 
@@ -16,10 +17,11 @@ public:
     void onCreate() override {
         // Create a game object
         GameObject* triangle = scene.createGameObject("Triangle");
+        
         // Connect a MeshRendererComponent to created object, which will render on every update
         auto* meshRendererComponent = triangle->addComponent<MeshRendererComponent>();
 
-        // Create a mesh with 3 position vertices and 3 indices
+        // Create a mesh with 3 position vertices and 3 indices in the MeshRenderer object
         meshRendererComponent->mesh.create(
             {
                 {{-0.5f, -0.5f, 0.0f}},
@@ -31,8 +33,15 @@ public:
             }
         );
         
-        // Create a shader program
+        // Create a shader program in the MeshRenderer object
         meshRendererComponent->shader.create("resources/shaders/position.vert", "resources/shaders/position.frag");
+
+        // Set position of the triangle object using its TransformComponent
+        triangle->getComponent<TransformComponent>()->position = glm::vec3(0, 0, -2);
+
+        // Create another game object and attach CameraComponent to it
+        GameObject* camera = scene.createGameObject("Camera");
+        camera->addComponent<CameraComponent>();
 
         // Start all game objects added to scene
         scene.startAllGameObjects();
@@ -76,16 +85,11 @@ make
 ```
 
 ## Current goals
-- 3D camera
 - pre-defined meshes
-- Entity Component System
-- transforms
 - materials
 
 ## Future improvements
 - Documentation
-- Error handling
-- Logger
 - Time scaling
 - Fixed timestep
 - Mouse inputs

@@ -97,10 +97,8 @@ bool Mesh::destroy() {
     return true;
 }
 
-void Mesh::draw(const Shader& shader) const {
+void Mesh::draw() const {
     glBindVertexArray(m_vao);
-
-    shader.use();
 
     glDrawElements(GL_TRIANGLES, static_cast<int>(m_indices.size()), GL_UNSIGNED_INT, nullptr);
 
