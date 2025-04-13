@@ -2,7 +2,7 @@
 #include <iostream>
 
 std::mutex Logger::s_mutex;
-LogLevel Logger::s_minLogLevel = LogLevel::Info;
+Logger::LogLevel Logger::s_minLogLevel = LogLevel::Info;
 
 void Logger::log(LogLevel level, const std::string& message) {
     if (level < s_minLogLevel) {

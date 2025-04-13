@@ -1,11 +1,12 @@
 #ifndef QUACK_LOGGER_HPP
 #define QUACK_LOGGER_HPP
-#include "LogLevel.hpp"
 #include <mutex>
 #include <string>
 
 class Logger {
 public:
+    enum class LogLevel { Debug, Info, Warning, Error };
+
     Logger() = delete;
     ~Logger() = delete;
     Logger(const Logger&) = delete;

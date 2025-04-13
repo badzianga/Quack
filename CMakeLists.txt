@@ -49,7 +49,6 @@ add_executable(Quack main.cpp
         include/Quack/Graphics/Vertex.hpp
         include/Quack/Core.hpp
         include/Quack/Graphics.hpp
-        include/Quack/Utils/LogLevel.hpp
         src/Quack/Utils/Logger.cpp
         include/Quack/Utils/Logger.hpp
         include/Quack/Scene/TransformComponent.hpp
