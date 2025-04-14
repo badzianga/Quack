@@ -12,7 +12,7 @@ public:
         camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();
 
-        GameObject* triangle = scene.createGameObject("Triangle");
+        triangle = scene.createGameObject("Triangle");
         triangle->getComponent<TransformComponent>()->position = glm::vec3(0, 0, -2);
         auto* meshRendererComponent = triangle->addComponent<MeshRendererComponent>();
 
@@ -53,6 +53,8 @@ public:
             z = -1;
         }
 
+        triangle->getComponent<TransformComponent>()->rotation.z -= 60.f * Time::getDeltaTime();
+
         const auto cameraTransform = camera->getComponent<TransformComponent>();
         const glm::vec3 movement = (cameraTransform->getRight() * x + cameraTransform->getForward() * z) * (Time::getDeltaTime() * 12.f);
 
@@ -64,6 +66,7 @@ public:
 private:
     Scene scene;
     GameObject* camera = nullptr;
+    GameObject* triangle = nullptr;
 };
 
 int main() {
