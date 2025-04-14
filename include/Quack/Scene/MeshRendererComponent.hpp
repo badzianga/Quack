@@ -1,6 +1,7 @@
 #ifndef QUACK_MESH_RENDERER_COMPONENT_HPP
 #define QUACK_MESH_RENDERER_COMPONENT_HPP
 #include "Quack/Graphics/Mesh.hpp"
+#include "Quack/Graphics/Shader.hpp"
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/Component.hpp"
 #include "Quack/Scene/GameObject.hpp"

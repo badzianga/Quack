@@ -1,9 +1,7 @@
 #include "Quack/Graphics/Mesh.hpp"
-
-#include <utility>
-
 #include "Quack/Utils/Logger.hpp"
 #include <glad/glad.h>
+#include <utility>
 
 Mesh::Mesh() : m_vao(0), m_vbo(0), m_ebo(0) {}
 

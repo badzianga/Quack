@@ -1,7 +1,6 @@
 #ifndef QUACK_MESH_HPP
 #define QUACK_MESH_HPP
 #include "Quack/Graphics/Vertex.hpp"
-#include "Quack/Graphics/Shader.hpp"
 #include <cstdint>
 #include <initializer_list>
 #include <vector>
