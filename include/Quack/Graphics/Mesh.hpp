@@ -18,6 +18,9 @@ public:
     bool create(std::initializer_list<Vertex> vertices, std::initializer_list<uint32_t> indices);
     bool destroy();
     void draw() const;
+
+    static Mesh createCube();
+    static Mesh createPlane();
 private:
     std::vector<Vertex> m_vertices;
     std::vector<uint32_t> m_indices;

@@ -102,3 +102,50 @@ void Mesh::draw() const {
 
     glBindVertexArray(0);
 }
+
+Mesh Mesh::createPlane() {
+    Mesh mesh;
+
+    mesh.create(
+        {
+            { { -0.5f, 0.f,  0.5f } },
+            { {  0.5f, 0.f,  0.5f } },
+            { {  0.5f, 0.f, -0.5f } },
+            { { -0.5f, 0.f, -0.5f } },
+        },
+        {
+            0, 1, 2,
+            0, 2, 3,
+        }
+    );
+
+    return mesh;
+}
+
+Mesh Mesh::createCube() {
+    Mesh mesh;
+
+    // from the left-bottom-front, counter-clockwise from bottom
+    mesh.create(
+        {
+            { { -0.5f, -0.5f,  0.5f } },
+            { {  0.5f, -0.5f,  0.5f } },
+            { {  0.5f, -0.5f, -0.5f } },
+            { { -0.5f, -0.5f, -0.5f } },
+            { { -0.5f,  0.5f,  0.5f } },
+            { {  0.5f,  0.5f,  0.5f } },
+            { {  0.5f,  0.5f, -0.5f } },
+            { { -0.5f,  0.5f, -0.5f } },
+        },
+        {
+            4, 5, 6, 4, 6, 7,  // top
+            0, 1, 5, 0, 5, 4,  // front
+            1, 2, 6, 1, 6, 5,  // right
+            3, 2, 1, 3, 1, 0,  // bottom
+            2, 3, 7, 2, 7, 6,  // back
+            3, 0, 4, 3, 4, 7,  // left
+        }
+    );
+
+    return mesh;
+}
