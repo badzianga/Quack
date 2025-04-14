@@ -43,6 +43,7 @@ bool Window::create(int width, int height, const char* title) {
     }
 
     glViewport(0, 0, width, height);
+    glEnable(GL_DEPTH_TEST);
 
     Logger::info(std::string("OpenGL API ") + std::string(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
     Logger::info(
@@ -85,5 +86,5 @@ void Window::setClearColor(float r, float g, float b, float a) const {
 
 void Window::clear() const {
     (void) p_window;
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
