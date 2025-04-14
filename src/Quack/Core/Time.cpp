@@ -1,5 +1,5 @@
 #include "Quack/Core/Time.hpp"
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 Time Time::s_instance;
 

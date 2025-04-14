@@ -1,6 +1,4 @@
-#include "Quack/Core/Engine.hpp"
-#include "Quack/Core/Input.hpp"
-#include "Quack/Core/Time.hpp"
+#include "Quack/Core.hpp"
 #include "Quack/Utils/Logger.hpp"
 
 bool Engine::create() {
