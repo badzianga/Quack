@@ -18,6 +18,7 @@ public:
 
         meshRendererComponent->mesh = Mesh::createCube();
         meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
+        meshRendererComponent->material.colorMap = { 0.f, 0.f, 1.f, 1.f };
 
         scene.startAllGameObjects();
     }

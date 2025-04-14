@@ -2,7 +2,8 @@
 
 out vec4 FragColor;
 
-void main()
-{
-    FragColor = vec4(1.0);
+uniform vec4 u_colorMap;
+
+void main() {
+    FragColor = u_colorMap;
 }

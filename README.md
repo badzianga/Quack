@@ -23,18 +23,18 @@ public:
     
         // Create another game object
         myCube = scene.createGameObject("MyCube");
-        
-        // Connect a MeshRendererComponent to created object, which will render on every update
-        auto* meshRendererComponent = myCube->addComponent<MeshRendererComponent>();
-
-        // Create a cube mesh
-        meshRendererComponent->mesh = Mesh::createCube();
 
         // Set position of the cube object using its TransformComponent
         myCube->getComponent<TransformComponent>()->position = glm::vec3(0, 0, -2);
         
+        // Connect a MeshRendererComponent to created object, which will render on every update
+        auto* meshRendererComponent = myCube->addComponent<MeshRendererComponent>();
+
         // Create a shader program in the MeshRenderer object
         meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
+
+        // Set the blue color of the created object
+        meshRendererComponent->material.colorMap = { 0.f, 0.f, 1.f, 1.f };
 
         // Start all game objects added to scene
         scene.startAllGameObjects();
@@ -79,9 +79,6 @@ cmake ..
 make
 ./Quack
 ```
-
-## Current goals
-- materials
 
 ## Future improvements
 - Documentation

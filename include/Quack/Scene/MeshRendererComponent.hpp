@@ -1,5 +1,6 @@
 #ifndef QUACK_MESH_RENDERER_COMPONENT_HPP
 #define QUACK_MESH_RENDERER_COMPONENT_HPP
+#include "Quack/Graphics/Material.hpp"
 #include "Quack/Graphics/Mesh.hpp"
 #include "Quack/Graphics/Shader.hpp"
 #include "Quack/Scene/CameraComponent.hpp"
@@ -12,6 +13,7 @@ class MeshRendererComponent final : public Component {
 public:
     Mesh mesh;
     Shader shader;
+    Material material;
 
     void start() override {}
 
@@ -25,6 +27,7 @@ public:
 
         shader.use();
         shader.set("u_mvp", mvp);
+        shader.set("u_colorMap", material.colorMap);
         mesh.draw();
     }
 private:
