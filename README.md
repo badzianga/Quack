@@ -72,12 +72,20 @@ int main() {
 ## Build Instructions
 Because the engine is still developed, there is not a build target available for a static or dynamic library.
 However, at the moment the project contains a main file which can be freely modified and your whole project can be built
-using attached CMakeLists.txt:
+using attached CMakeLists.txt.
+
+### Windows:
 ```bash
 mkdir build && cd build
 cmake ..
-make
-./Quack
+cmake --build . --config Release
+```
+
+### Linux:
+```bash
+mkdir build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build .
 ```
 
 ## Future improvements
