@@ -32,3 +32,17 @@ bool Input::isKeyDown(Keyboard::Key key) {
     int keyCode = static_cast<int>(key);
     return glfwGetKey(s_instance.p_window, keyCode) == GLFW_PRESS;
 }
+
+float Input::getMouseX() {
+    double x;
+    double y;
+    glfwGetCursorPos(s_instance.p_window, &x, &y);
+    return static_cast<float>(x);
+}
+
+float Input::getMouseY() {
+    double x;
+    double y;
+    glfwGetCursorPos(s_instance.p_window, &x, &y);
+    return static_cast<float>(y);
+}

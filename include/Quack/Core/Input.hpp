@@ -15,6 +15,8 @@ public:
     static bool isKeyPressed(Keyboard::Key key);
     static bool isKeyReleased(Keyboard::Key key);
     static bool isKeyDown(Keyboard::Key key);
+    static float getMouseX();
+    static float getMouseY();
 private:
     Input();
 
