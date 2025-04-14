@@ -20,6 +20,7 @@ public:
     bool destroy();
     void setClearColor(float r, float g, float b, float a) const;
     void clear() const;
+    void setCursorEnabled(bool enabled) const;
 private:
     GLFWwindow* p_window;
 

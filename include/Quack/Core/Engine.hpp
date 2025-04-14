@@ -17,7 +17,8 @@ public:
     void stop();
     bool destroy();
 
-    void setWindowClearColor(float red, float green, float blue, float alpha);
+    void setWindowClearColor(float red, float green, float blue, float alpha) const;
+    void setWindowCursorEnabled(bool enabled) const;
 
     virtual void onCreate() = 0;
     virtual void onUpdate() = 0;

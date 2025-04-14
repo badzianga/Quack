@@ -88,3 +88,12 @@ void Window::clear() const {
     (void) p_window;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+
+void Window::setCursorEnabled(bool enabled) const {
+    if (enabled) {
+        glfwSetInputMode(p_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+    else {
+        glfwSetInputMode(p_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+}

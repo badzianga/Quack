@@ -38,7 +38,11 @@ bool Engine::destroy() {
     return true;
 }
 
-void Engine::setWindowClearColor(float red, float green, float blue, float alpha) {
+void Engine::setWindowClearColor(float red, float green, float blue, float alpha) const {
     m_window.setClearColor(red, green, blue, alpha);
     Logger::debug("Window clear color changed");
+}
+
+void Engine::setWindowCursorEnabled(bool enabled) const {
+    m_window.setCursorEnabled(enabled);
 }
