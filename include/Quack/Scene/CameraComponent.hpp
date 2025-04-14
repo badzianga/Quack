@@ -7,7 +7,7 @@
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-class CameraComponent : public Component {
+class CameraComponent final : public Component {
 public:
     float fieldOfView = 60.f;
     float nearClip = 0.3f;
@@ -18,8 +18,8 @@ public:
         auto transform = gameObject->getComponent<TransformComponent>();
         assert(transform != nullptr);
         const glm::vec3& position = transform->position;
-        glm::vec3 forward = getForward(transform);
-        glm::vec3 up = getUp(transform);
+        glm::vec3 forward = transform->getForward();
+        glm::vec3 up = transform->getUp();
 
         return glm::lookAt(position, position + forward, up);
     }
@@ -42,25 +42,6 @@ public:
         s_projectionView = getProjectionViewMatrix();
     }
 private:
-    static glm::vec3 getForward(const TransformComponent* transform) {
-        glm::vec4 forward = glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
-        const glm::vec3& rotation = transform->rotation;
-        auto rotationMatrix = glm::mat4(1.0f);
-        rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-        rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-        rotationMatrix = glm::rotate(rotationMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-        forward = rotationMatrix * forward;
-        return forward;
-    }
-
-    static glm::vec3 getRight(const TransformComponent* transform) {
-        return glm::normalize(glm::cross(getForward(transform), glm::vec3(0.0f, 1.0f, 0.0f)));
-    }
-
-    static glm::vec3 getUp(const TransformComponent* transform) {
-        return glm::normalize(glm::cross(getRight(transform), getForward(transform)));
-    }
-
     static glm::mat4 s_projectionView;
 };
 
