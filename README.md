@@ -90,6 +90,9 @@ cmake --build .
 
 ## Future improvements
 - Documentation
+- Matrix, Quaternion, Vector classes
+- Rotation with Quaternions
+- Color class
 - Time scaling
 - Fixed timestep
 - Mouse inputs
