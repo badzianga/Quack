@@ -5,6 +5,7 @@ Quack Engine is a currently developed small 3D game engine created using C++ and
 ## Usage Example
 ```C++
 #include <Quack/Core/Engine.hpp>
+#include <Quack/Core/Time.hpp>
 #include <Quack/Scene/CameraComponent.hpp>
 #include <Quack/Scene/MeshRendererComponent.hpp>
 #include <Quack/Scene/Scene.hpp>
@@ -12,36 +13,28 @@ Quack Engine is a currently developed small 3D game engine created using C++ and
 class Application final : public Engine {
 public:
     Scene scene;
+    GameObject* myCube = nullptr;
 
     // Called just after engine initialization
     void onCreate() override {
-        // Create a game object
-        GameObject* triangle = scene.createGameObject("Triangle");
-        
-        // Connect a MeshRendererComponent to created object, which will render on every update
-        auto* meshRendererComponent = triangle->addComponent<MeshRendererComponent>();
-
-        // Create a mesh with 3 position vertices and 3 indices in the MeshRenderer object
-        meshRendererComponent->mesh.create(
-            {
-                {{-0.5f, -0.5f, 0.0f}},
-                {{0.5f, -0.5f, 0.0f}},
-                {{0.0f,  0.5f, 0.0f}}
-            },
-            {
-                0, 1, 2
-            }
-        );
-        
-        // Create a shader program in the MeshRenderer object
-        meshRendererComponent->shader.create("resources/shaders/position.vert", "resources/shaders/position.frag");
-
-        // Set position of the triangle object using its TransformComponent
-        triangle->getComponent<TransformComponent>()->position = glm::vec3(0, 0, -2);
-
-        // Create another game object and attach CameraComponent to it
+        // Create a game object and attach CameraComponent to it
         GameObject* camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();
+    
+        // Create another game object
+        myCube = scene.createGameObject("MyCube");
+        
+        // Connect a MeshRendererComponent to created object, which will render on every update
+        auto* meshRendererComponent = myCube->addComponent<MeshRendererComponent>();
+
+        // Create a cube mesh
+        meshRendererComponent->mesh = Mesh::createCube();
+
+        // Set position of the cube object using its TransformComponent
+        myCube->getComponent<TransformComponent>()->position = glm::vec3(0, 0, -2);
+        
+        // Create a shader program in the MeshRenderer object
+        meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
 
         // Start all game objects added to scene
         scene.startAllGameObjects();
@@ -52,6 +45,9 @@ public:
 
     // Called every frame between clearing and updating
     void onUpdate() override {
+        // Rotate the cube 60 degrees per second
+        myCube->getComponent<TransformComponent>()->rotation.y += 60.f * Time::getDeltaTime();
+    
         // Update all objects added to the scene
         scene.updateAllGameObjects();
     }
@@ -85,7 +81,6 @@ make
 ```
 
 ## Current goals
-- pre-defined meshes
 - materials
 
 ## Future improvements
