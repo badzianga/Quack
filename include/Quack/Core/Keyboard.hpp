@@ -1,8 +1,20 @@
 #ifndef QUACK_KEYBOARD_HPP
 #define QUACK_KEYBOARD_HPP
 
+/**
+ * @brief Namespace containing keyboard input definitions.
+ *
+ * The Keyboard namespace defines key codes that can be used
+ * to detect specific key presses in the application.
+ */
 namespace Keyboard {
 
+/**
+ * @brief Enumeration of supported keyboard keys.
+ *
+ * This enum maps human-readable key names to their corresponding
+ * integer values, aligned with GLFW key codes.
+ */
 enum class Key {
     Space          = 32,
     Apostrophe     = 39,

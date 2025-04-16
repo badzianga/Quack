@@ -1,0 +1,19 @@
+# === OUTPUT CONFIGURATION ===
+OUTPUT_DIRECTORY         = ../doxygen/output
+GENERATE_XML             = YES
+XML_OUTPUT               = xml
+
+# === INPUT SOURCES ===
+INPUT                    = ../include
+RECURSIVE                = YES
+
+# === PROJECT INFO ===
+PROJECT_NAME             = "Quack Engine"
+EXTRACT_ALL              = YES
+
+# === PATH CONFIGURATION ===
+SHOW_INCLUDE_FILES     = YES
+INCLUDE_PATH             = ../include
+FULL_PATH_NAMES          = YES
+STRIP_FROM_PATH      =
+STRIP_FROM_INC_PATH  =
