@@ -12,7 +12,7 @@ public:
     Engine& operator=(const Engine&) = delete;
     Engine& operator=(Engine&&) = delete;
 
-    bool create();
+    bool create(int width = 0, int height = 0, const char* title = nullptr);
     void start();
     void stop();
     bool destroy();

@@ -1,8 +1,8 @@
 #include "Quack/Core.hpp"
 #include "Quack/Utils/Logger.hpp"
 
-bool Engine::create() {
-    m_window.create(1024, 768, "Quack Engine");
+bool Engine::create(int width, int height, const char* title) {
+    m_window.create(width, height, title);
     Input::init(m_window.p_window);
 
     this->onCreate();

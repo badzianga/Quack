@@ -65,7 +65,7 @@ private:
 int main() {
     Application app;
 
-    if (app.create()) {
+    if (app.create(1024, 768, "Quack Engine")) {
         app.start();
     }
 

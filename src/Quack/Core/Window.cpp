@@ -8,7 +8,7 @@
 Window::Window() : p_window(nullptr) {}
 
 bool Window::create(int width, int height, const char* title) {
-    if (width < 0 || height < 0) {
+    if (width <= 0 || height <= 0) {
         width = DEFAULT_WIDTH;
         height = DEFAULT_HEIGHT;
         Logger::warn("Invalid width/height of the window. Setting to default 1024x768...");
