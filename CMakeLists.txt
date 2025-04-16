@@ -63,6 +63,9 @@ add_executable(Quack main.cpp
         src/Quack/Scene/CameraComponent.cpp
         src/Quack/Scene/MeshRendererComponent.cpp
         src/Quack/Scene/TransformComponent.cpp
+        src/Quack/Scene/GameObject.cpp
+        include/Quack/Scene/GameObject.inl
+        src/Quack/Scene/Scene.cpp
 )
 
 target_include_directories(Quack PRIVATE include)
