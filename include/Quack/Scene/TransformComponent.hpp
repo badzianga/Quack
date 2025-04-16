@@ -1,5 +1,5 @@
-#ifndef TRANSFORM_COMPONENT_HPP
-#define TRANSFORM_COMPONENT_HPP
+#ifndef QUACK_TRANSFORM_COMPONENT_HPP
+#define QUACK_TRANSFORM_COMPONENT_HPP
 #include "Quack/Scene/Component.hpp"
 #include <glm/matrix.hpp>
 #include <glm/gtc/matrix_transform.hpp>
