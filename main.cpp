@@ -1,6 +1,7 @@
 #include "Quack/Core/Engine.hpp"
 #include "Quack/Core/Input.hpp"
 #include "Quack/Core/Time.hpp"
+#include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
 #include "Quack/Scene/Scene.hpp"
 
@@ -21,27 +22,9 @@ public:
         meshRendererComponent->material.colorMap = { 0.f, 0.f, 1.f, 1.f };
 
         scene.startAllGameObjects();
-
-        lastX = Input::getMouseX();
-        lastY = Input::getMouseY();
-        setWindowCursorEnabled(false);
     }
 
     void onUpdate() override {
-        float currentX = Input::getMouseX();
-        float currentY = Input::getMouseY();
-        auto& cameraRotation = camera->getComponent<TransformComponent>()->rotation;
-        cameraRotation.y -= (currentX - lastX) * 0.25f;
-        cameraRotation.x -= (currentY - lastY) * 0.25f;
-        if (cameraRotation.x > 89.f) {
-            cameraRotation.x = 89.f;
-        }
-        if (cameraRotation.x < -89.f) {
-            cameraRotation.x = -89.f;
-        }
-        lastX = currentX;
-        lastY = currentY;
-
         scene.updateAllGameObjects();
 
         if (Input::isKeyPressed(Keyboard::Key::Escape) || Input::isKeyPressed(Keyboard::Key::Q)) {
@@ -77,8 +60,6 @@ private:
     Scene scene;
     GameObject* camera = nullptr;
     GameObject* object = nullptr;
-    float lastX = 0.f;
-    float lastY = 0.f;
 };
 
 int main() {

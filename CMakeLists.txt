@@ -60,6 +60,9 @@ add_executable(Quack main.cpp
         include/Quack/Utils.hpp
         include/Quack/Scene.hpp
         include/Quack/Graphics/Material.hpp
+        src/Quack/Scene/CameraComponent.cpp
+        src/Quack/Scene/MeshRendererComponent.cpp
+        src/Quack/Scene/TransformComponent.cpp
 )
 
 target_include_directories(Quack PRIVATE include)
