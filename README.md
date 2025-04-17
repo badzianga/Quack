@@ -10,7 +10,8 @@ Since Quack Engine is still in development, it doesn't have many features. Howev
 - transform objects on the scene
 
 ## Usage Example
-Code below shows a simple example how to use the engine. Simple. work-in-progress documentation is available [here](https://badzianga.github.io/Quack/annotated.html).
+Code below shows a small example how to use the engine. Simple, work-in-progress documentation with described classes
+is available [here](https://badzianga.github.io/Quack/annotated.html).
 ```C++
 #include <Quack/Core/Engine.hpp>
 #include <Quack/Core/Time.hpp>
