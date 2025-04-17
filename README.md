@@ -10,9 +10,11 @@ Since Quack Engine is still in development, it doesn't have many features. Howev
 - transform objects on the scene
 
 ## Usage Example
+Code below shows a simple example how to use the engine. Simple. work-in-progress documentation is available [here](https://badzianga.github.io/Quack/annotated.html).
 ```C++
 #include <Quack/Core/Engine.hpp>
 #include <Quack/Core/Time.hpp>
+#include <Quack/Graphics/Mesh.hpp>
 #include <Quack/Scene/CameraComponent.hpp>
 #include <Quack/Scene/MeshRendererComponent.hpp>
 #include <Quack/Scene/Scene.hpp>
@@ -36,6 +38,9 @@ public:
         
         // Connect a MeshRendererComponent to created object, which will render on every update
         auto* meshRendererComponent = myCube->addComponent<MeshRendererComponent>();
+
+        // Add a cube mesh to the MeshRenderer object
+        meshRendererComponent->mesh = Mesh::createCube(); 
 
         // Create a shader program in the MeshRenderer object
         meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
