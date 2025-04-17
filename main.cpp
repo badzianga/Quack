@@ -8,7 +8,7 @@
 class Application final : public Engine {
 public:
     void onCreate() override {
-        setWindowClearColor(0.2f, 0.3f, 0.3f, 1.f);
+        accessWindow().setClearColor(0.2f, 0.3f, 0.3f, 1.f);
 
         camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();

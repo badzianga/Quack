@@ -12,18 +12,6 @@ struct GLFWwindow;
 class Window {
 public:
     /**
-     * @brief Default constructor.
-     *
-     * This constructor doesn't actually create the engine,
-     * it is used only to declare the object.
-     * Call create() to open the actual window.
-     *
-     * The window is created by the engine class,
-     * so the user does not have to do it themselves.
-     */
-    Window();
-
-    /**
      * @brief Deleted copy constructor.
      */
     Window(const Window&) = delete;
@@ -44,10 +32,36 @@ public:
     Window& operator=(Window&&) = delete;
 
     /**
+     * @brief Set visibility of the mouse cursor in the window.
+     *
+     * When disabled, the cursor is hidden and locked for applications.
+     *
+     * @param enabled True to show the cursor, false to hide it.
+     */
+    void setCursorEnabled(bool enabled) const;
+
+    /**
+     * @brief Set the clear color used before drawing each frame.
+     *
+     * @param r Red channel (0.f to 1.f).
+     * @param g Green channel (0.f to 1.f).
+     * @param b Blue channel (0.f to 1.f).
+     * @param a Alpha channel (0.f to 1.f).
+     */
+    void setClearColor(float r, float g, float b, float a) const;
+private:
+    /**
+     * @brief Default private constructor.
+     *
+     * This constructor doesn't actually create the window,
+     * it is used only to declare the object in the Engine class.
+     */
+    Window();
+
+    /**
      * @brief Create the window with given parameters.
      *
-     * The window is created by the engine class,
-     * so the user does not have to do it themselves.
+     * The window is created by the friend Engine class.
      *
      * @param width Width of the window in pixels.
      * @param height Height of the window in pixels.
@@ -83,36 +97,17 @@ public:
     bool destroy();
 
     /**
-     * @brief Set the clear color used before drawing each frame.
-     *
-     * @param r Red channel (0.f to 1.f).
-     * @param g Green channel (0.f to 1.f).
-     * @param b Blue channel (0.f to 1.f).
-     * @param a Alpha channel (0.f to 1.f).
-     */
-    void setClearColor(float r, float g, float b, float a) const;
-
-    /**
      * @brief Clear the window using the current clear color.
      */
     void clear() const;
 
-    /**
-     * @brief Set visibility of the mouse cursor in the window.
-     *
-     * When disabled, the cursor is hidden and locked for applications.
-     *
-     * @param enabled True to show the cursor, false to hide it.
-     */
-    void setCursorEnabled(bool enabled) const;
-private:
     GLFWwindow* p_window;
-
-    friend class Engine;
 
     static constexpr int DEFAULT_WIDTH = 1024;
     static constexpr int DEFAULT_HEIGHT = 768;
     static constexpr auto DEFAULT_TITLE = "Quack Window";
+
+    friend class Engine;
 };
 
 #endif //QUACK_WINDOW_HPP

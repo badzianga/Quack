@@ -47,7 +47,7 @@ public:
         scene.startAllGameObjects();
 
         // Set window clear color (RGBA)
-        setWindowClearColor(0.2f, 0.3f, 0.3f, 1.f);
+        accessWindow().setClearColor(0.2f, 0.3f, 0.3f, 1.f);
     }
 
     // Called every frame between clearing and updating

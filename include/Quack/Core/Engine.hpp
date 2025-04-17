@@ -85,23 +85,13 @@ public:
     bool destroy();
 
     /**
-     * @brief Set the clear color used to clear the window each frame.
+     * @brief Get the const reference to the window.
      *
-     * @param red Red channel (0.f to 1.f).
-     * @param green Green channel (0.f to 1.f).
-     * @param blue Blue channel (0.f to 1.f).
-     * @param alpha Alpha channel (0.f to 1.f).
+     * Allows to access window class to call window-related methods.
+     *
+     * @return Const reference to the window.
      */
-    void setWindowClearColor(float red, float green, float blue, float alpha) const;
-
-    /**
-     * @brief Set visibility of the mouse cursor in the window.
-     *
-     * When disabled, the cursor is hidden and locked for applications.
-     *
-     * @param enabled True to show the cursor, false to hide it.
-     */
-    void setWindowCursorEnabled(bool enabled) const;
+    const Window& accessWindow() const;
 
     /**
      * @brief Callback invoked when the engine is created.
