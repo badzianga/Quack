@@ -96,7 +96,6 @@ cmake --build .
 ```
 
 ## Future improvements and features
-- Documentation
 - Mesh/Shader manager with one instance of objects, references to them in components
 - 3D light
 - Capsule and sphere meshes

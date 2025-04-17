@@ -2,6 +2,7 @@
 OUTPUT_DIRECTORY         = ../doxygen/output
 GENERATE_XML             = YES
 XML_OUTPUT               = xml
+GENERATE_LATEX           = NO
 
 # === INPUT SOURCES ===
 INPUT                    = ../include
@@ -12,8 +13,8 @@ PROJECT_NAME             = "Quack Engine"
 EXTRACT_ALL              = YES
 
 # === PATH CONFIGURATION ===
-SHOW_INCLUDE_FILES     = YES
-INCLUDE_PATH             = ../include
+SHOW_INCLUDE_FILES       = YES
 FULL_PATH_NAMES          = YES
-STRIP_FROM_PATH      =
-STRIP_FROM_INC_PATH  =
+INCLUDE_PATH             = ../include
+STRIP_FROM_PATH          = ../include
+STRIP_FROM_INC_PATH      = ../include
