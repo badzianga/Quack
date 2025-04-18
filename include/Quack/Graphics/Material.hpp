@@ -1,6 +1,6 @@
 #ifndef QUACK_MATERIAL_HPP
 #define QUACK_MATERIAL_HPP
-#include <glm/vec4.hpp>
+#include "Quack/Graphics/Color.hpp"
 
 /**
  * @brief Simple structure representing a material's visual properties
@@ -12,9 +12,9 @@ struct Material {
     /**
      * @brief RGBA base color of the material.
      *
-     * Default value is white (1.0, 1.0, 1.0, 1.0).
+     * Default value is white.
      */
-    glm::vec4 colorMap{1.f};
+    Color colorMap = Color::White;
 };
 
 #endif //QUACK_MATERIAL_HPP

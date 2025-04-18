@@ -167,6 +167,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0296bdde51daa3ff1fc3a88880238ea3" id="r_a0296bdde51daa3ff1fc3a88880238ea3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0296bdde51daa3ff1fc3a88880238ea3">set</a> (const char *name, const glm::mat4 &amp;value)</td></tr>
 <tr class="memdesc:a0296bdde51daa3ff1fc3a88880238ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a 4x4 matrix uniform variable in the shader program.  <br /></td></tr>
 <tr class="separator:a0296bdde51daa3ff1fc3a88880238ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a260e1a3e03313c3edac5e6dc3e94656a" id="r_a260e1a3e03313c3edac5e6dc3e94656a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a260e1a3e03313c3edac5e6dc3e94656a">set</a> (const char *name, <a class="el" href="classColor.html">Color</a> value)</td></tr>
+<tr class="memdesc:a260e1a3e03313c3edac5e6dc3e94656a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a color uniform variable in the shader program.  <br /></td></tr>
+<tr class="separator:a260e1a3e03313c3edac5e6dc3e94656a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Representation of a shader program. </p>
@@ -391,8 +394,38 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a260e1a3e03313c3edac5e6dc3e94656a" name="a260e1a3e03313c3edac5e6dc3e94656a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a260e1a3e03313c3edac5e6dc3e94656a">&#9670;&#160;</a></span>set() <span class="overload">[1/9]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Shader::set </td>
+          <td>(</td>
+          <td class="paramtype">const char *</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classColor.html">Color</a></td>          <td class="paramname"><span class="paramname"><em>value</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set a color uniform variable in the shader program. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>The name of the uniform variable. </td></tr>
+    <tr><td class="paramname">value</td><td>The color value to set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="aa16b92eca9a0b92459bf9427e12f723d" name="aa16b92eca9a0b92459bf9427e12f723d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa16b92eca9a0b92459bf9427e12f723d">&#9670;&#160;</a></span>set() <span class="overload">[1/8]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa16b92eca9a0b92459bf9427e12f723d">&#9670;&#160;</a></span>set() <span class="overload">[2/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -422,7 +455,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a637fbb8da7bd5c82004f7bb1d0f51e48" name="a637fbb8da7bd5c82004f7bb1d0f51e48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a637fbb8da7bd5c82004f7bb1d0f51e48">&#9670;&#160;</a></span>set() <span class="overload">[2/8]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a637fbb8da7bd5c82004f7bb1d0f51e48">&#9670;&#160;</a></span>set() <span class="overload">[3/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -452,7 +485,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a0296bdde51daa3ff1fc3a88880238ea3" name="a0296bdde51daa3ff1fc3a88880238ea3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0296bdde51daa3ff1fc3a88880238ea3">&#9670;&#160;</a></span>set() <span class="overload">[3/8]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0296bdde51daa3ff1fc3a88880238ea3">&#9670;&#160;</a></span>set() <span class="overload">[4/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -482,7 +515,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="ae5e6bc87e6cf5a1832f8e62e3de6fe65" name="ae5e6bc87e6cf5a1832f8e62e3de6fe65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5e6bc87e6cf5a1832f8e62e3de6fe65">&#9670;&#160;</a></span>set() <span class="overload">[4/8]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5e6bc87e6cf5a1832f8e62e3de6fe65">&#9670;&#160;</a></span>set() <span class="overload">[5/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -512,7 +545,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a671cbc19ebf72e8d6348020040dccac0" name="a671cbc19ebf72e8d6348020040dccac0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a671cbc19ebf72e8d6348020040dccac0">&#9670;&#160;</a></span>set() <span class="overload">[5/8]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a671cbc19ebf72e8d6348020040dccac0">&#9670;&#160;</a></span>set() <span class="overload">[6/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -542,7 +575,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a8571133ec36422378e0033b71b162335" name="a8571133ec36422378e0033b71b162335"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8571133ec36422378e0033b71b162335">&#9670;&#160;</a></span>set() <span class="overload">[6/8]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8571133ec36422378e0033b71b162335">&#9670;&#160;</a></span>set() <span class="overload">[7/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -572,7 +605,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a7ba983f3e06201da95cef8b8e6a6e5ff" name="a7ba983f3e06201da95cef8b8e6a6e5ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ba983f3e06201da95cef8b8e6a6e5ff">&#9670;&#160;</a></span>set() <span class="overload">[7/8]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ba983f3e06201da95cef8b8e6a6e5ff">&#9670;&#160;</a></span>set() <span class="overload">[8/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -602,7 +635,7 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a4315e8cddc724b837b089e88a2facfe8" name="a4315e8cddc724b837b089e88a2facfe8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4315e8cddc724b837b089e88a2facfe8">&#9670;&#160;</a></span>set() <span class="overload">[8/8]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4315e8cddc724b837b089e88a2facfe8">&#9670;&#160;</a></span>set() <span class="overload">[9/9]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

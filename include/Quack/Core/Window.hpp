@@ -1,5 +1,6 @@
 #ifndef QUACK_WINDOW_HPP
 #define QUACK_WINDOW_HPP
+#include "Quack/Graphics/Color.hpp"
 
 struct GLFWwindow;
 
@@ -43,12 +44,9 @@ public:
     /**
      * @brief Set the clear color used before drawing each frame.
      *
-     * @param r Red channel (0.f to 1.f).
-     * @param g Green channel (0.f to 1.f).
-     * @param b Blue channel (0.f to 1.f).
-     * @param a Alpha channel (0.f to 1.f).
+     * @param color Clear color.
      */
-    void setClearColor(float r, float g, float b, float a) const;
+    void setClearColor(Color color) const;
 private:
     /**
      * @brief Default private constructor.

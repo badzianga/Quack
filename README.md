@@ -47,13 +47,13 @@ public:
         meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
 
         // Set the blue color of the created object
-        meshRendererComponent->material.colorMap = { 0.f, 0.f, 1.f, 1.f };
+        meshRendererComponent->material.colorMap = Color::Blue;
 
         // Start all game objects added to scene
         scene.startAllGameObjects();
 
         // Set window clear color (RGBA)
-        accessWindow().setClearColor(0.2f, 0.3f, 0.3f, 1.f);
+        accessWindow().setClearColor({0.2f, 0.3f, 0.3f, 1.f});
     }
 
     // Called every frame between clearing and updating
@@ -108,7 +108,6 @@ cmake --build .
 - Pre-defined shaders
 - Matrix, Quaternion, Vector classes
 - Rotation with Quaternions
-- Color class
 - Time scaling
 - Fixed timestep
 - Mouse inputs

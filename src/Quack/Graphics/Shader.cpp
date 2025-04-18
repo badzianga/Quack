@@ -110,6 +110,11 @@ void Shader::set(const char* name, const glm::mat4& value) {
     glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
+void Shader::set(const char* name, Color value) {
+    glUniform4f(getUniformLocation(name), value.r, value.g, value.b, value.a);
+}
+
+
 int32_t Shader::getUniformLocation(const char *name) {
     auto locationIterator = m_uniformLocationCache.find(name);
     if (locationIterator != m_uniformLocationCache.end()) {

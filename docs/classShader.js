@@ -8,6 +8,7 @@ var classShader =
     [ "destroy", "classShader.html#abb99f221b9115a37271ae2648335c1c6", null ],
     [ "operator=", "classShader.html#a05b53bc160d089df65f67688990d763d", null ],
     [ "operator=", "classShader.html#a557f8fd3b05bf16c79bc4ebc295c7420", null ],
+    [ "set", "classShader.html#a260e1a3e03313c3edac5e6dc3e94656a", null ],
     [ "set", "classShader.html#aa16b92eca9a0b92459bf9427e12f723d", null ],
     [ "set", "classShader.html#a637fbb8da7bd5c82004f7bb1d0f51e48", null ],
     [ "set", "classShader.html#a0296bdde51daa3ff1fc3a88880238ea3", null ],

@@ -107,17 +107,20 @@ $(function(){initNavTree('Material_8hpp_source.html',''); initResizable(true); }
 <div class="contents">
 <a href="Material_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef QUACK_MATERIAL_HPP</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define QUACK_MATERIAL_HPP</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;glm/vec4.hpp&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="Color_8hpp.html">Quack/Graphics/Color.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span></div>
 <div class="foldopen" id="foldopen00011" data-start="{" data-end="};">
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="structMaterial.html">   11</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structMaterial.html">Material</a> {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structMaterial.html#a17d17adc2d223ac9d33f0b953924a0a1">   17</a></span>    glm::vec4 <a class="code hl_variable" href="structMaterial.html#a17d17adc2d223ac9d33f0b953924a0a1">colorMap</a>{1.f};</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="structMaterial.html#a42082876c417f83b531c562d2616babe">   17</a></span>    <a class="code hl_class" href="classColor.html">Color</a> <a class="code hl_variable" href="structMaterial.html#a42082876c417f83b531c562d2616babe">colorMap</a> = <a class="code hl_variable" href="classColor.html#a64abba1de9a93b7b2cf3ddbde14f640b">Color::White</a>;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>};</div>
 </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#endif </span><span class="comment">//QUACK_MATERIAL_HPP</span></div>
+<div class="ttc" id="aColor_8hpp_html"><div class="ttname"><a href="Color_8hpp.html">Color.hpp</a></div></div>
+<div class="ttc" id="aclassColor_html"><div class="ttname"><a href="classColor.html">Color</a></div><div class="ttdoc">Representation of a color using floating-point RGBA components.</div><div class="ttdef"><b>Definition</b> Color.hpp:12</div></div>
+<div class="ttc" id="aclassColor_html_a64abba1de9a93b7b2cf3ddbde14f640b"><div class="ttname"><a href="classColor.html#a64abba1de9a93b7b2cf3ddbde14f640b">Color::White</a></div><div class="ttdeci">static const Color White</div><div class="ttdoc">Predefined white color (1.f, 1.f, 1.f, 1.f).</div><div class="ttdef"><b>Definition</b> Color.hpp:69</div></div>
 <div class="ttc" id="astructMaterial_html"><div class="ttname"><a href="structMaterial.html">Material</a></div><div class="ttdoc">Simple structure representing a material&#39;s visual properties.</div><div class="ttdef"><b>Definition</b> Material.hpp:11</div></div>
-<div class="ttc" id="astructMaterial_html_a17d17adc2d223ac9d33f0b953924a0a1"><div class="ttname"><a href="structMaterial.html#a17d17adc2d223ac9d33f0b953924a0a1">Material::colorMap</a></div><div class="ttdeci">glm::vec4 colorMap</div><div class="ttdoc">RGBA base color of the material.</div><div class="ttdef"><b>Definition</b> Material.hpp:17</div></div>
+<div class="ttc" id="astructMaterial_html_a42082876c417f83b531c562d2616babe"><div class="ttname"><a href="structMaterial.html#a42082876c417f83b531c562d2616babe">Material::colorMap</a></div><div class="ttdeci">Color colorMap</div><div class="ttdoc">RGBA base color of the material.</div><div class="ttdef"><b>Definition</b> Material.hpp:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

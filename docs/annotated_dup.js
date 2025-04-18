@@ -1,6 +1,8 @@
 var annotated_dup =
 [
     [ "CameraComponent", "classCameraComponent.html", "classCameraComponent" ],
+    [ "Color", "classColor.html", "classColor" ],
+    [ "Color8", "classColor8.html", "classColor8" ],
     [ "Component", "classComponent.html", "classComponent" ],
     [ "Engine", "classEngine.html", "classEngine" ],
     [ "FileIO", "classFileIO.html", "classFileIO" ],

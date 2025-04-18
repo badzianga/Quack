@@ -8,7 +8,7 @@
 class Application final : public Engine {
 public:
     void onCreate() override {
-        accessWindow().setClearColor(0.2f, 0.3f, 0.3f, 1.f);
+        accessWindow().setClearColor({0.2f, 0.3f, 0.3f, 1.f});
 
         camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();
@@ -19,7 +19,7 @@ public:
 
         meshRendererComponent->mesh = Mesh::createCube();
         meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
-        meshRendererComponent->material.colorMap = { 0.f, 0.f, 1.f, 1.f };
+        meshRendererComponent->material.colorMap = Color::Blue;
 
         scene.startAllGameObjects();
     }

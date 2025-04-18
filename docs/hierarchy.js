@@ -1,5 +1,7 @@
 var hierarchy =
 [
+    [ "Color", "classColor.html", null ],
+    [ "Color8", "classColor8.html", null ],
     [ "Component", "classComponent.html", [
       [ "CameraComponent", "classCameraComponent.html", null ],
       [ "MeshRendererComponent", "classMeshRendererComponent.html", null ],

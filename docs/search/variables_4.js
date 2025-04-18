@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['gameobject_0',['gameObject',['../classComponent.html#af4a2157b3d021916719085f26f1548b0',1,'Component']]]
+  ['farclip_0',['farClip',['../classCameraComponent.html#a9595721df3486c45ae33b14ebcc0c02a',1,'CameraComponent']]],
+  ['fieldofview_1',['fieldOfView',['../classCameraComponent.html#a77c2b3a69477b30d3d4c35dee48567e2',1,'CameraComponent']]]
 ];

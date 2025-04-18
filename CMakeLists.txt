@@ -66,6 +66,10 @@ add_executable(Quack main.cpp
         src/Quack/Scene/GameObject.cpp
         include/Quack/Scene/GameObject.inl
         src/Quack/Scene/Scene.cpp
+        src/Quack/Graphics/Color.cpp
+        include/Quack/Graphics/Color.hpp
+        src/Quack/Graphics/Color8.cpp
+        include/Quack/Graphics/Color8.hpp
 )
 
 target_include_directories(Quack PRIVATE include)

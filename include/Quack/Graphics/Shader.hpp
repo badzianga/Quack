@@ -1,5 +1,6 @@
 #ifndef QUACK_SHADER_HPP
 #define QUACK_SHADER_HPP
+#include "Quack/Graphics/Color.hpp"
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -155,6 +156,14 @@ public:
      * @param value The 4x4 matrix value to set.
      */
     void set(const char* name, const glm::mat4& value);
+
+    /**
+     * @brief Set a color uniform variable in the shader program.
+     *
+     * @param name The name of the uniform variable.
+     * @param value The color value to set.
+     */
+    void set(const char* name, Color value);
 
 private:
     uint32_t m_id;
