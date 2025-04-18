@@ -11,7 +11,7 @@ Since Quack Engine is still in development, it doesn't have many features. Howev
 
 ## Usage Example
 Code below shows a small example how to use the engine. Simple, work-in-progress documentation with described classes
-is available [here](https://badzianga.github.io/Quack/annotated.html).
+is available [here](https://quackengine.netlify.app/annotated.html).
 ```C++
 #include <Quack/Core/Engine.hpp>
 #include <Quack/Core/Time.hpp>
