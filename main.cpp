@@ -9,19 +9,22 @@ class Application final : public Engine {
 public:
     void onCreate() override {
         accessWindow().setClearColor({0.2f, 0.3f, 0.3f, 1.f});
+        accessWindow().setCursorEnabled(false);
 
         camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();
+        camera->getComponent<TransformComponent>()->rotation.y = -90.f;
 
         object = scene.createGameObject("Object");
         object->getComponent<TransformComponent>()->position = glm::vec3(0.f, 0.f, -2.f);
         auto* meshRendererComponent = object->addComponent<MeshRendererComponent>();
-
         meshRendererComponent->mesh = Mesh::createCube();
         meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
         meshRendererComponent->material.colorMap = Color::Blue;
 
         scene.startAllGameObjects();
+        lastX = Input::getMouseX();
+        lastY = Input::getMouseY();
     }
 
     void onUpdate() override {
@@ -52,14 +55,24 @@ public:
         const glm::vec3 movement = (cameraTransform->getRight() * x + cameraTransform->getForward() * z) * (Time::getDeltaTime() * 12.f);
 
         cameraTransform->position += movement;
+
+        constexpr float mouseSensitivity = 10.f;
+        float deltaX = (Input::getMouseX() - lastX) * mouseSensitivity * Time::getDeltaTime();
+        float deltaY = (Input::getMouseY() - lastY) * mouseSensitivity * Time::getDeltaTime();
+        lastX = Input::getMouseX();
+        lastY = Input::getMouseY();
+        cameraTransform->rotation.x -= deltaY;
+        cameraTransform->rotation.x = glm::clamp(cameraTransform->rotation.x, -89.f, 89.f);
+        cameraTransform->rotation.y += deltaX;
     }
 
-    void onDestroy() override {
-    }
+    void onDestroy() override {}
 private:
     Scene scene;
     GameObject* camera = nullptr;
     GameObject* object = nullptr;
+    float lastX = 0;
+    float lastY = 0;
 };
 
 int main() {
