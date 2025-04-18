@@ -13,7 +13,6 @@ public:
 
         camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();
-        camera->getComponent<TransformComponent>()->rotation.y = -90.f;
 
         object = scene.createGameObject("Object");
         object->getComponent<TransformComponent>()->position = glm::vec3(0.f, 0.f, -2.f);

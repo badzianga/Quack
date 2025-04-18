@@ -6,13 +6,12 @@ void TransformComponent::start() {}
 void TransformComponent::update() {}
 
 glm::vec3 TransformComponent::getForward() const {
-    // TODO: default camera front is to X axis instead of Z axis, how to change it?
-    float radiansX = glm::radians(rotation.x);
-    float radiansY = glm::radians(rotation.y);
+    float pitch = glm::radians(rotation.x);
+    float yaw = glm::radians(rotation.y);
     glm::vec3 forward;
-    forward.x = std::cos(radiansY) * std::cos(radiansX);
-    forward.y = std::sin(radiansX);
-    forward.z = std::sin(radiansY) * std::cos(radiansX);
+    forward.x = std::sin(yaw) * std::cos(pitch);
+    forward.y = std::sin(pitch);
+    forward.z = -std::cos(yaw) * std::cos(pitch);
     return glm::normalize(forward);
 }
 
