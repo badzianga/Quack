@@ -42,6 +42,16 @@ public:
     void setCursorEnabled(bool enabled) const;
 
     /**
+     * @brief Set vertical synchronization of the window.
+     *
+     * When disabled, the window will be refreshed with maximum frequency.
+     * By default, V-Sync is enabled.
+     *
+     * @param enabled True to set V-Sync enabled, false otherwise.
+     */
+    void setVSyncEnabled(bool enabled) const;
+
+    /**
      * @brief Set the clear color used before drawing each frame.
      *
      * @param color Clear color.

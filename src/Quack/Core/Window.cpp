@@ -97,3 +97,8 @@ void Window::setCursorEnabled(bool enabled) const {
         glfwSetInputMode(p_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 }
+
+void Window::setVSyncEnabled(bool enabled) const {
+    (void) p_window;
+    glfwSwapInterval(enabled);
+}
