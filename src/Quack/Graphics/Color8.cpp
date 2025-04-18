@@ -24,7 +24,7 @@ const Color8 Color8::Red{ 255, 0, 0, 255 };
 const Color8 Color8::Green{ 0, 255, 0, 255 };
 const Color8 Color8::Blue{ 0, 0, 255, 255 };
 const Color8 Color8::Yellow{ 255, 255, 0, 255 };
-const Color8 Color8::Magenta{ 255, 255, 0, 255 };
+const Color8 Color8::Magenta{ 255, 0, 255, 255 };
 const Color8 Color8::Cyan{ 0, 255, 255, 255 };
 const Color8 Color8::White{ 255, 255, 255, 255 };
 const Color8 Color8::Black{ 0, 0, 0, 255 };
