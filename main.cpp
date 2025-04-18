@@ -10,6 +10,7 @@ public:
     void onCreate() override {
         accessWindow().setClearColor({0.2f, 0.3f, 0.3f, 1.f});
         accessWindow().setCursorEnabled(false);
+        accessWindow().setVSyncEnabled(false);
 
         camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();
@@ -20,6 +21,14 @@ public:
         meshRendererComponent->mesh = Mesh::createCube();
         meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
         meshRendererComponent->material.colorMap = Color::Blue;
+
+        auto ground = scene.createGameObject("Ground");
+        ground->getComponent<TransformComponent>()->position = glm::vec3(0.f, -0.5f, -2.f);
+        ground->getComponent<TransformComponent>()->scale = glm::vec3(8.f, 1.f, 8.f);
+        auto* meshRenderer = ground->addComponent<MeshRendererComponent>();
+        meshRenderer->mesh = Mesh::createPlane();
+        meshRenderer->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
+        meshRenderer->material.colorMap = Color{ 0.f, 0.6f, 0.1f, 1.f };
 
         scene.startAllGameObjects();
         lastX = Input::getMouseX();
@@ -55,14 +64,22 @@ public:
 
         cameraTransform->position += movement;
 
-        constexpr float mouseSensitivity = 10.f;
-        float deltaX = (Input::getMouseX() - lastX) * mouseSensitivity * Time::getDeltaTime();
-        float deltaY = (Input::getMouseY() - lastY) * mouseSensitivity * Time::getDeltaTime();
+        constexpr float mouseSensitivity = 0.25f;
+        float deltaX = (Input::getMouseX() - lastX) * mouseSensitivity;
+        float deltaY = (Input::getMouseY() - lastY) * mouseSensitivity;
         lastX = Input::getMouseX();
         lastY = Input::getMouseY();
         cameraTransform->rotation.x -= deltaY;
         cameraTransform->rotation.x = glm::clamp(cameraTransform->rotation.x, -89.f, 89.f);
         cameraTransform->rotation.y += deltaX;
+
+        timeSum += Time::getDeltaTime();
+        ++fps;
+        if (timeSum > 1.f) {
+            printf("FPS: %d\n", fps);
+            timeSum = 0.f;
+            fps = 0;
+        }
     }
 
     void onDestroy() override {}
@@ -72,6 +89,8 @@ private:
     GameObject* object = nullptr;
     float lastX = 0;
     float lastY = 0;
+    float timeSum = 0.f;
+    int fps = 0;
 };
 
 int main() {
