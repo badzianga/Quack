@@ -31,6 +31,7 @@ public:
      * @brief Get the forward direction vector.
      *
      * Calculated from the current rotation.
+     * With rotation (0, 0, 0), forward direction is to the negative Z axis (0, 0, -1).
      *
      * @return 3D vector with normalized forward direction.
      */
