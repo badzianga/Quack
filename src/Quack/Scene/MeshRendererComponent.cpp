@@ -25,7 +25,7 @@ void MeshRendererComponent::update() {
     }
     mesh.draw();
 
-    Texture::unbind();
+    // TODO: consider unbinding texture
 }
 
 glm::mat4 MeshRendererComponent::getModelMatrix(const TransformComponent* transform) {

@@ -22,10 +22,6 @@ void Texture::bind(uint32_t unit) const {
     glBindTexture(GL_TEXTURE_2D, m_id);
 }
 
-void Texture::unbind() {
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
-
 void Texture::generate() {
     glGenTextures(1, &m_id);
     glBindTexture(GL_TEXTURE_2D, m_id);

@@ -24,6 +24,9 @@ struct Material {
      * @brief Texture of the material.
      *
      * If it is not specified, then only color is used for the material.
+     *
+     * Valid texture should be created somewhere else and address of it
+     * should be set to this pointer to properly access it during rendering.
      */
     Texture* baseMap = nullptr;
 };
