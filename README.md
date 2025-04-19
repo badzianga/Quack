@@ -47,7 +47,7 @@ public:
         meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
 
         // Set the blue color of the created object
-        meshRendererComponent->material.colorMap = Color::Blue;
+        meshRendererComponent->material.baseColor = Color::Blue;
 
         // Start all game objects added to scene
         scene.startAllGameObjects();

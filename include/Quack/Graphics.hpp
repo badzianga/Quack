@@ -6,6 +6,7 @@
 #include "Quack/Graphics/Material.hpp"
 #include "Quack/Graphics/Mesh.hpp"
 #include "Quack/Graphics/Shader.hpp"
+#include "Quack/Graphics/Texture.hpp"
 #include "Quack/Graphics/Vertex.hpp"
 
 #endif //QUACK_GRAPHICS_HPP

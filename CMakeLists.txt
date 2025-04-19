@@ -70,9 +70,11 @@ add_executable(Quack main.cpp
         include/Quack/Graphics/Color.hpp
         src/Quack/Graphics/Color8.cpp
         include/Quack/Graphics/Color8.hpp
+        src/Quack/Graphics/Texture.cpp
+        include/Quack/Graphics/Texture.hpp
 )
 
-target_include_directories(Quack PRIVATE include)
+target_include_directories(Quack PRIVATE include external)
 target_link_libraries(Quack PRIVATE glad glfw glm)
 
 file(COPY resources DESTINATION "${CMAKE_BINARY_DIR}")

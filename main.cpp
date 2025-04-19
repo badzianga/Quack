@@ -19,16 +19,16 @@ public:
         object->getComponent<TransformComponent>()->position = glm::vec3(0.f, 0.f, -2.f);
         auto* meshRendererComponent = object->addComponent<MeshRendererComponent>();
         meshRendererComponent->mesh = Mesh::createCube();
-        meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
-        meshRendererComponent->material.colorMap = Color::Blue;
+        meshRendererComponent->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
+        meshRendererComponent->material.baseColor = Color::Blue;
 
         auto ground = scene.createGameObject("Ground");
         ground->getComponent<TransformComponent>()->position = glm::vec3(0.f, -0.5f, -2.f);
         ground->getComponent<TransformComponent>()->scale = glm::vec3(8.f, 1.f, 8.f);
         auto* meshRenderer = ground->addComponent<MeshRendererComponent>();
         meshRenderer->mesh = Mesh::createPlane();
-        meshRenderer->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
-        meshRenderer->material.colorMap = Color{ 0.f, 0.6f, 0.1f, 1.f };
+        meshRenderer->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
+        meshRenderer->material.baseColor = Color{ 0.f, 0.6f, 0.1f, 1.f };
 
         scene.startAllGameObjects();
         lastX = Input::getMouseX();
