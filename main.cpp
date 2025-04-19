@@ -34,8 +34,7 @@ public:
         meshRenderer->material.baseColor = Color::Blue;
 
         scene.startAllGameObjects();
-        lastX = Input::getMouseX();
-        lastY = Input::getMouseY();
+        lastMousePosition = Input::getMousePosition();
     }
 
     void onUpdate() override {
@@ -68,13 +67,11 @@ public:
         cameraTransform->position += movement;
 
         constexpr float mouseSensitivity = 0.25f;
-        float deltaX = (Input::getMouseX() - lastX) * mouseSensitivity;
-        float deltaY = (Input::getMouseY() - lastY) * mouseSensitivity;
-        lastX = Input::getMouseX();
-        lastY = Input::getMouseY();
-        cameraTransform->rotation.x -= deltaY;
+        glm::vec2 mouseDelta = (Input::getMousePosition() - lastMousePosition) * mouseSensitivity;
+        lastMousePosition = Input::getMousePosition();
+        cameraTransform->rotation.x -= mouseDelta.y;
         cameraTransform->rotation.x = glm::clamp(cameraTransform->rotation.x, -89.f, 89.f);
-        cameraTransform->rotation.y += deltaX;
+        cameraTransform->rotation.y += mouseDelta.x;
 
         timeSum += Time::getDeltaTime();
         ++fps;
@@ -93,8 +90,7 @@ private:
     GameObject* camera = nullptr;
     GameObject* object = nullptr;
     Texture texture;
-    float lastX = 0;
-    float lastY = 0;
+    glm::vec2 lastMousePosition{ 0.f };
     float timeSum = 0.f;
     int fps = 0;
 };

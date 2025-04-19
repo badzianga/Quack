@@ -33,16 +33,14 @@ bool Input::isKeyDown(Keyboard::Key key) {
     return glfwGetKey(s_instance.p_window, keyCode) == GLFW_PRESS;
 }
 
-float Input::getMouseX() {
-    double x;
-    double y;
-    glfwGetCursorPos(s_instance.p_window, &x, &y);
-    return static_cast<float>(x);
+bool Input::isButtonPressed(Mouse::Button button) {
+    int mouseButton = static_cast<int>(button);
+    return glfwGetMouseButton(s_instance.p_window, mouseButton) == GLFW_PRESS;
 }
 
-float Input::getMouseY() {
+glm::vec2 Input::getMousePosition() {
     double x;
     double y;
     glfwGetCursorPos(s_instance.p_window, &x, &y);
-    return static_cast<float>(y);
+    return { static_cast<float>(x), static_cast<float>(y) };
 }

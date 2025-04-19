@@ -4,6 +4,7 @@
 #include "Quack/Core/Engine.hpp"
 #include "Quack/Core/Input.hpp"
 #include "Quack/Core/Keyboard.hpp"
+#include "Quack/Core/Mouse.hpp"
 #include "Quack/Core/Time.hpp"
 #include "Quack/Core/Window.hpp"
 

@@ -1,7 +1,9 @@
 #ifndef QUACK_INPUT_HPP
 #define QUACK_INPUT_HPP
 #include "Quack/Core/Keyboard.hpp"
+#include "Quack/Core/Mouse.hpp"
 #include <unordered_map>
+#include <glm/vec2.hpp>
 
 struct GLFWwindow;
 
@@ -61,18 +63,19 @@ public:
     static bool isKeyDown(Keyboard::Key key);
 
     /**
-     * @brief Get the current X position of the mouse cursor.
+     * @brief Check if a button is currently pressed (down).
      *
-     * @return Mouse X coordinate in window space.
+     * @param button Button to check.
+     * @return True if button is currently pressed.
      */
-    static float getMouseX();
+    static bool isButtonPressed(Mouse::Button button);
 
     /**
-     * @brief Get the current Y position of the mouse cursor.
+     * @brief Get the current position of the mouse cursor.
      *
-     * @return Mouse Y coordinate in window space.
+     * @return Mouse coordinates in window space.
      */
-    static float getMouseY();
+    static glm::vec2 getMousePosition();
 private:
     /**
      * @brief Private constructor to enforce singleton pattern.

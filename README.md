@@ -102,17 +102,16 @@ cmake --build .
 ```
 
 ## Future improvements and features
-- Mesh/Shader manager with one instance of objects, references to them in components
 - 3D light
-- Capsule and sphere meshes
+- Mesh/Shader/Texture manager with one instance of objects, references to them in components
 - Pre-defined shaders
-- Matrix, Quaternion, Vector classes
-- Rotation with Quaternions
+- Matrix and Vector classes
+- ScriptComponent and scripting
+- Interactive editor
+- RigidBodyComponent with basic physics
+- Capsule and sphere meshes
 - Time scaling
 - Fixed timestep
-- Mouse inputs
 - Action mapping
 - Mouse delta
 - Gamepad support
-- RigidBodyComponent with basic physics
-- ScriptComponent and scripting

@@ -72,6 +72,7 @@ add_executable(Quack main.cpp
         include/Quack/Graphics/Color8.hpp
         src/Quack/Graphics/Texture.cpp
         include/Quack/Graphics/Texture.hpp
+        include/Quack/Core/Mouse.hpp
 )
 
 target_include_directories(Quack PRIVATE include external)
