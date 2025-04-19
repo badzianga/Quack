@@ -10,17 +10,20 @@ public:
     void onCreate() override {
         accessWindow().setClearColor({0.2f, 0.3f, 0.3f, 1.f});
         accessWindow().setCursorEnabled(false);
-        accessWindow().setVSyncEnabled(false);
+        accessWindow().setVSyncEnabled(true);
 
         camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();
+
+        texture.create("resources/textures/logo.png");
 
         object = scene.createGameObject("Object");
         object->getComponent<TransformComponent>()->position = glm::vec3(0.f, 0.f, -2.f);
         auto* meshRendererComponent = object->addComponent<MeshRendererComponent>();
         meshRendererComponent->mesh = Mesh::createCube();
         meshRendererComponent->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
-        meshRendererComponent->material.baseColor = Color::Blue;
+        meshRendererComponent->material.baseMap = &texture;
+
 
         auto ground = scene.createGameObject("Ground");
         ground->getComponent<TransformComponent>()->position = glm::vec3(0.f, -0.5f, -2.f);
@@ -28,7 +31,7 @@ public:
         auto* meshRenderer = ground->addComponent<MeshRendererComponent>();
         meshRenderer->mesh = Mesh::createPlane();
         meshRenderer->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
-        meshRenderer->material.baseColor = Color{ 0.f, 0.6f, 0.1f, 1.f };
+        meshRenderer->material.baseColor = Color::Blue;
 
         scene.startAllGameObjects();
         lastX = Input::getMouseX();
@@ -82,11 +85,14 @@ public:
         }
     }
 
-    void onDestroy() override {}
+    void onDestroy() override {
+        texture.destroy();
+    }
 private:
     Scene scene;
     GameObject* camera = nullptr;
     GameObject* object = nullptr;
+    Texture texture;
     float lastX = 0;
     float lastY = 0;
     float timeSum = 0.f;

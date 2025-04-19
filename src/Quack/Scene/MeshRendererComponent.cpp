@@ -16,8 +16,16 @@ void MeshRendererComponent::update() {
     shader.use();
     shader.set("u_mvp", mvp);
     shader.set("u_baseColor", material.baseColor);
-    shader.set("u_hasBaseMap", material.baseMap != nullptr);
+    if (material.baseMap != nullptr) {
+        shader.set("u_hasBaseMap", true);
+        material.baseMap->bind();
+    }
+    else {
+        shader.set("u_hasBaseMap", false);
+    }
     mesh.draw();
+
+    Texture::unbind();
 }
 
 glm::mat4 MeshRendererComponent::getModelMatrix(const TransformComponent* transform) {
