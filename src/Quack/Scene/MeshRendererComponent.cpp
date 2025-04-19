@@ -16,6 +16,7 @@ void MeshRendererComponent::update() {
     shader.use();
     shader.set("u_mvp", mvp);
     shader.set("u_baseColor", material.baseColor);
+    shader.set("u_hasBaseMap", material.baseMap != nullptr);
     mesh.draw();
 }
 

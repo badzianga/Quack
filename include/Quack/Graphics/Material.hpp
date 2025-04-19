@@ -4,7 +4,7 @@
 #include "Quack/Graphics/Texture.hpp"
 
 /**
- * @brief Simple structure representing a material's visual properties
+ * @brief Simple structure representing a material's visual properties.
  *
  * Currently, it only includes a base color (color map), but will be extended
  * to include textures, shininess, specular highlights, etc.
