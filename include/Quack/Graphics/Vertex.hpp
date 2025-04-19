@@ -1,5 +1,6 @@
 #ifndef QUACK_VERTEX_HPP
 #define QUACK_VERTEX_HPP
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
 /**
@@ -16,6 +17,11 @@ struct Vertex {
      * This is the primary attribute used for rendering the mesh.
      */
     glm::vec3 position;
+
+    /**
+     * @brief Texture UV of the vertex.
+     */
+    glm::vec2 texCoord;
 };
 
 #endif //QUACK_VERTEX_HPP
