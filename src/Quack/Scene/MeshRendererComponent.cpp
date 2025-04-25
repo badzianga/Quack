@@ -7,10 +7,8 @@ void MeshRendererComponent::start() {}
 
 void MeshRendererComponent::update() {
     // TODO: update only if enabled
-    const auto transform = gameObject->getComponent<TransformComponent>();
-    assert(transform != nullptr);
 
-    glm::mat4 model = getModelMatrix(transform);
+    glm::mat4 model = getModelMatrix(gameObject->transform);
     glm::mat4 mvp = CameraComponent::getStaticProjectionView() * model;
 
     shader.use();
@@ -28,14 +26,14 @@ void MeshRendererComponent::update() {
     // TODO: consider unbinding texture
 }
 
-glm::mat4 MeshRendererComponent::getModelMatrix(const TransformComponent* transform) {
+glm::mat4 MeshRendererComponent::getModelMatrix(const Transform& transform) {
     glm::mat4 model{1.f};
 
-    model = glm::translate(model, transform->position);
-    model = glm::rotate(model, glm::radians(transform->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(transform->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(transform->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, transform->scale);
+    model = glm::translate(model, transform.position);
+    model = glm::rotate(model, glm::radians(transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::scale(model, transform.scale);
 
     return model;
 }

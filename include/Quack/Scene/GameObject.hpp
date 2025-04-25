@@ -1,6 +1,7 @@
 #ifndef QUACK_GAME_OBJECT_HPP
 #define QUACK_GAME_OBJECT_HPP
 #include "Quack/Scene/Component.hpp"
+#include "Quack/Scene/Transform.hpp"
 #include <memory>
 #include <typeindex>
 #include <unordered_map>
@@ -81,6 +82,9 @@ public:
      * @return True if active, false otherwise.
      */
     [[nodiscard]] bool isActive() const;
+
+    // Transform pseudo-component which contains transformation-related vectors
+    Transform transform{};
 
 private:
     std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;

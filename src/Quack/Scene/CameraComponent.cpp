@@ -1,6 +1,6 @@
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
-#include "Quack/Scene/TransformComponent.hpp"
+#include "Quack/Scene/Transform.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 glm::mat4 CameraComponent::s_projectionView{1.f};
@@ -12,11 +12,9 @@ void CameraComponent::update() {
 }
 
 glm::mat4 CameraComponent::getViewMatrix() const {
-    auto transform = gameObject->getComponent<TransformComponent>();
-    assert(transform != nullptr);
-    const glm::vec3& position = transform->position;
-    glm::vec3 forward = transform->getForward();
-    glm::vec3 up = transform->getUp();
+    const glm::vec3& position = gameObject->transform.position;
+    glm::vec3 forward = gameObject->transform.getForward();
+    glm::vec3 up = gameObject->transform.getUp();
 
     return glm::lookAt(position, position + forward, up);
 }

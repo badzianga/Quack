@@ -1,32 +1,15 @@
-#ifndef QUACK_TRANSFORM_COMPONENT_HPP
-#define QUACK_TRANSFORM_COMPONENT_HPP
-#include "Quack/Scene/Component.hpp"
+#ifndef QUACK_TRANSFORM_HPP
+#define QUACK_TRANSFORM_HPP
 #include <glm/mat4x4.hpp>
 
 /**
- * @brief %Component representing the position, rotation, and scale of a %GameObject.
+ * @brief Class representing the position, rotation, and scale of a %GameObject.
  *
- * This component is essential for spatial transformations and orientation in the 3D world.
+ * This pseudo-component is essential for spatial transformations and orientation in the 3D world.
  * It is added to every created GameObject by default.
  */
-class TransformComponent final : public Component {
+class Transform {
 public:
-    /**
-     * @brief Call once when the component is initialized.
-     *
-     * In the future it will be used to perform any setup required
-     * for the transform component. For now, it does nothing.
-     */
-    void start() override;
-
-    /**
-     * @brief Call every frame to update the component.
-     *
-     * Can be used to apply continuous transformations,
-     * but in the future. For now, it does nothing.
-     */
-    void update() override;
-
     /**
      * @brief Get the forward direction vector.
      *
@@ -65,4 +48,4 @@ public:
     glm::vec3 scale{1.f};
 };
 
-#endif //QUACK_TRANSFORM_COMPONENT_HPP
+#endif //QUACK_TRANSFORM_HPP

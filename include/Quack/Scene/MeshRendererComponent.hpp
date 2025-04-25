@@ -2,7 +2,7 @@
 #define QUACK_MESH_RENDERER_COMPONENT_HPP
 #include "Quack/Graphics.hpp"
 #include "Quack/Scene/Component.hpp"
-#include "Quack/Scene/TransformComponent.hpp"
+#include "Quack/Scene/Transform.hpp"
 
 /**
  * @brief %Component responsible for rendering a 3D mesh.
@@ -44,7 +44,7 @@ private:
      * @param transform Pointer to the TransformComponent.
      * @return The resulting model matrix.
      */
-    static glm::mat4 getModelMatrix(const TransformComponent* transform);
+    static glm::mat4 getModelMatrix(const Transform& transform);
 };
 
 #endif //QUACK_MESH_RENDERER_COMPONENT_HPP

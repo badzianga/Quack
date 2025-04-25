@@ -1,11 +1,7 @@
-#include "Quack/Scene/TransformComponent.hpp"
+#include "Quack/Scene/Transform.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-void TransformComponent::start() {}
-
-void TransformComponent::update() {}
-
-glm::vec3 TransformComponent::getForward() const {
+glm::vec3 Transform::getForward() const {
     float pitch = glm::radians(rotation.x);
     float yaw = glm::radians(rotation.y);
     glm::vec3 forward;
@@ -15,10 +11,10 @@ glm::vec3 TransformComponent::getForward() const {
     return glm::normalize(forward);
 }
 
-glm::vec3 TransformComponent::getRight() const {
+glm::vec3 Transform::getRight() const {
     return glm::normalize(glm::cross(getForward(), glm::vec3(0.0f, 1.0f, 0.0f)));
 }
 
-glm::vec3 TransformComponent::getUp() const {
+glm::vec3 Transform::getUp() const {
     return glm::normalize(glm::cross(getRight(), getForward()));
 }

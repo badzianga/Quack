@@ -18,7 +18,7 @@ public:
         texture.create("resources/textures/logo.png");
 
         object = scene.createGameObject("Object");
-        object->getComponent<TransformComponent>()->position = glm::vec3(0.f, 0.f, -2.f);
+        object->transform.position = glm::vec3(0.f, 0.f, -2.f);
         auto* meshRendererComponent = object->addComponent<MeshRendererComponent>();
         meshRendererComponent->mesh = Mesh::createCube();
         meshRendererComponent->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
@@ -26,8 +26,8 @@ public:
 
 
         auto ground = scene.createGameObject("Ground");
-        ground->getComponent<TransformComponent>()->position = glm::vec3(0.f, -0.5f, -2.f);
-        ground->getComponent<TransformComponent>()->scale = glm::vec3(8.f, 1.f, 8.f);
+        ground->transform.position = glm::vec3(0.f, -0.5f, -2.f);
+        ground->transform.scale = glm::vec3(8.f, 1.f, 8.f);
         auto* meshRenderer = ground->addComponent<MeshRendererComponent>();
         meshRenderer->mesh = Mesh::createPlane();
         meshRenderer->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
@@ -59,19 +59,18 @@ public:
             z = -1;
         }
 
-        object->getComponent<TransformComponent>()->rotation.y += 60.f * Time::getDeltaTime();
+        object->transform.rotation.y += 60.f * Time::getDeltaTime();
 
-        const auto cameraTransform = camera->getComponent<TransformComponent>();
-        const glm::vec3 movement = (cameraTransform->getRight() * x + cameraTransform->getForward() * z) * (Time::getDeltaTime() * 12.f);
+        const glm::vec3 movement = (camera->transform.getRight() * x + camera->transform.getForward() * z) * (Time::getDeltaTime() * 12.f);
 
-        cameraTransform->position += movement;
+        camera->transform.position += movement;
 
         constexpr float mouseSensitivity = 0.25f;
         glm::vec2 mouseDelta = (Input::getMousePosition() - lastMousePosition) * mouseSensitivity;
         lastMousePosition = Input::getMousePosition();
-        cameraTransform->rotation.x -= mouseDelta.y;
-        cameraTransform->rotation.x = glm::clamp(cameraTransform->rotation.x, -89.f, 89.f);
-        cameraTransform->rotation.y += mouseDelta.x;
+        camera->transform.rotation.x -= mouseDelta.y;
+        camera->transform.rotation.x = glm::clamp(camera->transform.rotation.x, -89.f, 89.f);
+        camera->transform.rotation.y += mouseDelta.x;
 
         timeSum += Time::getDeltaTime();
         ++fps;

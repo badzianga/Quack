@@ -51,7 +51,7 @@ add_executable(Quack main.cpp
         include/Quack/Graphics.hpp
         src/Quack/Utils/Logger.cpp
         include/Quack/Utils/Logger.hpp
-        include/Quack/Scene/TransformComponent.hpp
+        include/Quack/Scene/Transform.hpp
         include/Quack/Scene/GameObject.hpp
         include/Quack/Scene/Component.hpp
         include/Quack/Scene/Scene.hpp
@@ -62,7 +62,7 @@ add_executable(Quack main.cpp
         include/Quack/Graphics/Material.hpp
         src/Quack/Scene/CameraComponent.cpp
         src/Quack/Scene/MeshRendererComponent.cpp
-        src/Quack/Scene/TransformComponent.cpp
+        src/Quack/Scene/Transform.cpp
         src/Quack/Scene/GameObject.cpp
         include/Quack/Scene/GameObject.inl
         src/Quack/Scene/Scene.cpp

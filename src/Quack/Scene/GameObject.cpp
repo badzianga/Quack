@@ -1,9 +1,6 @@
 #include "Quack/Scene/GameObject.hpp"
-#include "Quack/Scene/TransformComponent.hpp"
 
-GameObject::GameObject(const char* name) : m_name(name) {
-    addComponent<TransformComponent>();
-}
+GameObject::GameObject(const char* name) : m_name(name) {}
 
 void GameObject::startAllComponents() const {
     for (auto& pair : m_components) {
