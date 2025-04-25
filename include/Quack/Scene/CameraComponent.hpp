@@ -11,6 +11,9 @@
  */
 class CameraComponent final : public Component {
 public:
+    /// Enumeration with camera projection types.
+    enum class ProjectionType { Perspective, Orthographic };
+
     /**
      * @brief Initialize the camera component.
      *
@@ -36,7 +39,8 @@ public:
     /**
      * @brief Calculate the projection matrix.
      *
-     * @return Matrix representing the perspective projection.
+     * @return Matrix representing the perspective or orthographic projection,
+     * depending on selected projectionType.
      */
     [[nodiscard]] glm::mat4 getProjectionMatrix() const;
 
@@ -59,6 +63,9 @@ public:
      */
     [[nodiscard]] static glm::mat4 getStaticProjectionView();
 
+    /// Projection type of the camera.
+    ProjectionType projectionType = ProjectionType::Perspective;
+
     /// Field of view in degrees.
     float fieldOfView = 60.f;
 
@@ -70,6 +77,9 @@ public:
 
     /// Aspect ratio of the camera's viewport (width / height).
     float aspectRatio = 4.f / 3.f;
+
+    /// Orthogonal size used by Orthographic camera.
+    float orthoSize = 5.0f;
 private:
     static glm::mat4 s_projectionView;
 };

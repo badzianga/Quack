@@ -20,7 +20,12 @@ glm::mat4 CameraComponent::getViewMatrix() const {
 }
 
 glm::mat4 CameraComponent::getProjectionMatrix() const {
-    return glm::perspective(glm::radians(fieldOfView), aspectRatio, nearClip, farClip);
+    if (projectionType == ProjectionType::Perspective) {
+        return glm::perspective(glm::radians(fieldOfView), aspectRatio, nearClip, farClip);
+    }
+    const float halfHeight = orthoSize * 0.5f;
+    const float halfWidth = halfHeight * aspectRatio;
+    return glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, nearClip, farClip);
 }
 
 glm::mat4 CameraComponent::getProjectionViewMatrix() const {
