@@ -35,7 +35,7 @@ public:
         myCube = scene.createGameObject("MyCube");
 
         // Set position of the cube object using its TransformComponent
-        myCube->getComponent<TransformComponent>()->position = glm::vec3(0, 0, -2);
+        myCube->transform.position = glm::vec3(0, 0, -2);
         
         // Connect a MeshRendererComponent to created object, which will render on every update
         auto* meshRendererComponent = myCube->addComponent<MeshRendererComponent>();
@@ -59,7 +59,7 @@ public:
     // Called every frame between clearing and updating
     void onUpdate() override {
         // Rotate the cube 60 degrees per second
-        myCube->getComponent<TransformComponent>()->rotation.y += 60.f * Time::getDeltaTime();
+        myCube->transform.rotation.y += 60.f * Time::getDeltaTime();
     
         // Update all objects added to the scene
         scene.updateAllGameObjects();
