@@ -3,6 +3,8 @@
 #include "Quack/Scene/MeshRendererComponent.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Quack/Graphics/GlobalLight.hpp"
+
 void MeshRendererComponent::start() {}
 
 void MeshRendererComponent::update() {
@@ -21,6 +23,11 @@ void MeshRendererComponent::update() {
     else {
         shader.set("u_hasBaseMap", false);
     }
+
+    // Set lights even if current shader doesn't support it
+    shader.set("u_lightColor", GlobalLight::color);
+    shader.set("u_ambientIntensity", GlobalLight::ambientIntensity);
+
     mesh.draw();
 
     // TODO: consider unbinding texture

@@ -5,9 +5,10 @@ Quack Engine is a currently developed small 3D game engine created using C++ and
 ## Features
 Since Quack Engine is still in development, it doesn't have many features. However, for now, it allows you to:
 - create your own Engine-derived class with auto-called methods
-- create a scene with objects to which you can connect components
+- create a scene with objects to which you can connect components (Mesh, Camera)
 - render pre-defined meshes (plane, cube)
 - transform objects on the scene
+- use global direction light applied to all object
 
 ## Usage Example
 Code below shows a small example how to use the engine. Simple, work-in-progress documentation with described classes
@@ -104,6 +105,7 @@ cmake --build .
 ## Future improvements and features
 - 3D light
 - Mesh/Shader/Texture manager with one instance of objects, references to them in components
+- loading .obj files
 - Pre-defined shaders
 - Matrix and Vector classes
 - ScriptComponent and scripting

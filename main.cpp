@@ -5,6 +5,9 @@
 #include "Quack/Scene/MeshRendererComponent.hpp"
 #include "Quack/Scene/Scene.hpp"
 
+constexpr const char* VERT_SHADER = "resources/shaders/global_light.vert";
+constexpr const char* FRAG_SHADER = "resources/shaders/global_light.frag";
+
 class Application final : public Engine {
 public:
     void onCreate() override {
@@ -21,7 +24,7 @@ public:
         object->transform.position = glm::vec3(0.f, 0.f, -2.f);
         auto* meshRendererComponent = object->addComponent<MeshRendererComponent>();
         meshRendererComponent->mesh = Mesh::createCube();
-        meshRendererComponent->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
+        meshRendererComponent->shader.create(VERT_SHADER, FRAG_SHADER);
         meshRendererComponent->material.baseMap = &texture;
 
 
@@ -30,7 +33,7 @@ public:
         ground->transform.scale = glm::vec3(8.f, 1.f, 8.f);
         auto* meshRenderer = ground->addComponent<MeshRendererComponent>();
         meshRenderer->mesh = Mesh::createPlane();
-        meshRenderer->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
+        meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
         meshRenderer->material.baseColor = Color::Blue;
 
         scene.startAllGameObjects();

@@ -19,6 +19,11 @@ struct Vertex {
     glm::vec3 position;
 
     /**
+     * @brief Normal direction of the vertex.
+     */
+    glm::vec3 normal;
+
+    /**
      * @brief Texture UV of the vertex.
      */
     glm::vec2 texCoord;
