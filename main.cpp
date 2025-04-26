@@ -5,8 +5,8 @@
 #include "Quack/Scene/MeshRendererComponent.hpp"
 #include "Quack/Scene/Scene.hpp"
 
-constexpr const char* VERT_SHADER = "resources/shaders/global_light.vert";
-constexpr const char* FRAG_SHADER = "resources/shaders/global_light.frag";
+constexpr auto VERT_SHADER = "resources/shaders/global_light.vert";
+constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
 
 class Application final : public Engine {
 public:
@@ -18,15 +18,15 @@ public:
         camera = scene.createGameObject("Camera");
         camera->addComponent<CameraComponent>();
 
-        texture.create("resources/textures/logo.png");
+        // texture.create("resources/textures/logo.png");
 
         object = scene.createGameObject("Object");
-        object->transform.position = glm::vec3(0.f, 0.f, -2.f);
+        object->transform.position = glm::vec3(0.f, -0.5f, -2.f);
+        object->transform.scale *= 0.01f;
         auto* meshRendererComponent = object->addComponent<MeshRendererComponent>();
-        meshRendererComponent->mesh = Mesh::createCube();
+        meshRendererComponent->mesh = Mesh::loadObj("resources/models/fox.obj");
         meshRendererComponent->shader.create(VERT_SHADER, FRAG_SHADER);
-        meshRendererComponent->material.baseMap = &texture;
-
+        // meshRendererComponent->material.baseMap = &texture;
 
         auto ground = scene.createGameObject("Ground");
         ground->transform.position = glm::vec3(0.f, -0.5f, -2.f);

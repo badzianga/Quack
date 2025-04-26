@@ -9,6 +9,7 @@ Since Quack Engine is still in development, it doesn't have many features. Howev
 - render pre-defined meshes (plane, cube)
 - transform objects on the scene
 - use global direction light applied to all object
+- load .obj files as meshes to render
 
 ## Usage Example
 Code below shows a small example how to use the engine. Simple, work-in-progress documentation with described classes
@@ -103,7 +104,6 @@ cmake --build .
 ```
 
 ## Future improvements and features
-- loading .obj files
 - LightComponent with directional, point and spot light
 - Mesh/Shader/Texture manager with one instance of objects, references to them in components
 - Pre-defined shaders

@@ -2,7 +2,6 @@
 #define QUACK_MESH_HPP
 #include "Quack/Graphics/Vertex.hpp"
 #include <cstdint>
-#include <initializer_list>
 #include <vector>
 
 /**
@@ -71,7 +70,7 @@ public:
      * @param indices The list of indices for indexed drawing.
      * @return True if the mesh was successfully created, false otherwise.
      */
-    bool create(std::initializer_list<Vertex> vertices, std::initializer_list<uint32_t> indices);
+    bool create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 
     /**
      * @brief Destroy the mesh and clean up OpenGL resources.
@@ -106,6 +105,8 @@ public:
      * @return The generated plane mesh.
      */
     static Mesh createPlane();
+
+    static Mesh loadObj(const char* filename);
 private:
     std::vector<Vertex> m_vertices;
     std::vector<uint32_t> m_indices;

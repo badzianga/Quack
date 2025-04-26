@@ -1,6 +1,8 @@
 #include "Quack/Graphics/Mesh.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include <glad/glad.h>
+#include <fstream>
+#include <sstream>
 #include <utility>
 
 Mesh::Mesh() : m_vao(0), m_vbo(0), m_ebo(0) {}
@@ -39,7 +41,7 @@ Mesh& Mesh::operator=(Mesh&& other) noexcept {
     return *this;
 }
 
-bool Mesh::create(std::initializer_list<Vertex> vertices, std::initializer_list<uint32_t> indices) {
+bool Mesh::create(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices) {
     m_vertices = vertices;
     m_indices = indices;
 
@@ -200,5 +202,68 @@ Mesh Mesh::createCube() {
         }
     );
 
+    return mesh;
+}
+
+Mesh Mesh::loadObj(const char* filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        Logger::error("Failed to load file: " + std::string(filename));
+        return {};
+    }
+
+    std::vector<glm::vec3> tempPositions;
+    std::vector<glm::vec2> tempTexCoords;
+    std::vector<glm::vec3> tempNormals;
+
+    std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
+
+    std::string line;
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string prefix;
+        iss >> prefix;
+
+        if (prefix == "v") {
+            glm::vec3 pos;
+            iss >> pos.x >> pos.y >> pos.z;
+            tempPositions.push_back(pos);
+        }
+        else if (prefix == "vt") {
+            glm::vec2 texCoord;
+            iss >> texCoord.x >> texCoord.y;
+            tempTexCoords.push_back(texCoord);
+        }
+        else if (prefix == "vn") {
+            glm::vec3 normal;
+            iss >> normal.x >> normal.y >> normal.z;
+            tempNormals.push_back(normal);
+        }
+        else if (prefix == "f") {
+            std::string vertexStr;
+            for (int i = 0; i < 3; ++i) {
+                iss >> vertexStr;
+                size_t slash1 = vertexStr.find('/');
+                size_t slash2 = vertexStr.find('/', slash1 + 1);
+                int posIndex = std::stoi(vertexStr.substr(0, slash1)) - 1;
+                int texCoordIndex = std::stoi(vertexStr.substr(slash1 +1, slash2 - slash1 - 1)) - 1;
+                int normalIndex = std::stoi(vertexStr.substr(slash2 + 1)) - 1;
+
+                Vertex vertex{
+                    .position = tempPositions[posIndex],
+                    .normal = tempNormals[normalIndex],
+                    .texCoord = tempTexCoords[texCoordIndex],
+                };
+
+                vertices.push_back(vertex);
+                indices.push_back(static_cast<uint32_t>(vertices.size() - 1));
+            }
+        }
+    }
+    file.close();
+
+    Mesh mesh;
+    mesh.create(vertices, indices);
     return mesh;
 }
