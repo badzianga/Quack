@@ -8,9 +8,10 @@ out vec2 textureCoord;
 out vec3 normal;
 
 uniform mat4 u_mvp;
+uniform mat3 u_normalMatrix;
 
 void main() {
     gl_Position = u_mvp * vec4(a_position, 1.f);
     textureCoord = a_textureCoord;
-    normal = a_normal;
+    normal = u_normalMatrix * a_normal;
 }

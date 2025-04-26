@@ -27,6 +27,8 @@ void MeshRendererComponent::update() {
     // Set lights even if current shader doesn't support it
     shader.set("u_lightColor", GlobalLight::color);
     shader.set("u_ambientIntensity", GlobalLight::ambientIntensity);
+    glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(model)));
+    shader.set("u_normalMatrix", normalMatrix);
 
     mesh.draw();
 
