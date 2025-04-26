@@ -62,7 +62,7 @@ public:
             z = -1;
         }
 
-        object->transform.rotation.y += 60.f * Time::getDeltaTime();
+        // object->transform.rotation.y += 60.f * Time::getDeltaTime();
 
         const glm::vec3 movement = (camera->transform.getRight() * x + camera->transform.getForward() * z) * (Time::getDeltaTime() * 12.f);
 
