@@ -45,7 +45,7 @@ public:
         meshRendererComponent->mesh = Mesh::createCube(); 
 
         // Create a shader program in the MeshRenderer object
-        meshRendererComponent->shader.create("resources/shaders/universal.vert", "resources/shaders/universal.frag");
+        meshRendererComponent->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
 
         // Set the blue color of the created object
         meshRendererComponent->material.baseColor = Color::Blue;
@@ -103,9 +103,9 @@ cmake --build .
 ```
 
 ## Future improvements and features
-- 3D light
-- Mesh/Shader/Texture manager with one instance of objects, references to them in components
 - loading .obj files
+- LightComponent with directional, point and spot light
+- Mesh/Shader/Texture manager with one instance of objects, references to them in components
 - Pre-defined shaders
 - Matrix and Vector classes
 - ScriptComponent and scripting
