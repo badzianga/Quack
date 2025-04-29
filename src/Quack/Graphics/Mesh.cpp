@@ -1,6 +1,8 @@
 #include "Quack/Graphics/Mesh.hpp"
 #include "Quack/Utils/Logger.hpp"
+#include <cmath>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 #include <fstream>
 #include <sstream>
 #include <utility>
@@ -204,6 +206,56 @@ Mesh Mesh::createCube() {
 
     return mesh;
 }
+
+Mesh Mesh::createSphere() {
+    constexpr int stackCount = 18;
+    constexpr int sectorCount = 36;
+
+    std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
+
+    for (int i = 0; i <= stackCount; ++i) {
+        float stackAngle = M_PI / 2.f - i * (M_PI / stackCount); // from +pi/2 to -pi/2
+        float xy = 0.5f * std::cos(stackAngle);
+        float z = 0.5f * std::sin(stackAngle);
+
+        for (int j = 0; j <= sectorCount; ++j) {
+            float sectorAngle = static_cast<float>(j) * (2.f * static_cast<float>(M_PI) / sectorCount); // from 0 to 2pi
+
+            float x = xy * cosf(sectorAngle);
+            float y = xy * sinf(sectorAngle);
+
+            glm::vec3 position = glm::vec3(x, y, z);
+            glm::vec3 normal = glm::normalize(position);
+            glm::vec2 texCoord = glm::vec2(
+                static_cast<float>(j) / sectorCount,
+                static_cast<float>(i) / stackCount
+            );
+
+            vertices.push_back(Vertex{position, normal, texCoord});
+        }
+    }
+
+    for (uint32_t i = 0; i < stackCount; ++i) {
+        for (uint32_t j = 0; j < sectorCount; ++j) {
+            uint32_t first = i * (sectorCount + 1) + j;
+            uint32_t second = first + sectorCount + 1;
+
+            indices.push_back(first);
+            indices.push_back(second);
+            indices.push_back(first + 1);
+
+            indices.push_back(second);
+            indices.push_back(second + 1);
+            indices.push_back(first + 1);
+        }
+    }
+
+    Mesh mesh;
+    mesh.create(vertices, indices);
+    return mesh;
+}
+
 
 Mesh Mesh::loadObj(const char* filename) {
     std::ifstream file(filename);

@@ -106,6 +106,21 @@ public:
      */
     static Mesh createPlane();
 
+    /**
+     * @brief Create a default sphere mesh.
+     *
+     * Generates a unit sphere mesh.
+     *
+     * @return The generated shpere mesh.
+     */
+    static Mesh createSphere();
+
+    /**
+     * @brief Load a mesh from .obj file.
+     *
+     * @param filename .obj file to read
+     * @return The loaded mesh.
+     */
     static Mesh loadObj(const char* filename);
 private:
     std::vector<Vertex> m_vertices;
