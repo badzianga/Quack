@@ -30,52 +30,13 @@ if(NOT glm_POPULATED)
     FetchContent_MakeAvailable(glm)
 endif()
 
-add_executable(Quack main.cpp
-        src/Quack/Core/Engine.cpp
-        include/Quack/Core/Engine.hpp
-        src/Quack/Core/Window.cpp
-        include/Quack/Core/Window.hpp
-        src/Quack/Core/Time.cpp
-        include/Quack/Core/Time.hpp
-        src/Quack/Core/Input.cpp
-        include/Quack/Core/Input.hpp
-        include/Quack/Core/Keyboard.hpp
-        src/Quack/Graphics/Shader.cpp
-        include/Quack/Graphics/Shader.hpp
-        src/Quack/Utils/FileIO.cpp
-        include/Quack/Utils/FileIO.hpp
-        src/Quack/Graphics/Mesh.cpp
-        include/Quack/Graphics/Mesh.hpp
-        include/Quack/Graphics/Vertex.hpp
-        include/Quack/Core.hpp
-        include/Quack/Graphics.hpp
-        src/Quack/Utils/Logger.cpp
-        include/Quack/Utils/Logger.hpp
-        include/Quack/Scene/Transform.hpp
-        include/Quack/Scene/GameObject.hpp
-        include/Quack/Scene/Component.hpp
-        include/Quack/Scene/Scene.hpp
-        include/Quack/Scene/MeshRendererComponent.hpp
-        include/Quack/Scene/CameraComponent.hpp
-        include/Quack/Utils.hpp
-        include/Quack/Scene.hpp
-        include/Quack/Graphics/Material.hpp
-        src/Quack/Scene/CameraComponent.cpp
-        src/Quack/Scene/MeshRendererComponent.cpp
-        src/Quack/Scene/Transform.cpp
-        src/Quack/Scene/GameObject.cpp
-        include/Quack/Scene/GameObject.inl
-        src/Quack/Scene/Scene.cpp
-        src/Quack/Graphics/Color.cpp
-        include/Quack/Graphics/Color.hpp
-        src/Quack/Graphics/Color8.cpp
-        include/Quack/Graphics/Color8.hpp
-        src/Quack/Graphics/Texture.cpp
-        include/Quack/Graphics/Texture.hpp
-        include/Quack/Core/Mouse.hpp
-        src/Quack/Graphics/GlobalLight.cpp
-        include/Quack/Graphics/GlobalLight.hpp
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
+        "${CMAKE_SOURCE_DIR}/src/Quack/*/*.cpp"
+        "${CMAKE_SOURCE_DIR}/include/Quack/*/*.h"
+        main.cpp
 )
+
+add_executable(Quack ${SRC_FILES})
 
 target_include_directories(Quack PRIVATE include external)
 target_link_libraries(Quack PRIVATE glad glfw glm)
