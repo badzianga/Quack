@@ -83,7 +83,7 @@ public:
      */
     [[nodiscard]] bool isActive() const;
 
-    // Transform pseudo-component which contains transformation-related vectors
+    /// Transform pseudo-component which contains transformation-related vectors
     Transform transform{};
 
 private:
