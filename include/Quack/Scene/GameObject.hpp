@@ -76,13 +76,6 @@ public:
      */
     void updateAllComponents() const;
 
-    /**
-     * @brief Check whether the GameObject is active.
-     *
-     * @return True if active, false otherwise.
-     */
-    [[nodiscard]] bool isActive() const;
-
     /// Transform pseudo-component which contains transformation-related vectors.
     Transform transform{};
 

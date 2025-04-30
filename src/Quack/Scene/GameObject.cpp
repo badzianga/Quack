@@ -11,7 +11,7 @@ void GameObject::startAllComponents() const {
 }
 
 void GameObject::updateAllComponents() const {
-    if (!m_active) return;
+    if (!active) return;
 
     for (auto& pair : m_components) {
         if (pair.second->enabled) {
@@ -20,6 +20,3 @@ void GameObject::updateAllComponents() const {
     }
 }
 
-bool GameObject::isActive() const {
-    return m_active;
-}
