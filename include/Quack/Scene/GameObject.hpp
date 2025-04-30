@@ -83,13 +83,14 @@ public:
      */
     [[nodiscard]] bool isActive() const;
 
-    /// Transform pseudo-component which contains transformation-related vectors
+    /// Transform pseudo-component which contains transformation-related vectors.
     Transform transform{};
 
+    /// Indicate whether the game object is active (updated every frame).
+    bool active = true;
 private:
     std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
     std::string m_name;
-    bool m_active = true;
 };
 
 #endif //QUACK_GAME_OBJECT_HPP

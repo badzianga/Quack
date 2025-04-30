@@ -40,11 +40,7 @@ public:
      */
     GameObject* gameObject = nullptr;
 
-    /**
-     * @brief Indicate whether the component is enabled.
-     *
-     * TODO: Only enabled components receive update() calls.
-     */
+    /// Indicate whether the component is enabled (updated every frame)/
     bool enabled = true;
 };
 

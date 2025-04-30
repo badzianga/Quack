@@ -8,6 +8,8 @@ glm::mat4 CameraComponent::s_projectionView{1.f};
 void CameraComponent::start() {}
 
 void CameraComponent::update() {
+    if (!enabled) return;
+
     s_projectionView = getProjectionViewMatrix();
 }
 

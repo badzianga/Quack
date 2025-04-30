@@ -8,7 +8,7 @@
 void MeshRendererComponent::start() {}
 
 void MeshRendererComponent::update() {
-    // TODO: update only if enabled
+    if (!enabled) return;
 
     glm::mat4 model = getModelMatrix(gameObject->transform);
     glm::mat4 mvp = CameraComponent::getStaticProjectionView() * model;
