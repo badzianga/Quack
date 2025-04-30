@@ -68,7 +68,16 @@ public:
     }
 
     // Called just before engine destruction
-    void onDestroy() override {}
+    void onDestroy() override {
+        // Free used resources
+        for (auto& object : scene.getAllGameObjects()) {
+            if (object->hasComponent<MeshRendererComponent>()) {
+                auto* meshRenderer = object->getComponent<MeshRendererComponent>();
+                meshRenderer->mesh.destroy();
+                meshRenderer->shader.destroy();
+            }
+        }
+    }
 };
 
 int main() {
