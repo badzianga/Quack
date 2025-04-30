@@ -5,13 +5,16 @@ set(CMAKE_CXX_STANDARD 20)
 
 include(FetchContent)
 
-FetchContent_Declare(glad GIT_REPOSITORY https://github.com/Dav1dde/glad.git)
-FetchContent_GetProperties(glad)
-if(NOT glad_POPULATED)
-    FetchContent_MakeAvailable(glad)
-    set(GLAD_PROFILE "core" CACHE STRING "OpenGL profile")
-    set(GLAD_API "gl=3.3" CACHE STRING "API type/version pairs, like \"gl=3.2,gles=\", no version means latest")
-    set(GLAD_GENERATOR "c" CACHE STRING "Language to generate the binding for")
+FetchContent_Declare(
+        glew
+        GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
+        GIT_TAG        master
+        SOURCE_DIR     ${CMAKE_BINARY_DIR}/_deps/glew-src
+        BINARY_DIR     ${CMAKE_BINARY_DIR}/_deps/glew-build
+)
+FetchContent_GetProperties(glew)
+if(NOT glew_POPULATED)
+    FetchContent_MakeAvailable(glew)
 endif()
 
 FetchContent_Declare(glfw GIT_REPOSITORY https://github.com/glfw/glfw GIT_TAG 3.4)
@@ -39,6 +42,6 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 add_executable(Quack ${SRC_FILES})
 
 target_include_directories(Quack PRIVATE include external)
-target_link_libraries(Quack PRIVATE glad glfw glm)
+target_link_libraries(Quack PRIVATE libglew_static glfw glm)
 
 file(COPY resources DESTINATION "${CMAKE_BINARY_DIR}")

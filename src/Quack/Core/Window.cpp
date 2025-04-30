@@ -1,6 +1,6 @@
 #include "Quack/Core/Window.hpp"
 #include "Quack/Utils/Logger.hpp"
-#include <glad/glad.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <cstdio>
 #include <cstring>
@@ -35,8 +35,8 @@ bool Window::create(int width, int height, const char* title) {
     }
 
     glfwMakeContextCurrent(p_window);
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
-        Logger::error("Failed to initialize GLAD");
+    if (glewInit() != GLEW_OK) {
+        Logger::error("Failed to initialize GLEW");
         glfwDestroyWindow(p_window);
         glfwTerminate();
         return false;

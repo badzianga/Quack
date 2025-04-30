@@ -1,7 +1,7 @@
 #include "Quack/Graphics/Mesh.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include <cmath>
-#include <glad/glad.h>
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <fstream>
 #include <sstream>

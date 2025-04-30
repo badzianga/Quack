@@ -1,7 +1,7 @@
 #include "Quack/Graphics/Shader.hpp"
 #include "Quack/Utils.hpp"
 #include <utility>
-#include <glad/glad.h>
+#include <GL/glew.h>
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
