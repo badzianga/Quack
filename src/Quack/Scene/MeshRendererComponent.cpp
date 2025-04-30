@@ -24,9 +24,10 @@ void MeshRendererComponent::update() {
         shader.set("u_hasBaseMap", false);
     }
 
-    // Set lights even if current shader doesn't support it
+    // Set lights even if the current shader doesn't support it
     shader.set("u_lightColor", GlobalLight::color);
     shader.set("u_ambientIntensity", GlobalLight::ambientIntensity);
+    shader.set("u_lightDirection", GlobalLight::direction);
     glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(model)));
     shader.set("u_normalMatrix", normalMatrix);
 

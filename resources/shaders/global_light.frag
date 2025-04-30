@@ -11,8 +11,7 @@ uniform bool u_hasBaseMap;
 
 uniform vec4 u_lightColor;
 uniform float u_ambientIntensity;
-
-vec3 lightDirection = vec3(1.f, -1.f, -0.5f);
+uniform vec3 u_lightDirection;
 
 void main() {
     vec4 textureColor = texture(u_baseMap, textureCoord);
@@ -22,7 +21,7 @@ void main() {
     vec4 ambient = u_ambientIntensity * u_lightColor;
 
     vec3 norm = normalize(normal);
-    vec3 lightDir = normalize(-lightDirection);
+    vec3 lightDir = normalize(-u_lightDirection);
     float diff = max(dot(norm, lightDir), 0.f);
     vec4 diffuse = diff * u_lightColor;
 
