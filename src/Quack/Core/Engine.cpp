@@ -30,10 +30,9 @@ void Engine::stop() {
 }
 
 bool Engine::destroy() {
-    m_window.destroy();
-
     this->onDestroy();
 
+    m_window.destroy();
     Logger::debug("Engine destroyed");
     return true;
 }

@@ -7,10 +7,7 @@
 
 Shader::Shader() : m_id(0) {}
 
-// TODO: probably called after GL context destruction
-Shader::~Shader() {
-    destroy();
-}
+Shader::~Shader() = default;
 
 Shader::Shader(Shader&& other) noexcept
     : m_id(std::exchange(other.m_id, 0)),

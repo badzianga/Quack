@@ -106,6 +106,14 @@ public:
 
     void onDestroy() override {
         texture.destroy();
+
+        for (auto& object : scene.getAllGameObjects()) {
+            if (object->hasComponent<MeshRendererComponent>()) {
+                auto* meshRenderer = object->getComponent<MeshRendererComponent>();
+                meshRenderer->mesh.destroy();
+                meshRenderer->shader.destroy();
+            }
+        }
     }
 private:
     Scene scene;

@@ -9,10 +9,7 @@
 
 Mesh::Mesh() : m_vao(0), m_vbo(0), m_ebo(0) {}
 
-// TODO: probably called after GL context destruction
-Mesh::~Mesh() {
-    destroy();
-}
+Mesh::~Mesh() = default;
 
 Mesh::Mesh(Mesh&& other) noexcept
     : m_vao(std::exchange(other.m_vao, 0)),

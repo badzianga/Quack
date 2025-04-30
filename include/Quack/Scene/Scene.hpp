@@ -40,6 +40,13 @@ public:
      * Call once per frame to update game logic.
      */
     void updateAllGameObjects() const;
+
+    /**
+     * @brief Get all GameObject from this scene.
+     *
+     * @return Vector of pointers to the GameObjects on the scene.
+     */
+    [[nodiscard]] std::vector<std::unique_ptr<GameObject>>& getAllGameObjects();
 private:
     std::vector<std::unique_ptr<GameObject>> m_gameObjects;
 };

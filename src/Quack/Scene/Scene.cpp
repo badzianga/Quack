@@ -27,3 +27,7 @@ void Scene::updateAllGameObjects() const {
         gameObject->updateAllComponents();
     }
 }
+
+std::vector<std::unique_ptr<GameObject>>& Scene::getAllGameObjects() {
+    return m_gameObjects;
+}
