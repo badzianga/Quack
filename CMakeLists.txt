@@ -35,7 +35,7 @@ endif()
 
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         "${CMAKE_SOURCE_DIR}/src/Quack/*/*.cpp"
-        "${CMAKE_SOURCE_DIR}/include/Quack/*/*.h"
+        "${CMAKE_SOURCE_DIR}/include/Quack/*/*.hpp"
         main.cpp
 )
 
