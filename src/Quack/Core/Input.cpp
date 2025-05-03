@@ -38,7 +38,7 @@ bool Input::isButtonPressed(Mouse::Button button) {
     return glfwGetMouseButton(s_instance.p_window, mouseButton) == GLFW_PRESS;
 }
 
-glm::vec2 Input::getMousePosition() {
+Vector2 Input::getMousePosition() {
     double x;
     double y;
     glfwGetCursorPos(s_instance.p_window, &x, &y);

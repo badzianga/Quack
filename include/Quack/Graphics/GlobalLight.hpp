@@ -1,7 +1,7 @@
 #ifndef QUACK_GLOBAL_LIGHT_HPP
 #define QUACK_GLOBAL_LIGHT_HPP
-#include "Color.hpp"
-#include <glm/vec3.hpp>
+#include "Quack/Graphics/Color.hpp"
+#include "Quack/Math/Vector3.hpp"
 
 /**
  * @brief Configuration of global light.
@@ -17,7 +17,7 @@ public:
     static float ambientIntensity;
 
     /// Direction of the light ((1.f, -1.f, -0.5f) by default, will be normalized).
-    static glm::vec3 direction;
+    static Vector3 direction;
 };
 
 #endif //QUACK_GLOBAL_LIGHT_HPP

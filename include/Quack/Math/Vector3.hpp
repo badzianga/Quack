@@ -3,6 +3,7 @@
 #include <cstddef>
 
 class Vector2;
+class Vector4;
 
 class Vector3 {
 public:
@@ -10,6 +11,7 @@ public:
     Vector3(float scalar);
     Vector3(Vector2 v, float z);
     Vector3(float x, float y, float z);
+    explicit Vector3(const Vector4& v);
 
     float& operator[](size_t index);
     const float& operator[](size_t index) const;

@@ -2,8 +2,6 @@
 #include "Quack/Utils.hpp"
 #include <utility>
 #include <GL/glew.h>
-#include <glm/matrix.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader() : m_id(0) {}
 
@@ -83,34 +81,6 @@ void Shader::set(const char* name, float value) {
     glUniform1f(getUniformLocation(name), value);
 }
 
-void Shader::set(const char* name, const glm::vec2& value) {
-    glUniform2f(getUniformLocation(name), value.x, value.y);
-}
-
-void Shader::set(const char* name, const glm::vec3& value) {
-    glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
-}
-
-void Shader::set(const char* name, const glm::vec4& value) {
-    glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
-}
-
-void Shader::set(const char* name, const glm::mat2& value) {
-    glUniformMatrix2fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
-}
-
-void Shader::set(const char* name, const glm::mat3& value) {
-    glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
-}
-
-void Shader::set(const char* name, const glm::mat4& value) {
-    glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
-}
-
-void Shader::set(const char* name, Color value) {
-    glUniform4f(getUniformLocation(name), value.r, value.g, value.b, value.a);
-}
-
 void Shader::set(const char* name, const Vector2& value) {
     glUniform2f(getUniformLocation(name), value.x, value.y);
 }
@@ -121,11 +91,18 @@ void Shader::set(const char* name, const Vector3& value) {
 
 void Shader::set(const char* name, const Vector4& value) {
     glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
+}
 
+void Shader::set(const char* name, const Matrix3& value) {
+    glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, value.get());
 }
 
 void Shader::set(const char* name, const Matrix4& value) {
     glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, value.get());
+}
+
+void Shader::set(const char* name, Color value) {
+    glUniform4f(getUniformLocation(name), value.r, value.g, value.b, value.a);
 }
 
 int32_t Shader::getUniformLocation(const char *name) {

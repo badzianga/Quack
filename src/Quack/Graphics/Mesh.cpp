@@ -2,7 +2,6 @@
 #include "Quack/Utils/Logger.hpp"
 #include <cmath>
 #include <GL/glew.h>
-#include <glm/glm.hpp>
 #include <fstream>
 #include <sstream>
 #include <utility>
@@ -222,12 +221,12 @@ Mesh Mesh::createSphere() {
             float x = xy * cosf(sectorAngle);
             float y = xy * sinf(sectorAngle);
 
-            glm::vec3 position = glm::vec3(x, y, z);
-            glm::vec3 normal = glm::normalize(position);
-            glm::vec2 texCoord = glm::vec2(
+            Vector3 position = { x, y, z };
+            Vector3 normal = position.normalized();
+            Vector2 texCoord = {
                 static_cast<float>(j) / sectorCount,
                 static_cast<float>(i) / stackCount
-            );
+            };
 
             vertices.push_back(Vertex{position, normal, texCoord});
         }
@@ -261,9 +260,9 @@ Mesh Mesh::loadObj(const char* filename) {
         return {};
     }
 
-    std::vector<glm::vec3> tempPositions;
-    std::vector<glm::vec2> tempTexCoords;
-    std::vector<glm::vec3> tempNormals;
+    std::vector<Vector3> tempPositions;
+    std::vector<Vector2> tempTexCoords;
+    std::vector<Vector3> tempNormals;
 
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
@@ -275,17 +274,17 @@ Mesh Mesh::loadObj(const char* filename) {
         iss >> prefix;
 
         if (prefix == "v") {
-            glm::vec3 pos;
+            Vector3 pos;
             iss >> pos.x >> pos.y >> pos.z;
             tempPositions.push_back(pos);
         }
         else if (prefix == "vt") {
-            glm::vec2 texCoord;
+            Vector2 texCoord;
             iss >> texCoord.x >> texCoord.y;
             tempTexCoords.push_back(texCoord);
         }
         else if (prefix == "vn") {
-            glm::vec3 normal;
+            Vector3 normal;
             iss >> normal.x >> normal.y >> normal.z;
             tempNormals.push_back(normal);
         }

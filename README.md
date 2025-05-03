@@ -37,7 +37,7 @@ public:
         myCube = scene.createGameObject("MyCube");
 
         // Set position of the cube object using its TransformComponent
-        myCube->transform.position = glm::vec3(0, 0, -2);
+        myCube->transform.position = {0, 0, -2};
         
         // Connect a MeshRendererComponent to created object, which will render on every update
         auto* meshRendererComponent = myCube->addComponent<MeshRendererComponent>();

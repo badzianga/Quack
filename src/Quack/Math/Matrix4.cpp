@@ -110,4 +110,13 @@ const float* Matrix4::get() const {
     return &m_data[0].x;
 }
 
+Matrix4 operator*(const Matrix4& left, const Matrix4& right) {
+    Matrix4 result;
+    result[0] = left[0] * right[0][0] + left[1] * right[0][1] + left[2] * right[0][2] + left[3] * right[0][3];
+    result[1] = left[0] * right[1][0] + left[1] * right[1][1] + left[2] * right[1][2] + left[3] * right[1][3];
+    result[2] = left[0] * right[2][0] + left[1] * right[2][1] + left[2] * right[2][2] + left[3] * right[2][3];
+    result[3] = left[0] * right[3][0] + left[1] * right[3][1] + left[2] * right[3][2] + left[3] * right[3][3];
+    return result;
+}
+
 const Matrix4 Matrix4::Identity{ 1.f };

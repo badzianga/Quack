@@ -20,12 +20,11 @@ public:
     [[nodiscard]] Matrix4 rotated(float angle, const Vector3& rotationAxis) const ;
     [[nodiscard]] Matrix4 scaled(const Vector3& scale) const;
 
-    // Matrix4 perspective(float fov, float aspect, float near, float far);
-    // Matrix4 orthographic(float left, float right, float bottom, float top, float near, float far);
-
     static const Matrix4 Identity;
 private:
     Vector4 m_data[4];
 };
+
+Matrix4 operator*(const Matrix4& left, const Matrix4& right);
 
 #endif //QUACK_MATRIX_4_HPP

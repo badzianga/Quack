@@ -1,7 +1,7 @@
 #ifndef QUACK_CAMERA_COMPONENT_HPP
 #define QUACK_CAMERA_COMPONENT_HPP
 #include "Quack/Scene/Component.hpp"
-#include <glm/mat4x4.hpp>
+#include "Quack/Math/Matrix4.hpp"
 
 /**
  * @brief %Component that defines a camera for rendering the scene.
@@ -34,7 +34,7 @@ public:
      *
      * @return Matrix representing the view transformation.
      */
-    [[nodiscard]] glm::mat4 getViewMatrix() const;
+    [[nodiscard]] Matrix4 getViewMatrix() const;
 
     /**
      * @brief Calculate the projection matrix.
@@ -42,7 +42,7 @@ public:
      * @return Matrix representing the perspective or orthographic projection,
      * depending on selected projectionType.
      */
-    [[nodiscard]] glm::mat4 getProjectionMatrix() const;
+    [[nodiscard]] Matrix4 getProjectionMatrix() const;
 
     /**
      * @brief Return the combined projection and view matrix.
@@ -51,7 +51,7 @@ public:
      *
      * @return Result matrix from projection and view multiplication.
      */
-    [[nodiscard]] glm::mat4 getProjectionViewMatrix() const;
+    [[nodiscard]] Matrix4 getProjectionViewMatrix() const;
 
     /**
      * @brief Get the statically stored projection-view matrix.
@@ -61,7 +61,7 @@ public:
      *
      * @return Multiplied Projection-view matrix.
      */
-    [[nodiscard]] static glm::mat4 getStaticProjectionView();
+    [[nodiscard]] static Matrix4 getStaticProjectionView();
 
     /// Projection type of the camera.
     ProjectionType projectionType = ProjectionType::Perspective;
@@ -81,7 +81,7 @@ public:
     /// Orthogonal size used by Orthographic camera.
     float orthoSize = 5.0f;
 private:
-    static glm::mat4 s_projectionView;
+    static Matrix4 s_projectionView;
 };
 
 #endif //QUACK_CAMERA_COMPONENT_HPP

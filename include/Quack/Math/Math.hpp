@@ -10,7 +10,13 @@ float toRadians(float degrees);
 
 float toDegrees(float radians);
 
+float clamp(float value, float min, float max);
+
 Matrix4 lookAt(Vector3 eye, Vector3 target, Vector3 up);
+
+Matrix4 perspective(float fov, float aspect, float near, float far);
+
+Matrix4 orthographic(float left, float right, float bottom, float top, float near, float far);
 
 } // Math
 

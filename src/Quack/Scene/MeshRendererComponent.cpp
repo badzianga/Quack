@@ -1,18 +1,16 @@
 #include "Quack/Graphics/GlobalLight.hpp"
+#include "Quack/Math/Matrix3.hpp"
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
-#include <glm/gtc/matrix_transform.hpp>
 
 void MeshRendererComponent::start() {}
 
 void MeshRendererComponent::update() {
     if (!enabled) return;
 
-    Matrix4 quackModel = getModelMatrix(gameObject->transform);
-
-    glm::mat4 model = reinterpret_cast<glm::mat4&>(quackModel);
-    glm::mat4 mvp = CameraComponent::getStaticProjectionView() * model;
+    Matrix4 model = getModelMatrix(gameObject->transform);
+    Matrix4 mvp = CameraComponent::getStaticProjectionView() * model;
 
     shader.use();
     shader.set("u_mvp", mvp);
@@ -29,7 +27,7 @@ void MeshRendererComponent::update() {
     shader.set("u_lightColor", GlobalLight::color);
     shader.set("u_ambientIntensity", GlobalLight::ambientIntensity);
     shader.set("u_lightDirection", GlobalLight::direction);
-    glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(model)));
+    Matrix3 normalMatrix = Matrix3(model).inversed().transposed();
     shader.set("u_normalMatrix", normalMatrix);
 
     mesh.draw();
@@ -41,9 +39,9 @@ Matrix4 MeshRendererComponent::getModelMatrix(const Transform& transform) {
     Matrix4 model = Matrix4::Identity;
 
     model.translate(transform.position);
-    model.rotate(glm::radians(transform.rotation.x), { 1.f, 0.f, 0.f });
-    model.rotate(glm::radians(transform.rotation.y), { 0.f, 1.f, 0.f });
-    model.rotate(glm::radians(transform.rotation.z), { 0.f, 0.f, 1.f });
+    model.rotate(Math::toRadians(transform.rotation.x), { 1.f, 0.f, 0.f });
+    model.rotate(Math::toRadians(transform.rotation.y), { 0.f, 1.f, 0.f });
+    model.rotate(Math::toRadians(transform.rotation.z), { 0.f, 0.f, 1.f });
     model.scale(transform.scale);
 
     return model;

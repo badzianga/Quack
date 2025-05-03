@@ -1,7 +1,7 @@
 #ifndef QUACK_VERTEX_HPP
 #define QUACK_VERTEX_HPP
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
+#include "Quack/Math/Vector2.hpp"
+#include "Quack/Math/Vector3.hpp"
 
 /**
  * @brief Representation of a single vertex in 3D space.
@@ -16,17 +16,17 @@ struct Vertex {
      *
      * This is the primary attribute used for rendering the mesh.
      */
-    glm::vec3 position;
+    Vector3 position;
 
     /**
      * @brief Normal direction of the vertex.
      */
-    glm::vec3 normal;
+    Vector3 normal;
 
     /**
      * @brief Texture UV of the vertex.
      */
-    glm::vec2 texCoord;
+    Vector2 texCoord;
 };
 
 #endif //QUACK_VERTEX_HPP

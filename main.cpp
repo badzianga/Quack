@@ -89,10 +89,10 @@ public:
         camera->transform.position += movement;
 
         constexpr float mouseSensitivity = 0.25f;
-        glm::vec2 mouseDelta = (Input::getMousePosition() - lastMousePosition) * mouseSensitivity;
+        Vector2 mouseDelta = (Input::getMousePosition() - lastMousePosition) * mouseSensitivity;
         lastMousePosition = Input::getMousePosition();
         camera->transform.rotation.x -= mouseDelta.y;
-        camera->transform.rotation.x = glm::clamp(camera->transform.rotation.x, -89.f, 89.f);
+        camera->transform.rotation.x = Math::clamp(camera->transform.rotation.x, -89.f, 89.f);
         camera->transform.rotation.y += mouseDelta.x;
 
         timeSum += Time::getDeltaTime();
@@ -120,7 +120,7 @@ private:
     GameObject* camera = nullptr;
     GameObject* object = nullptr;
     Texture texture;
-    glm::vec2 lastMousePosition{ 0.f };
+    Vector2 lastMousePosition{ 0.f };
     float timeSum = 0.f;
     int fps = 0;
 };

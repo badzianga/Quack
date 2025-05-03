@@ -5,7 +5,6 @@
 #include <cstdint>
 #include <string>
 #include <unordered_map>
-#include <glm/fwd.hpp>
 
 /**
  * @brief Representation of a shader program.
@@ -116,7 +115,7 @@ public:
      * @param name The name of the uniform variable.
      * @param value The 2D vector value to set.
      */
-    void set(const char* name, const glm::vec2& value);
+    void set(const char* name, const Vector2& value);
 
     /**
      * @brief Set a 3D vector uniform variable in the shader program.
@@ -124,7 +123,7 @@ public:
      * @param name The name of the uniform variable.
      * @param value The 3D vector value to set.
      */
-    void set(const char* name, const glm::vec3& value);
+    void set(const char* name, const Vector3& value);
 
     /**
      * @brief Set a 4D vector uniform variable in the shader program.
@@ -132,15 +131,7 @@ public:
      * @param name The name of the uniform variable.
      * @param value The 4D vector value to set.
      */
-    void set(const char* name, const glm::vec4& value);
-
-    /**
-     * @brief Set a 2x2 matrix uniform variable in the shader program.
-     *
-     * @param name The name of the uniform variable.
-     * @param value The 2x2 matrix value to set.
-     */
-    void set(const char* name, const glm::mat2& value);
+    void set(const char* name, const Vector4& value);
 
     /**
      * @brief Set a 3x3 matrix uniform variable in the shader program.
@@ -148,7 +139,7 @@ public:
      * @param name The name of the uniform variable.
      * @param value The 3x3 matrix value to set.
      */
-    void set(const char* name, const glm::mat3& value);
+    void set(const char* name, const Matrix3& value);
 
     /**
      * @brief Set a 4x4 matrix uniform variable in the shader program.
@@ -156,7 +147,7 @@ public:
      * @param name The name of the uniform variable.
      * @param value The 4x4 matrix value to set.
      */
-    void set(const char* name, const glm::mat4& value);
+    void set(const char* name, const Matrix4& value);
 
     /**
      * @brief Set a color uniform variable in the shader program.
@@ -165,11 +156,6 @@ public:
      * @param value The color value to set.
      */
     void set(const char* name, Color value);
-
-    void set(const char* name, const Vector2& value);
-    void set(const char* name, const Vector3& value);
-    void set(const char* name, const Vector4& value);
-    void set(const char* name, const Matrix4& value);
 
 private:
     uint32_t m_id;

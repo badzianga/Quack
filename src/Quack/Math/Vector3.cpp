@@ -1,5 +1,6 @@
 #include "Quack/Math/Vector3.hpp"
 #include "Quack/Math/Vector2.hpp"
+#include "Quack/Math/Vector4.hpp"
 #include <cassert>
 #include <cmath>
 
@@ -10,6 +11,8 @@ Vector3::Vector3(float scalar) : x(scalar), y(scalar), z(scalar) {}
 Vector3::Vector3(Vector2 v, float z) : x(v.x), y(v.y), z(z) {}
 
 Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
+
+Vector3::Vector3(const Vector4& v) : x(v.x), y(v.y), z(v.z) {}
 
 float& Vector3::operator[](size_t index) {
     assert(index < 3 && "Index out of bounds");

@@ -2,8 +2,8 @@
 #define QUACK_INPUT_HPP
 #include "Quack/Core/Keyboard.hpp"
 #include "Quack/Core/Mouse.hpp"
+#include "Quack/Math/Vector2.hpp"
 #include <unordered_map>
-#include <glm/vec2.hpp>
 
 struct GLFWwindow;
 
@@ -75,7 +75,7 @@ public:
      *
      * @return Mouse coordinates in window space.
      */
-    static glm::vec2 getMousePosition();
+    static Vector2 getMousePosition();
 private:
     /**
      * @brief Private constructor to enforce singleton pattern.
