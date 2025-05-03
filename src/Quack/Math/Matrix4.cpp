@@ -1,5 +1,5 @@
 // This file includes code snippets from:
-// G-Truc Creation (c) 2005, licensed under the MIT License
+// GLM, G-Truc Creation (c) 2005, licensed under the MIT License
 // Full license available in the link below.
 // https://github.com/g-truc/glm/blob/master/copying.txt
 

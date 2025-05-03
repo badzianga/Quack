@@ -1,16 +1,17 @@
+#include "Quack/Graphics/GlobalLight.hpp"
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-
-#include "Quack/Graphics/GlobalLight.hpp"
 
 void MeshRendererComponent::start() {}
 
 void MeshRendererComponent::update() {
     if (!enabled) return;
 
-    glm::mat4 model = getModelMatrix(gameObject->transform);
+    Matrix4 quackModel = getModelMatrix(gameObject->transform);
+
+    glm::mat4 model = reinterpret_cast<glm::mat4&>(quackModel);
     glm::mat4 mvp = CameraComponent::getStaticProjectionView() * model;
 
     shader.use();
@@ -36,14 +37,14 @@ void MeshRendererComponent::update() {
     // TODO: consider unbinding texture
 }
 
-glm::mat4 MeshRendererComponent::getModelMatrix(const Transform& transform) {
-    glm::mat4 model{1.f};
+Matrix4 MeshRendererComponent::getModelMatrix(const Transform& transform) {
+    Matrix4 model = Matrix4::Identity;
 
-    model = glm::translate(model, transform.position);
-    model = glm::rotate(model, glm::radians(transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::scale(model, transform.scale);
+    model.translate(transform.position);
+    model.rotate(glm::radians(transform.rotation.x), { 1.f, 0.f, 0.f });
+    model.rotate(glm::radians(transform.rotation.y), { 0.f, 1.f, 0.f });
+    model.rotate(glm::radians(transform.rotation.z), { 0.f, 0.f, 1.f });
+    model.scale(transform.scale);
 
     return model;
 }

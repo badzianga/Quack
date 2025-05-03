@@ -1,6 +1,6 @@
 #ifndef QUACK_TRANSFORM_HPP
 #define QUACK_TRANSFORM_HPP
-#include <glm/mat4x4.hpp>
+#include "Quack/Math/Vector3.hpp"
 
 /**
  * @brief Class representing the position, rotation, and scale of a %GameObject.
@@ -18,7 +18,7 @@ public:
      *
      * @return 3D vector with normalized forward direction.
      */
-    [[nodiscard]] glm::vec3 getForward() const;
+    [[nodiscard]] Vector3 getForward() const;
 
     /**
      * @brief Get the right direction vector.
@@ -27,7 +27,7 @@ public:
      *
      * @return 3D vector with normalized right direction.
      */
-    [[nodiscard]] glm::vec3 getRight() const;
+    [[nodiscard]] Vector3 getRight() const;
 
     /**
      * @brief Get the up direction vector.
@@ -36,16 +36,16 @@ public:
      *
      * @return 3D vector with normalized up direction.
      */
-    [[nodiscard]] glm::vec3 getUp() const;
+    [[nodiscard]] Vector3 getUp() const;
 
     /// Position of the GameObject in world space.
-    glm::vec3 position{0.f};
+    Vector3 position{0.f};
 
     /// Rotation of the GameObject in Euler angles (degrees).
-    glm::vec3 rotation{0.f};
+    Vector3 rotation{0.f};
 
     /// Scale of the GameObject.
-    glm::vec3 scale{1.f};
+    Vector3 scale{1.f};
 };
 
 #endif //QUACK_TRANSFORM_HPP

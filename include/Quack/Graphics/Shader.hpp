@@ -1,6 +1,7 @@
 #ifndef QUACK_SHADER_HPP
 #define QUACK_SHADER_HPP
 #include "Quack/Graphics/Color.hpp"
+#include "Quack/Math.hpp"
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -164,6 +165,11 @@ public:
      * @param value The color value to set.
      */
     void set(const char* name, Color value);
+
+    void set(const char* name, const Vector2& value);
+    void set(const char* name, const Vector3& value);
+    void set(const char* name, const Vector4& value);
+    void set(const char* name, const Matrix4& value);
 
 private:
     uint32_t m_id;

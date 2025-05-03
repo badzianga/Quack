@@ -51,6 +51,18 @@ Vector3 Vector3::normalized() const {
     return *this / length();
 }
 
+float Vector3::dot(const Vector3& left, const Vector3& right) {
+    return left.x * right.x + left.y * right.y + left.z * right.z;
+}
+
+Vector3 Vector3::cross(const Vector3& left, const Vector3& right) {
+    return {
+        left.y * right.z - left.z * right.y,
+        left.z * right.x - left.x * right.z,
+        left.x * right.y - left.y * right.x
+    };
+}
+
 Vector3 operator+(const Vector3& v1, const Vector3& v2) {
     return { v1.x + v2.x, v1.y + v2.y, v1.z + v2.z };
 }

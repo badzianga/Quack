@@ -20,7 +20,7 @@ public:
 
         {
             object = scene.createGameObject("Object");
-            object->transform.position = glm::vec3(0.f, -0.5f, -2.f);
+            object->transform.position = Vector3(0.f, -0.5f, -2.f);
             object->transform.scale *= 0.01f;
             auto meshRenderer = object->addComponent<MeshRendererComponent>();
             meshRenderer->mesh = Mesh::loadObj("resources/models/fox.obj");
@@ -29,8 +29,8 @@ public:
 
         {
             auto ground = scene.createGameObject("Ground");
-            ground->transform.position = glm::vec3(0.f, -0.5f, -2.f);
-            ground->transform.scale = glm::vec3(8.f, 1.f, 8.f);
+            ground->transform.position = Vector3(0.f, -0.5f, -2.f);
+            ground->transform.scale = Vector3(8.f, 1.f, 8.f);
             auto meshRenderer = ground->addComponent<MeshRendererComponent>();
             meshRenderer->mesh = Mesh::createPlane();
             meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
@@ -39,7 +39,7 @@ public:
 
         {
             auto sphere = scene.createGameObject("Sphere");
-            sphere->transform.position = glm::vec3(2.f, 0.f, -2.f);
+            sphere->transform.position = Vector3(2.f, 0.f, -2.f);
             auto meshRenderer = sphere->addComponent<MeshRendererComponent>();
             meshRenderer->mesh = Mesh::createSphere();
             meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
@@ -48,7 +48,7 @@ public:
 
         {
             auto cube = scene.createGameObject("Cube");
-            cube->transform.position = glm::vec3(-2.f, 0.f, -2.f);
+            cube->transform.position = Vector3(-2.f, 0.f, -2.f);
             auto meshRenderer = cube->addComponent<MeshRendererComponent>();
             meshRenderer->mesh = Mesh::createCube();
             meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
@@ -84,7 +84,7 @@ public:
 
         object->transform.rotation.y += 60.f * Time::getDeltaTime();
 
-        const glm::vec3 movement = (camera->transform.getRight() * x + camera->transform.getForward() * z) * (Time::getDeltaTime() * 12.f);
+        Vector3 movement = (camera->transform.getRight() * x + camera->transform.getForward() * z) * (Time::getDeltaTime() * 12.f);
 
         camera->transform.position += movement;
 

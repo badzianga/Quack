@@ -21,6 +21,9 @@ public:
     [[nodiscard]] float lengthSquared() const;
     [[nodiscard]] Vector3 normalized() const;
 
+    [[nodiscard]] static float dot(const Vector3& left, const Vector3& right);
+    [[nodiscard]] static Vector3 cross(const Vector3& left, const Vector3& right);
+
     static const Vector3 Zero;
     static const Vector3 One;
     static const Vector3 Inf;

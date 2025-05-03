@@ -1,3 +1,5 @@
+#include "Quack/Math/Math.hpp"
+#include "Quack/Math/Matrix4.hpp"
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/Transform.hpp"
@@ -14,11 +16,12 @@ void CameraComponent::update() {
 }
 
 glm::mat4 CameraComponent::getViewMatrix() const {
-    const glm::vec3& position = gameObject->transform.position;
-    glm::vec3 forward = gameObject->transform.getForward();
-    glm::vec3 up = gameObject->transform.getUp();
+    Vector3 position = gameObject->transform.position;
+    Vector3 forward = gameObject->transform.getForward();
+    Vector3 up = gameObject->transform.getUp();
 
-    return glm::lookAt(position, position + forward, up);
+    Matrix4 result = Math::lookAt(position, position + forward, up);
+    return reinterpret_cast<glm::mat4&>(result);
 }
 
 glm::mat4 CameraComponent::getProjectionMatrix() const {
