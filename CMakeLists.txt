@@ -27,12 +27,6 @@ if(NOT glfw_POPULATED)
     set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
 endif()
 
-FetchContent_Declare(glm GIT_REPOSITORY https://github.com/g-truc/glm.git GIT_TAG 1.0.1)
-FetchContent_GetProperties(glm)
-if(NOT glm_POPULATED)
-    FetchContent_MakeAvailable(glm)
-endif()
-
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         "${CMAKE_SOURCE_DIR}/src/Quack/*/*.cpp"
         "${CMAKE_SOURCE_DIR}/include/Quack/*/*.hpp"
@@ -42,6 +36,6 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 add_executable(Quack ${SRC_FILES})
 
 target_include_directories(Quack PRIVATE include external)
-target_link_libraries(Quack PRIVATE libglew_static glfw glm)
+target_link_libraries(Quack PRIVATE libglew_static glfw)
 
 file(COPY resources DESTINATION "${CMAKE_BINARY_DIR}")

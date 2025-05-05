@@ -125,7 +125,6 @@ cmake --build .
 - Own scripting language
 
 ## Future minor improvements
-- Own Matrix and Vector classes instead of glm
 - Time scaling
 - Fixed timestep
 - Action mapping
