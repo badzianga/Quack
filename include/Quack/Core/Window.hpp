@@ -52,6 +52,16 @@ public:
     void setVSyncEnabled(bool enabled) const;
 
     /**
+     * @brief Enable or disable wireframe mode for rendering.
+     *
+     * When enabled, rendering will display objects as wireframes
+     * instead of filled surfaces.
+     *
+     * @param enabled True to enable wireframe mode, false to disable it.
+     */
+    void setWireframeModeEnabled(bool enabled) const;
+
+    /**
      * @brief Set the clear color used before drawing each frame.
      *
      * @param color Clear color.

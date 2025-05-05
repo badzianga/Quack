@@ -102,3 +102,13 @@ void Window::setVSyncEnabled(bool enabled) const {
     (void) p_window;
     glfwSwapInterval(enabled);
 }
+
+void Window::setWireframeModeEnabled(bool enabled) const {
+    (void) p_window;
+    if (enabled) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    }
+    else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+}
