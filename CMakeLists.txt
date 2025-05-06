@@ -30,12 +30,58 @@ endif()
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         "${CMAKE_SOURCE_DIR}/src/Quack/*/*.cpp"
         "${CMAKE_SOURCE_DIR}/include/Quack/*/*.hpp"
-        main.cpp
 )
 
-add_executable(Quack ${SRC_FILES})
+add_library(Quack STATIC ${SRC_FILES})
 
-target_include_directories(Quack PRIVATE include external)
+target_include_directories(Quack PUBLIC include external)
 target_link_libraries(Quack PRIVATE libglew_static glfw)
 
 file(COPY resources DESTINATION "${CMAKE_BINARY_DIR}")
+
+
+
+add_executable(QuackSandbox main.cpp)
+target_link_libraries(QuackSandbox PRIVATE Quack)
+
+
+
+FetchContent_Declare(
+        imgui
+        GIT_REPOSITORY https://github.com/ocornut/imgui.git
+        GIT_TAG docking
+)
+FetchContent_GetProperties(imgui)
+if(NOT imgui_POPULATED)
+    FetchContent_MakeAvailable(imgui)
+endif()
+
+find_package(OpenGL REQUIRED)
+
+add_library(imgui_lib
+        ${imgui_SOURCE_DIR}/imgui.cpp
+        ${imgui_SOURCE_DIR}/imgui_demo.cpp
+        ${imgui_SOURCE_DIR}/imgui_draw.cpp
+        ${imgui_SOURCE_DIR}/imgui_tables.cpp
+        ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
+target_include_directories(imgui_lib PUBLIC
+        ${imgui_SOURCE_DIR}
+        ${imgui_SOURCE_DIR}/backends
+)
+
+target_link_libraries(imgui_lib PRIVATE glfw OpenGL::GL)
+
+add_executable(QuackEditor editor/editor.cpp
+        editor/src/ImGuiConfig.cpp
+        editor/include/ImGuiConfig.hpp)
+
+target_include_directories(QuackEditor PRIVATE
+        editor/include
+        ${imgui_SOURCE_DIR}
+        ${imgui_SOURCE_DIR}/backends
+)
+target_link_libraries(QuackEditor PUBLIC glfw imgui_lib Quack)
