@@ -1,5 +1,6 @@
 #ifndef QUACK_TEXTURE_HPP
 #define QUACK_TEXTURE_HPP
+#include "Quack/Math/Vector2.hpp"
 #include <cstdint>
 
 /**
@@ -10,6 +11,21 @@
 class Texture {
 public:
     /**
+     * @brief Enumeration for texture wrapping modes.
+     *
+     * Defines how textures are sampled when texture coordinates are outside the standard [0, 1] range.
+     */
+    enum class WrapMode { Repeat, MirroredRepeat, ClampToEdge, ClampToBorder };
+
+    /**
+     * @brief Enumeration for texture filtering modes.
+     *
+     * Specifies the method used to sample a texture when it is rendered
+     * at a size different from its original resolution.
+     */
+    enum class FilterMode { Nearest, Linear };
+
+    /**
      * @brief Default constructor.
      *
      * Does nothing, to initialize and load data, use create() method.
@@ -17,12 +33,28 @@ public:
     Texture();
 
     /**
-     * @brief Load a texture from an image file.
+     * @brief Create and load a texture from a file.
      *
-     * @param filename Path to the image file.
-     * @return True if the texture was successfully loaded and created, false otherwise.
+     * This method initializes a texture by loading the image data from the specified file
+     * and applying the specified wrapping and filtering modes.
+     *
+     * @param filename Path to the texture image file.
+     * @param wrapMode Texture wrapping mode to use (default is WrapMode::Repeat).
+     * @param filterMode Texture filtering mode to use (default is FilterMode::Linear).
+     * @return True if the texture was successfully created, false otherwise.
      */
-    bool create(const char* filename);
+    bool create(const char* filename, WrapMode wrapMode = WrapMode::Repeat, FilterMode filterMode = FilterMode::Linear);
+
+    /**
+     * @brief Create an empty texture with the specified dimensions.
+     *
+     * Allocates a 2D texture in GPU memory with the given width and height.
+     *
+     * @param width Width of the texture in pixels.
+     * @param height Height of the texture in pixels.
+     * @return True if the texture was successfully created, false otherwise.
+     */
+    bool create(int width, int height);
 
     /**
      * @brief Destroy the texture and free associated GPU resources.
@@ -39,21 +71,18 @@ public:
      * @param unit Texture unit index to bind the texture to (default is 0).
      */
     void bind(uint32_t unit = 0) const;
+
+    [[nodiscard]] uint32_t getId() const;
+    [[nodiscard]] Vector2 getSize() const;
+
 private:
     /**
-     * @brief Generate the OpenGL texture object.
+     * @brief Initialize the OpenGL texture object.
      */
-    void generate();
-
-    /**
-     * @brief Load image data from a file and upload it to the GPU.
-     *
-     * @param filename Path to the image file.
-     * @return True if loading and uploading succeeded, false otherwise.
-     */
-    bool loadFromFile(const char* filename);
+    void initialize(WrapMode wrap, FilterMode filter) const;
 
     uint32_t m_id;
+    Vector2 m_size;
 };
 
 #endif //QUACK_TEXTURE_HPP

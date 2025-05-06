@@ -3,11 +3,53 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <GL/glew.h>
+#include <oneapi/tbb/task_group.h>
 
 Texture::Texture() : m_id(0) {}
 
-bool Texture::create(const char* filename) {
-    return loadFromFile(filename);
+bool Texture::create(const char* filename, WrapMode wrapMode, FilterMode filterMode) {
+    stbi_set_flip_vertically_on_load(true);
+    int width, height, nrChannels;
+    uint8_t* data = stbi_load(filename, &width, &height, &nrChannels, 0);
+    if (!data) {
+        Logger::error("Texture " + std::string(filename) + " not found");
+        return false;
+    }
+
+    int format;
+    switch (nrChannels) {
+        case 1: {
+            format = GL_RED;
+        } break;
+        case 3: {
+            format = GL_RGB;
+        } break;
+        case 4: {
+            format = GL_RGBA;
+        } break;
+        default:
+            Logger::error("Unsupported number of channels");
+        return false;
+    }
+
+    glGenTextures(1, &m_id);
+    glBindTexture(GL_TEXTURE_2D, m_id);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+    initialize(wrapMode, filterMode);
+
+    stbi_image_free(data);
+    m_size = { static_cast<float>(width), static_cast<float>(height) };
+    return true;
+}
+
+bool Texture::create(int width, int height) {
+    m_size = { static_cast<float>(width), static_cast<float>(height) };
+    glGenTextures(1, &m_id);
+    glBindTexture(GL_TEXTURE_2D, m_id);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    initialize(WrapMode::Repeat, FilterMode::Linear);
+
+    return true;
 }
 
 bool Texture::destroy() {
@@ -22,46 +64,32 @@ void Texture::bind(uint32_t unit) const {
     glBindTexture(GL_TEXTURE_2D, m_id);
 }
 
-void Texture::generate() {
-    glGenTextures(1, &m_id);
-    glBindTexture(GL_TEXTURE_2D, m_id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-}
-
-bool Texture::loadFromFile(const char* filename) {
-    stbi_set_flip_vertically_on_load(true);
-    int width, height, nrChannels;
-    uint8_t* data = stbi_load(filename, &width, &height, &nrChannels, 0);
-    if (!data) {
-        Logger::error("Texture " + std::string(filename) + " not found");
-        return false;
+void Texture::initialize(WrapMode wrap, FilterMode filter) const {
+    (void) m_id;
+    int wrapMode = GL_REPEAT;
+    switch (wrap) {
+        case WrapMode::Repeat: {
+            wrapMode = GL_REPEAT;
+        } break;
+        case WrapMode::MirroredRepeat: {
+            wrapMode = GL_MIRRORED_REPEAT;
+        } break;
+        case WrapMode::ClampToEdge: {
+            wrapMode = GL_CLAMP_TO_EDGE;
+        } break;
+        case WrapMode::ClampToBorder: {
+            wrapMode = GL_CLAMP_TO_BORDER;
+        } break;
     }
 
-    GLenum format;
-    switch (nrChannels) {
-        case 1: {
-            format = GL_RED;
-        } break;
-        case 3: {
-            format = GL_RGB;
-        } break;
-        case 4: {
-            format = GL_RGBA;
-        } break;
-        default:
-            Logger::error("Unsupported number of channels");
-            return false;
+    int filterMode = (filter == FilterMode::Nearest) ? GL_NEAREST : GL_LINEAR;
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMode);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMode);
+
+    if (filter == FilterMode::Linear) {
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
-
-    generate();
-
-    glBindTexture(GL_TEXTURE_2D, m_id);
-    glTexImage2D(GL_TEXTURE_2D, 0, static_cast<int>(format), width, height, 0, format, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    stbi_image_free(data);
-    return true;
 }
