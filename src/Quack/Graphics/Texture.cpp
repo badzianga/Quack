@@ -93,3 +93,11 @@ void Texture::initialize(WrapMode wrap, FilterMode filter) const {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 }
+
+uint32_t Texture::getId() const {
+    return m_id;
+}
+
+Vector2 Texture::getSize() const {
+    return m_size;
+}
