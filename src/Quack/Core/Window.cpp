@@ -112,3 +112,7 @@ void Window::setWireframeModeEnabled(bool enabled) const {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 }
+
+GLFWwindow* Window::getHandle() const {
+    return p_window;
+}

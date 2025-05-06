@@ -67,6 +67,17 @@ public:
      * @param color Clear color.
      */
     void setClearColor(Color color) const;
+
+    /**
+     * @brief Retrieve the native handle for the GLFW window.
+     *
+     * This function provides direct access to the underlying GLFW window handle
+     * managed by the Window class. The handle can be used for integration with
+     * libraries or frameworks that require a native window reference.
+     *
+     * @return Pointer to the GLFWwindow structure associated with this window.
+     */
+    [[nodiscard]] GLFWwindow* getHandle() const;
 private:
     /**
      * @brief Default private constructor.
