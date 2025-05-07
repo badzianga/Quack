@@ -1,6 +1,7 @@
 #ifndef QUACK_WINDOW_HPP
 #define QUACK_WINDOW_HPP
 #include "Quack/Graphics/Color.hpp"
+#include "Quack/Math/Vector2.hpp"
 
 struct GLFWwindow;
 
@@ -78,6 +79,27 @@ public:
      * @return Pointer to the GLFWwindow structure associated with this window.
      */
     [[nodiscard]] GLFWwindow* getHandle() const;
+
+    /**
+     * @brief Get the current size of the window.
+     *
+     * This function retrieves the dimensions of the window in pixels.
+     *
+     * @return A vector representing the width and height of the window.
+     */
+    [[nodiscard]] Vector2 getSize() const;
+
+    /**
+     * @brief Applies the window's viewport size for rendering.
+     *
+     * Configures the viewport of the OpenGL context to match the
+     * dimensions of the window. This operation ensures that rendering
+     * aligns properly with the window size.
+     *
+     * This function should be called after rendering to framebuffers,
+     * especially those with dimensions other than the window dimensions.
+     */
+    void applyThisViewportSize() const;
 private:
     /**
      * @brief Default private constructor.
@@ -131,6 +153,7 @@ private:
     void clear() const;
 
     GLFWwindow* p_window;
+    Vector2 m_size;
 
     static constexpr int DEFAULT_WIDTH = 1024;
     static constexpr int DEFAULT_HEIGHT = 768;
