@@ -1,15 +1,32 @@
 #include "Quack/Core/Engine.hpp"
 #include "Quack/Graphics/Framebuffer.hpp"
+#include "Quack/Scene/CameraComponent.hpp"
+#include "Quack/Scene/Scene.hpp"
 #include "ImGuiConfig.hpp"
 #include <imgui.h>
+
+#include "Quack/Scene/MeshRendererComponent.hpp"
 
 class Editor final : public Engine {
     void onCreate() override {
         ImGuiConfig::Init(accessWindow().getHandle());
 
-        fb.create(1280, 720);
-        accessWindow().setClearColor({ 0.9f, 1.f, 0.f, 1.f });
+        sceneFramebuffer.create(1280, 720);
+        accessWindow().setClearColor({ 0.1f, 0.1f, 0.2f, 1.f });
         accessWindow().setVSyncEnabled(true);
+
+        editorCamera.addComponent<CameraComponent>();
+        editorCamera.transform.position = Vector3(-3.f, 2.f, 3.f);
+        editorCamera.transform.rotation = { -25.02f, 45.f, 0.f };
+        editorCamera.getComponent<CameraComponent>()->aspectRatio = 16.f / 9.f;
+        editorCamera.startAllComponents();
+
+        selectedObject = currentScene.createGameObject("GameObject");
+        selectedObject->addComponent<MeshRendererComponent>();
+        selectedObject->getComponent<MeshRendererComponent>()->mesh = Mesh::createCube();
+        selectedObject->getComponent<MeshRendererComponent>()->shader.create("resources/shaders/global_light.vert", "resources/shaders/global_light.frag");
+        selectedObject->getComponent<MeshRendererComponent>()->material.baseColor = Color::Red;
+        currentScene.startAllGameObjects();
     }
 
     void onUpdate() override {
@@ -31,18 +48,24 @@ class Editor final : public Engine {
     }
 
     void RenderScene() const {
-        fb.bind();
-        fb.clear();
-        fb.unbind();
+        sceneFramebuffer.bind();
+
+        sceneFramebuffer.clear();
+
+        editorCamera.updateAllComponents();
+        currentScene.updateAllGameObjects();
+
+        sceneFramebuffer.unbind();
         accessWindow().applyThisViewportSize();
     }
 
     void ShowMainMenuBar() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("New Scene")) { /* Handle new scene */ }
-                if (ImGui::MenuItem("Open Scene")) { /* Handle open scene */ }
-                if (ImGui::MenuItem("Save Scene")) { /* Handle save scene */ }
+                if (ImGui::MenuItem("New Scene", "Ctrl+N")) { }
+                if (ImGui::MenuItem("Open Scene", "Ctrl+O")) { }
+                if (ImGui::MenuItem("Save", "Ctrl+S")) { }
+                if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) { }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit")) {
                     stop();
@@ -51,8 +74,8 @@ class Editor final : public Engine {
             }
 
             if (ImGui::BeginMenu("Edit")) {
-                if (ImGui::MenuItem("Undo", "Ctrl+Z")) { /* Handle undo */ }
-                if (ImGui::MenuItem("Redo", "Ctrl+Y")) { /* Handle redo */ }
+                if (ImGui::MenuItem("Undo", "Ctrl+Z")) { }
+                if (ImGui::MenuItem("Redo", "Ctrl+Y")) { }
                 ImGui::EndMenu();
             }
 
@@ -63,13 +86,17 @@ class Editor final : public Engine {
     void ShowSceneWindow() const {
         ImGui::Begin("Scene");
 
-        ImGui::Image(fb.getTextureID(), { fb.getSize().x / 1.5f, fb.getSize().y / 1.5f });
+        ImGui::Image(
+            sceneFramebuffer.getTextureID(),
+            { sceneFramebuffer.getSize().x / 1.5f, sceneFramebuffer.getSize().y / 1.5f },
+            { 0.f, 1.f },
+            { 1.f, 0.f }
+        );
 
         ImGui::End();
     }
 
     void ShowEngineStatsWindow() const {
-        (void) fb;
         ImGui::Begin("Engine Stats");
 
         const ImGuiIO& io = ImGui::GetIO();
@@ -85,7 +112,6 @@ class Editor final : public Engine {
     }
 
     void ShowSceneHierarchyWindow() const {
-        (void) fb;
         ImGui::Begin("Scene Hierarchy");
 
         // Example scene hierarchy
@@ -115,7 +141,6 @@ class Editor final : public Engine {
     }
 
     void ShowPropertiesWindow() const {
-        (void) fb;
         ImGui::Begin("Properties");
 
         // Example properties for a selected object
@@ -141,7 +166,6 @@ class Editor final : public Engine {
     }
 
     void ShowContentBrowserWindow() const {
-        (void) fb;
         ImGui::Begin("Content Browser");
 
         // Example folder structure
@@ -161,7 +185,10 @@ class Editor final : public Engine {
         ImGui::End();
     }
 
-    Framebuffer fb;
+    Framebuffer sceneFramebuffer;
+    Scene currentScene;
+    GameObject editorCamera;
+    GameObject* selectedObject = nullptr;
 };
 
 int main() {
