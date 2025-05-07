@@ -18,6 +18,8 @@ public:
     void bind() const;
     void unbind() const;
 
+    void clear() const;
+
     [[nodiscard]] uint32_t getId() const;
     [[nodiscard]] uint32_t getTextureID() const;
     [[nodiscard]] Vector2 getSize() const;

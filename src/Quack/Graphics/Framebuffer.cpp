@@ -34,11 +34,14 @@ bool Framebuffer::create(int width, int height) {
         m_rbo
     );
 
+    glEnable(GL_DEPTH_TEST);
+
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         Logger::error("Framebuffer is incomplete");
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         return false;
     }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     return true;
 }
@@ -62,6 +65,12 @@ void Framebuffer::bind() const {
 void Framebuffer::unbind() const {
     (void) m_fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // TODO: set viewport size back to window size
+}
+
+void Framebuffer::clear() const {
+    (void) m_fbo;
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 uint32_t Framebuffer::getId() const {
