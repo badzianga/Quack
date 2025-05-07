@@ -13,10 +13,10 @@ class Editor final : public Engine {
 
         sceneFramebuffer.create(1280, 720);
         accessWindow().setClearColor({ 0.1f, 0.1f, 0.2f, 1.f });
-        accessWindow().setVSyncEnabled(true);
+        accessWindow().setVSyncEnabled(false);
 
         editorCamera.addComponent<CameraComponent>();
-        editorCamera.transform.position = Vector3(-3.f, 2.f, 3.f);
+        editorCamera.transform.position = Vector3(-2.f, 2.f / 1.5f, 2.f);
         editorCamera.transform.rotation = { -25.02f, 45.f, 0.f };
         editorCamera.getComponent<CameraComponent>()->aspectRatio = 16.f / 9.f;
         editorCamera.startAllComponents();
@@ -27,6 +27,8 @@ class Editor final : public Engine {
         selectedObject->getComponent<MeshRendererComponent>()->shader.create("resources/shaders/global_light.vert", "resources/shaders/global_light.frag");
         selectedObject->getComponent<MeshRendererComponent>()->material.baseColor = Color::Red;
         currentScene.startAllGameObjects();
+
+        GlobalLight::direction = { 0.7f, -1.f, -0.5f };
     }
 
     void onUpdate() override {
@@ -143,23 +145,26 @@ class Editor final : public Engine {
     void ShowPropertiesWindow() const {
         ImGui::Begin("Properties");
 
-        // Example properties for a selected object
-        if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
-            static float position[3] = { 0.f, 0.f, 0.f };
-            static float rotation[3] = { 0.f, 0.f, 0.f };
-            static float scale[3] = { 1.f, 1.f, 1.f };
-
-            ImGui::DragFloat3("Position", position, 0.1f);
-            ImGui::DragFloat3("Rotation", rotation, 1.f);
-            ImGui::DragFloat3("Scale", scale, 0.1f);
+        if (selectedObject == nullptr) {
+            ImGui::End();
+            return;
         }
 
-        if (ImGui::CollapsingHeader("Mesh Renderer", ImGuiTreeNodeFlags_DefaultOpen)) {
-            static bool enabled = true;
-            ImGui::Checkbox("Enabled", &enabled);
+        ImGui::Checkbox("Active", &selectedObject->active);
 
-            // Material selector would go here
-            ImGui::Text("Material: Default Material");
+        Transform& transform = selectedObject->transform;
+        if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
+            ImGui::DragFloat3("Position", &transform.position.x, 0.1f);
+            ImGui::DragFloat3("Rotation", &transform.rotation.x, 1.f);
+            ImGui::DragFloat3("Scale", &transform.scale.x, 0.1f);
+        }
+
+        if (selectedObject->hasComponent<MeshRendererComponent>()) {
+            auto* meshRenderer = selectedObject->getComponent<MeshRendererComponent>();
+            if (ImGui::CollapsingHeader("Mesh Renderer", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::Checkbox("Enabled", &meshRenderer->enabled);
+                ImGui::ColorEdit3("Base Color", &meshRenderer->material.baseColor.r);
+            }
         }
 
         ImGui::End();
