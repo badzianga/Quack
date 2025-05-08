@@ -101,8 +101,8 @@ bool Mesh::create(const std::vector<Vertex>& vertices, const std::vector<uint32_
         "Mesh created with "
         + std::to_string(m_vertices.size())
         + " vertices and "
-        + std::to_string(m_indices.size())
-        + " indices"
+        + std::to_string(m_indices.size() / 3)
+        + " triangles"
     );
 
     return true;

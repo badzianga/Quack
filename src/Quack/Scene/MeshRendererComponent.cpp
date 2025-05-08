@@ -4,6 +4,8 @@
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
 
+// TODO: mesh and shader are not destroyed, even after closing window
+
 void MeshRendererComponent::start() {}
 
 void MeshRendererComponent::update() {
