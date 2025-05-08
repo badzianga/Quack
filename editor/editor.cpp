@@ -150,6 +150,8 @@ class Editor final : public Engine {
 
         ImGui::SetNextItemOpen(true);
         if (ImGui::TreeNode(currentScene.name.c_str())) {
+            GameObject* toDelete = nullptr;
+
             for (auto &child: currentScene.getAllGameObjects()) {
                 if (ImGui::TreeNodeEx(child->name.c_str(), ImGuiTreeNodeFlags_Leaf)) {
                     if (ImGui::IsItemClicked()) {
@@ -158,18 +160,8 @@ class Editor final : public Engine {
 
                     if (ImGui::BeginPopupContextItem()) {
                         if (ImGui::MenuItem("Delete")) {
-                            if (selectedObject == child.get()) {
-                                selectedObject = nullptr;
-                            }
+                            toDelete = child.get();
 
-                            // TODO: temporary, destroy MeshRendererComponent resources
-                            if (child->hasComponent<MeshRendererComponent>()) {
-                                auto* meshRenderer = child->getComponent<MeshRendererComponent>();
-                                meshRenderer->mesh.destroy();
-                                meshRenderer->shader.destroy();
-                            }
-
-                            currentScene.removeGameObject(child.get());
                             ImGui::EndPopup();
                             ImGui::TreePop();
                             continue; // Skip rendering deleted object
@@ -181,6 +173,21 @@ class Editor final : public Engine {
                 }
             }
             ImGui::TreePop();
+
+            if (toDelete != nullptr) {
+                if (selectedObject == toDelete) {
+                    selectedObject = nullptr;
+                }
+
+                // TODO: temporary, destroy MeshRendererComponent resources
+                if (toDelete->hasComponent<MeshRendererComponent>()) {
+                    auto* meshRenderer = toDelete->getComponent<MeshRendererComponent>();
+                    meshRenderer->mesh.destroy();
+                    meshRenderer->shader.destroy();
+                }
+
+                currentScene.removeGameObject(toDelete);
+            }
         }
 
         ImGui::End();
