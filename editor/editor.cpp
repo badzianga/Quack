@@ -7,6 +7,9 @@
 
 #include "Quack/Scene/MeshRendererComponent.hpp"
 
+constexpr auto VERT_SHADER = "resources/shaders/global_light.vert";
+constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
+
 class Editor final : public Engine {
     void onCreate() override {
         ImGuiConfig::Init(accessWindow().getHandle());
@@ -20,13 +23,6 @@ class Editor final : public Engine {
         editorCamera.transform.rotation = { -25.02f, 45.f, 0.f };
         editorCamera.getComponent<CameraComponent>()->aspectRatio = 16.f / 9.f;
         editorCamera.startAllComponents();
-
-        selectedObject = currentScene.createGameObject("Cube");
-        selectedObject->addComponent<MeshRendererComponent>();
-        selectedObject->getComponent<MeshRendererComponent>()->mesh = Mesh::createCube();
-        selectedObject->getComponent<MeshRendererComponent>()->shader.create("resources/shaders/global_light.vert", "resources/shaders/global_light.frag");
-        selectedObject->getComponent<MeshRendererComponent>()->material.baseColor = Color::Red;
-        currentScene.startAllGameObjects();
 
         GlobalLight::direction = { 0.7f, -1.f, -0.5f };
     }
@@ -78,6 +74,31 @@ class Editor final : public Engine {
             if (ImGui::BeginMenu("Edit")) {
                 if (ImGui::MenuItem("Undo", "Ctrl+Z")) { }
                 if (ImGui::MenuItem("Redo", "Ctrl+Y")) { }
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("GameObject")) {
+                if (ImGui::MenuItem("Create Empty")) {
+                    selectedObject = currentScene.createGameObject();
+                }
+                if (ImGui::MenuItem("Create Cube")) {
+                    selectedObject = currentScene.createGameObject("Cube");
+                    auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
+                    meshRenderer->mesh = Mesh::createCube();
+                    meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
+                }
+                if (ImGui::MenuItem("Create Sphere")) {
+                    selectedObject = currentScene.createGameObject("Sphere");
+                    auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
+                    meshRenderer->mesh = Mesh::createSphere();
+                    meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
+                }
+                if (ImGui::MenuItem("Create Plane")) {
+                    selectedObject = currentScene.createGameObject("Plane");
+                    auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
+                    meshRenderer->mesh = Mesh::createPlane();
+                    meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
+                }
                 ImGui::EndMenu();
             }
 
