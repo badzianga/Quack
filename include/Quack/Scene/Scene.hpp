@@ -46,7 +46,10 @@ public:
      *
      * @return Vector of pointers to the GameObjects on the scene.
      */
-    [[nodiscard]] std::vector<std::unique_ptr<GameObject>>& getAllGameObjects();
+    std::vector<std::unique_ptr<GameObject>>& getAllGameObjects();
+
+    /// Displayed name of the scene.
+    std::string name = "SampleScene";
 private:
     std::vector<std::unique_ptr<GameObject>> m_gameObjects;
 };

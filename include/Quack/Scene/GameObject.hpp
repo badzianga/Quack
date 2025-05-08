@@ -81,9 +81,11 @@ public:
 
     /// Indicate whether the game object is active (updated every frame).
     bool active = true;
+
+     /// Name assigned to the GameObject.
+    std::string name;
 private:
     std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
-    std::string m_name;
 };
 
 #endif //QUACK_GAME_OBJECT_HPP

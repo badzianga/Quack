@@ -1,6 +1,6 @@
 #include "Quack/Scene/GameObject.hpp"
 
-GameObject::GameObject(const char* name) : m_name(name) {}
+GameObject::GameObject(const char* name) : name(name) {}
 
 void GameObject::startAllComponents() const {
     for (auto& pair : m_components) {
