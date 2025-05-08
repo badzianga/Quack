@@ -1,4 +1,6 @@
 #include "Quack/Core/Engine.hpp"
+#include "Quack/Core/Input.hpp"
+#include "Quack/Core/Time.hpp"
 #include "Quack/Graphics/Framebuffer.hpp"
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
@@ -18,10 +20,10 @@ class Editor final : public Engine {
         accessWindow().setClearColor({ 0.1f, 0.1f, 0.2f, 1.f });
         accessWindow().setVSyncEnabled(true);
 
-        editorCamera.addComponent<CameraComponent>();
+        editorCameraComponent = editorCamera.addComponent<CameraComponent>();
         editorCamera.transform.position = Vector3(-2.f, 2.f / 1.5f, 2.f);
         editorCamera.transform.rotation = { -25.02f, 45.f, 0.f };
-        editorCamera.getComponent<CameraComponent>()->aspectRatio = 16.f / 9.f;
+        editorCameraComponent->aspectRatio = 16.f / 9.f;
         editorCamera.startAllComponents();
 
         GlobalLight::direction = { 0.7f, -1.f, -0.5f };
@@ -117,8 +119,35 @@ class Editor final : public Engine {
         }
     }
 
-    void ShowSceneWindow() const {
+    void ShowSceneWindow()  {
         ImGui::Begin("Scene");
+
+        if (ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows)) {
+            constexpr float scrollSensitivity = 4.f;
+            editorCameraComponent->fieldOfView -= ImGui::GetIO().MouseWheel * scrollSensitivity;
+            editorCameraComponent->fieldOfView = Math::clamp(editorCameraComponent->fieldOfView, 1.f, 179.f);
+
+            if (Input::isButtonPressed(Mouse::Button::Right)) {
+                constexpr float mouseSensitivity = 0.25f;
+                constexpr float cameraSpeed = 10.f;
+                auto mouseDelta = ImGui::GetIO().MouseDelta;
+                editorCamera.transform.rotation.x -= mouseDelta.y * mouseSensitivity;
+                editorCamera.transform.rotation.x = Math::clamp(editorCamera.transform.rotation.x, -89.f, 89.f);
+                editorCamera.transform.rotation.y += mouseDelta.x * mouseSensitivity;
+
+                float x = 0;
+                float z = 0;
+                if (Input::isKeyDown(Keyboard::Key::A))      x = -1;
+                else if (Input::isKeyDown(Keyboard::Key::D)) x = 1;
+                if (Input::isKeyDown(Keyboard::Key::W))      z = 1;
+                else if (Input::isKeyDown(Keyboard::Key::S)) z = -1;
+
+                Vector3 movement = (editorCamera.transform.getRight() * x + editorCamera.transform.getForward() * z) * (Time::getDeltaTime() * cameraSpeed);
+                editorCamera.transform.position += movement;
+            }
+        }
+
+        // TODO: maybe scene render should be here?
 
         ImGui::Image(
             sceneFramebuffer.getTextureID(),
@@ -244,6 +273,7 @@ class Editor final : public Engine {
     Framebuffer sceneFramebuffer;
     Scene currentScene;
     GameObject editorCamera;
+    CameraComponent* editorCameraComponent = nullptr;
     GameObject* selectedObject = nullptr;
 };
 
