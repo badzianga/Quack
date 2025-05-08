@@ -139,9 +139,11 @@ class Editor final : public Engine {
 
         ImGui::SetNextItemOpen(true);
         if (ImGui::TreeNode(currentScene.name.c_str())) {
-            for (auto& child : currentScene.getAllGameObjects()) {
-                ImGui::SetNextItemOpen(true);
-                if (ImGui::TreeNode(child->name.c_str())) {
+            for (auto &child: currentScene.getAllGameObjects()) {
+                if (ImGui::TreeNodeEx(child->name.c_str(), ImGuiTreeNodeFlags_Leaf)) {
+                    if (ImGui::IsItemClicked()) {
+                        selectedObject = child.get();
+                    }
                     ImGui::TreePop();
                 }
             }
