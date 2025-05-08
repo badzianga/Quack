@@ -1,11 +1,11 @@
 #include "Quack/Core/Engine.hpp"
 #include "Quack/Graphics/Framebuffer.hpp"
 #include "Quack/Scene/CameraComponent.hpp"
+#include "Quack/Scene/MeshRendererComponent.hpp"
 #include "Quack/Scene/Scene.hpp"
+#include "Quack/Utils/Logger.hpp"
 #include "ImGuiConfig.hpp"
 #include <imgui.h>
-
-#include "Quack/Scene/MeshRendererComponent.hpp"
 
 constexpr auto VERT_SHADER = "resources/shaders/global_light.vert";
 constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
@@ -25,6 +25,8 @@ class Editor final : public Engine {
         editorCamera.startAllComponents();
 
         GlobalLight::direction = { 0.7f, -1.f, -0.5f };
+
+        Logger::setMinLogLevel(Logger::LogLevel::Debug);
     }
 
     void onUpdate() override {
@@ -43,6 +45,15 @@ class Editor final : public Engine {
 
     void onDestroy() override {
         ImGuiConfig::Shutdown();
+
+        // TODO: temporary, destroy scene resources
+        for (auto& object : currentScene.getAllGameObjects()) {
+            if (object->hasComponent<MeshRendererComponent>()) {
+                auto* meshRenderer = object->getComponent<MeshRendererComponent>();
+                meshRenderer->mesh.destroy();
+                meshRenderer->shader.destroy();
+            }
+        }
     }
 
     void RenderScene() const {
@@ -144,6 +155,28 @@ class Editor final : public Engine {
                     if (ImGui::IsItemClicked()) {
                         selectedObject = child.get();
                     }
+
+                    if (ImGui::BeginPopupContextItem()) {
+                        if (ImGui::MenuItem("Delete")) {
+                            if (selectedObject == child.get()) {
+                                selectedObject = nullptr;
+                            }
+
+                            // TODO: temporary, destroy MeshRendererComponent resources
+                            if (child->hasComponent<MeshRendererComponent>()) {
+                                auto* meshRenderer = child->getComponent<MeshRendererComponent>();
+                                meshRenderer->mesh.destroy();
+                                meshRenderer->shader.destroy();
+                            }
+
+                            currentScene.removeGameObject(child.get());
+                            ImGui::EndPopup();
+                            ImGui::TreePop();
+                            continue; // Skip rendering deleted object
+                        }
+                        ImGui::EndPopup();
+                    }
+
                     ImGui::TreePop();
                 }
             }
