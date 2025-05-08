@@ -13,7 +13,7 @@ class Editor final : public Engine {
 
         sceneFramebuffer.create(1280, 720);
         accessWindow().setClearColor({ 0.1f, 0.1f, 0.2f, 1.f });
-        accessWindow().setVSyncEnabled(false);
+        accessWindow().setVSyncEnabled(true);
 
         editorCamera.addComponent<CameraComponent>();
         editorCamera.transform.position = Vector3(-2.f, 2.f / 1.5f, 2.f);
@@ -21,7 +21,7 @@ class Editor final : public Engine {
         editorCamera.getComponent<CameraComponent>()->aspectRatio = 16.f / 9.f;
         editorCamera.startAllComponents();
 
-        selectedObject = currentScene.createGameObject("GameObject");
+        selectedObject = currentScene.createGameObject("Cube");
         selectedObject->addComponent<MeshRendererComponent>();
         selectedObject->getComponent<MeshRendererComponent>()->mesh = Mesh::createCube();
         selectedObject->getComponent<MeshRendererComponent>()->shader.create("resources/shaders/global_light.vert", "resources/shaders/global_light.frag");
@@ -113,28 +113,16 @@ class Editor final : public Engine {
         ImGui::End();
     }
 
-    void ShowSceneHierarchyWindow() const {
+    void ShowSceneHierarchyWindow() {
         ImGui::Begin("Scene Hierarchy");
 
-        // Example scene hierarchy
-        if (ImGui::TreeNode("Scene")) {
-            if (ImGui::TreeNode("Main Camera")) {
-                ImGui::TreePop();
-            }
-            if (ImGui::TreeNode("Directional Light")) {
-                ImGui::TreePop();
-            }
-            if (ImGui::TreeNode("Environment")) {
-                ImGui::TreePop();
-            }
-            if (ImGui::TreeNode("Game Objects")) {
-                if (ImGui::TreeNode("Player")) {
+        ImGui::SetNextItemOpen(true);
+        if (ImGui::TreeNode(currentScene.name.c_str())) {
+            for (auto& child : currentScene.getAllGameObjects()) {
+                ImGui::SetNextItemOpen(true);
+                if (ImGui::TreeNode(child->name.c_str())) {
                     ImGui::TreePop();
                 }
-                if (ImGui::TreeNode("Enemies")) {
-                    ImGui::TreePop();
-                }
-                ImGui::TreePop();
             }
             ImGui::TreePop();
         }
