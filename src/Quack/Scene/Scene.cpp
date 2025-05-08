@@ -2,7 +2,27 @@
 #include <algorithm>
 
 GameObject* Scene::createGameObject(const char* name) {
-    m_gameObjects.emplace_back(std::make_unique<GameObject>(name));
+    // set unique name for game object (add a number) if name already exists
+    // TODO: very inefficient code here, maybe this can be made better?
+    std::string nameStr = name;
+    const std::string originalName = name;
+
+    int suffix = 1;
+    bool nameExists;
+    do {
+        nameExists = false;
+        for (const auto& gameObject: m_gameObjects) {
+            if (gameObject->name == nameStr) {
+                nameExists = true;
+                break;
+            }
+        }
+        if (nameExists) {
+            nameStr = originalName + std::to_string(++suffix);
+        }
+    } while (nameExists);
+
+    m_gameObjects.emplace_back(std::make_unique<GameObject>(nameStr.c_str()));
     return m_gameObjects.back().get();
 }
 

@@ -15,6 +15,9 @@ public:
     /**
      * @brief Create and add a new GameObject to the scene.
      *
+     * If scene already has a GameObject with the same name as passed,
+     * then suffix is calculated and added.
+     *
      * @param name Optional name for the game object.
      * @return Pointer to the created GameObject.
      */
