@@ -30,6 +30,8 @@ endif()
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         "${CMAKE_SOURCE_DIR}/src/Quack/*/*.cpp"
         "${CMAKE_SOURCE_DIR}/include/Quack/*/*.hpp"
+        "${CMAKE_SOURCE_DIR}/include/Quack/*/*.inl"
+        "${CMAKE_SOURCE_DIR}/include/*.hpp"
 )
 
 add_library(Quack STATIC ${SRC_FILES})
@@ -77,7 +79,8 @@ target_link_libraries(imgui_lib PRIVATE glfw OpenGL::GL)
 
 add_executable(QuackEditor editor/editor.cpp
         editor/src/ImGuiConfig.cpp
-        editor/include/ImGuiConfig.hpp)
+        editor/include/ImGuiConfig.hpp
+)
 
 target_include_directories(QuackEditor PRIVATE
         editor/include
