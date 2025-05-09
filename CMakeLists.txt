@@ -27,6 +27,18 @@ if(NOT glfw_POPULATED)
     set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
 endif()
 
+FetchContent_Declare(lua GIT_REPOSITORY https://github.com/lua/lua.git GIT_TAG v5.4.7)
+FetchContent_GetProperties(lua)
+if (NOT lua_POPULATED)
+    FetchContent_MakeAvailable(lua)
+endif()
+
+FetchContent_Declare(sol2 GIT_REPOSITORY https://github.com/ThePhD/sol2.git GIT_TAG v3.5.0)
+FetchContent_GetProperties(sol2)
+if (NOT sol2_POPULATED)
+    FetchContent_MakeAvailable(sol2)
+endif()
+
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         "${CMAKE_SOURCE_DIR}/src/Quack/*/*.cpp"
         "${CMAKE_SOURCE_DIR}/include/Quack/*/*.hpp"
@@ -37,7 +49,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 add_library(Quack STATIC ${SRC_FILES})
 
 target_include_directories(Quack PUBLIC include external)
-target_link_libraries(Quack PRIVATE libglew_static glfw)
+target_link_libraries(Quack PUBLIC libglew_static glfw lua sol2)
 
 file(COPY resources DESTINATION "${CMAKE_BINARY_DIR}")
 

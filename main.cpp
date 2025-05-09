@@ -4,6 +4,7 @@
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
 #include "Quack/Scene/Scene.hpp"
+#include "Quack/Scene/ScriptComponent.hpp"
 
 constexpr auto VERT_SHADER = "resources/shaders/global_light.vert";
 constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
@@ -22,38 +23,40 @@ public:
             object = scene.createGameObject("Object");
             object->transform.position = Vector3(0.f, -0.5f, -2.f);
             object->transform.scale *= 0.01f;
-            auto meshRenderer = object->addComponent<MeshRendererComponent>();
+            auto* meshRenderer = object->addComponent<MeshRendererComponent>();
             meshRenderer->mesh = Mesh::loadObj("resources/models/fox.obj");
             meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
         }
 
         {
-            auto ground = scene.createGameObject("Ground");
+            auto* ground = scene.createGameObject("Ground");
             ground->transform.position = Vector3(0.f, -0.5f, -2.f);
             ground->transform.scale = Vector3(8.f, 1.f, 8.f);
-            auto meshRenderer = ground->addComponent<MeshRendererComponent>();
+            auto* meshRenderer = ground->addComponent<MeshRendererComponent>();
             meshRenderer->mesh = Mesh::createPlane();
             meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
             meshRenderer->material.baseColor = Color::Blue;
         }
 
         {
-            auto sphere = scene.createGameObject("Sphere");
+            auto* sphere = scene.createGameObject("Sphere");
             sphere->transform.position = Vector3(2.f, 0.f, -2.f);
-            auto meshRenderer = sphere->addComponent<MeshRendererComponent>();
+            auto* meshRenderer = sphere->addComponent<MeshRendererComponent>();
             meshRenderer->mesh = Mesh::createSphere();
             meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
             meshRenderer->material.baseColor = Color::Magenta;
         }
 
         {
-            auto cube = scene.createGameObject("Cube");
+            auto* cube = scene.createGameObject("Cube");
             cube->transform.position = Vector3(-2.f, 0.f, -2.f);
-            auto meshRenderer = cube->addComponent<MeshRendererComponent>();
+            auto* meshRenderer = cube->addComponent<MeshRendererComponent>();
             meshRenderer->mesh = Mesh::createCube();
             meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
             texture.create("resources/textures/logo.png");
             meshRenderer->material.baseMap = &texture;
+            auto* script = cube->addComponent<ScriptComponent>();
+            script->loadScript("resources/scripts/rotate.lua");
         }
 
         scene.startAllGameObjects();
