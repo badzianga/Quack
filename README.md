@@ -94,9 +94,9 @@ int main() {
 ```
 
 ## Build Instructions
-Because the engine is still developed, there is not a build target available for a static or dynamic library.
-However, at the moment the project contains a main file which can be freely modified and your whole project can be built
-using attached CMakeLists.txt.
+The project can be built using CMake. No external dependencies are needed since CMakeLists.txt
+downloads all necessary libs. Build folder will contain two main outputs - `QuackEditor`
+executable and `Quack` static library.
 
 ### Windows
 ```bash
@@ -114,7 +114,6 @@ cmake --build .
 
 ## Future features
 - Mesh/Shader/Texture Manager
-- Interactive editor
 - Better shader abstraction compatible with materials
 - Save/load scenes to/from file
 - Save/load prefabs to/from file
