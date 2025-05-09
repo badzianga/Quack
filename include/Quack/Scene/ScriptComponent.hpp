@@ -4,13 +4,15 @@
 #include <sol/sol.hpp>
 #include <string>
 
-class ScriptComponent : public Component {
+class ScriptComponent final : public Component {
 public:
     void start() override;
     void update() override;
 
-    void loadScript(const std::string& scriptPath);
+    std::string scriptPath;
 private:
+    void loadScript();
+
     sol::state m_lua;
     sol::function m_onStart;
     sol::function m_onUpdate;

@@ -6,6 +6,8 @@
 #include "Quack/Utils/Logger.hpp"
 
 void ScriptComponent::start() {
+    loadScript();
+
     if (m_onStart.valid()) {
         m_onStart();
     }
@@ -17,8 +19,15 @@ void ScriptComponent::update() {
     }
 }
 
-void ScriptComponent::loadScript(const std::string& scriptPath) {
+void ScriptComponent::loadScript() {
     m_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
+
+    sol::load_result script = m_lua.load_file(scriptPath);
+    if (!script.valid()) {
+        sol::error err = script;
+        Logger::error("Script error: " + std::string(err.what()));
+        return;
+    }
 
     m_lua.new_usertype<Vector3>("Vector3",
         sol::constructors<Vector3()>(),
@@ -37,13 +46,6 @@ void ScriptComponent::loadScript(const std::string& scriptPath) {
     m_lua.new_usertype<GameObject>("GameObject",
         "transform", &GameObject::transform
     );
-
-    sol::load_result script = m_lua.load_file(scriptPath);
-    if (!script.valid()) {
-        sol::error err = script;
-        Logger::error("Script error: " + std::string(err.what()));
-        return;
-    }
 
     script();
 
