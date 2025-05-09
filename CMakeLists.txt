@@ -90,3 +90,5 @@ target_include_directories(QuackEditor PRIVATE
         ${imgui_SOURCE_DIR}/backends
 )
 target_link_libraries(QuackEditor PUBLIC glfw imgui_lib Quack)
+
+configure_file(imgui.ini ${CMAKE_BINARY_DIR}/imgui.ini COPYONLY)
