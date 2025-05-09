@@ -8,6 +8,7 @@
 #include "Quack/Utils/Logger.hpp"
 #include "ImGuiConfig.hpp"
 #include <imgui.h>
+#include <imgui_stdlib.h>
 
 constexpr auto VERT_SHADER = "resources/shaders/global_light.vert";
 constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
@@ -230,7 +231,9 @@ class Editor final : public Engine {
             return;
         }
 
-        ImGui::Checkbox("Active", &selectedObject->active);
+        ImGui::Checkbox("##Active", &selectedObject->active);
+        ImGui::SameLine();
+        ImGui::InputText("##Name", &selectedObject->name, ImGuiInputTextFlags_EnterReturnsTrue);
 
         Transform& transform = selectedObject->transform;
         if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
