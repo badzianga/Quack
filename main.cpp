@@ -6,6 +6,8 @@
 #include "Quack/Scene/Scene.hpp"
 #include "Quack/Scene/ScriptComponent.hpp"
 
+constexpr bool showFPS = false;
+
 constexpr auto VERT_SHADER = "resources/shaders/global_light.vert";
 constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
 
@@ -98,12 +100,14 @@ public:
         camera->transform.rotation.x = Math::clamp(camera->transform.rotation.x, -89.f, 89.f);
         camera->transform.rotation.y += mouseDelta.x;
 
-        timeSum += Time::getDeltaTime();
-        ++fps;
-        if (timeSum > 1.f) {
-            printf("FPS: %d\n", fps);
-            timeSum = 0.f;
-            fps = 0;
+        if constexpr (showFPS) {
+            timeSum += Time::getDeltaTime();
+            ++fps;
+            if (timeSum > 1.f) {
+                printf("FPS: %d\n", fps);
+                timeSum = 0.f;
+                fps = 0;
+            }
         }
     }
 
@@ -124,6 +128,7 @@ private:
     GameObject* object = nullptr;
     Texture texture;
     Vector2 lastMousePosition{ 0.f };
+
     float timeSum = 0.f;
     int fps = 0;
 };
