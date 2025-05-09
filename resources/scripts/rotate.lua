@@ -3,5 +3,5 @@ function onStart()
 end
 
 function onUpdate(dt)
-    print("Updating with dt = " .. dt)
+    gameObject.transform.rotation.y = gameObject.transform.rotation.y + 60 * dt
 end

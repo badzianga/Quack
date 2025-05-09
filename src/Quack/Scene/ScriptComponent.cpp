@@ -1,7 +1,9 @@
 #include "Quack/Core/Time.hpp"
+#include "Quack/Math/Vector3.hpp"
+#include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/ScriptComponent.hpp"
+#include "Quack/Scene/Transform.hpp"
 #include "Quack/Utils/Logger.hpp"
-
 
 void ScriptComponent::start() {
     if (m_onStart.valid()) {
@@ -18,6 +20,24 @@ void ScriptComponent::update() {
 void ScriptComponent::loadScript(const std::string& scriptPath) {
     m_lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
 
+    m_lua.new_usertype<Vector3>("Vector3",
+        sol::constructors<Vector3()>(),
+        "x", &Vector3::x,
+        "y", &Vector3::y,
+        "z", &Vector3::z
+    );
+
+    m_lua.new_usertype<Transform>("Transform",
+        sol::constructors<Transform()>(),
+        "position", &Transform::position,
+        "rotation", &Transform::rotation,
+        "scale", &Transform::scale
+    );
+
+    m_lua.new_usertype<GameObject>("GameObject",
+        "transform", &GameObject::transform
+    );
+
     sol::load_result script = m_lua.load_file(scriptPath);
     if (!script.valid()) {
         sol::error err = script;
@@ -29,4 +49,5 @@ void ScriptComponent::loadScript(const std::string& scriptPath) {
 
     m_onStart = m_lua["onStart"];
     m_onUpdate = m_lua["onUpdate"];
+    m_lua["gameObject"] = gameObject;
 }
