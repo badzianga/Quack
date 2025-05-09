@@ -5,6 +5,7 @@
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
 #include "Quack/Scene/Scene.hpp"
+#include "Quack/Scene/ScriptComponent.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include "ImGuiConfig.hpp"
 #include <imgui.h>
@@ -242,11 +243,44 @@ class Editor final : public Engine {
             ImGui::DragFloat3("Scale", &transform.scale.x, 0.1f);
         }
 
+        // TODO: iterate through all components and add them to Properties
+        // now, only first Component of each type will be displayed
         if (selectedObject->hasComponent<MeshRendererComponent>()) {
             auto* meshRenderer = selectedObject->getComponent<MeshRendererComponent>();
-            if (ImGui::CollapsingHeader("Mesh Renderer", ImGuiTreeNodeFlags_DefaultOpen)) {
+            if (ImGui::CollapsingHeader("MeshRendererComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
                 ImGui::Checkbox("Enabled", &meshRenderer->enabled);
                 ImGui::ColorEdit3("Base Color", &meshRenderer->material.baseColor.r);
+            }
+        }
+
+        // TODO: in editor, update only MeshRendererComponent
+        // TODO: select which camera is currently used
+        if (selectedObject->hasComponent<CameraComponent>()) {
+            auto* camera = selectedObject->getComponent<CameraComponent>();
+            if (ImGui::CollapsingHeader("CameraComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::Checkbox("Enabled", &camera->enabled);
+
+                const char *projectionTypes[] = { "Perspective", "Orthographic" };
+                int currentProjection = static_cast<int>(camera->projectionType);
+                if (ImGui::Combo("Projection Type", &currentProjection, projectionTypes, IM_ARRAYSIZE(projectionTypes))) {
+                    camera->projectionType = static_cast<CameraComponent::ProjectionType>(currentProjection);
+                }
+                if (camera->projectionType == CameraComponent::ProjectionType::Perspective) {
+                    ImGui::DragFloat("FOV", &camera->fieldOfView, 0.1f, 1.f, 179.f);
+                }
+                else {
+                    ImGui::DragFloat("Ortho Size", &camera->orthoSize, 0.1f);
+                }
+                ImGui::DragFloat("Near Clip", &camera->nearClip, 0.1f);
+                ImGui::DragFloat("Far Clip", &camera->farClip, 0.1f);
+                ImGui::DragFloat("Aspect Ratio", &camera->aspectRatio, 0.01f);
+            }
+        }
+
+        if (selectedObject->hasComponent<ScriptComponent>()) {
+            if (ImGui::CollapsingHeader("ScriptComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                ImGui::Checkbox("Enabled", &selectedObject->getComponent<ScriptComponent>()->enabled);
+                ImGui::InputText("Script Path", &selectedObject->getComponent<ScriptComponent>()->scriptPath);
             }
         }
 

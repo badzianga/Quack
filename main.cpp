@@ -58,7 +58,7 @@ public:
             texture.create("resources/textures/logo.png");
             meshRenderer->material.baseMap = &texture;
             auto* script = cube->addComponent<ScriptComponent>();
-            script->loadScript("resources/scripts/rotate.lua");
+            script->scriptPath = "resources/scripts/rotate.lua";
         }
 
         scene.startAllGameObjects();
