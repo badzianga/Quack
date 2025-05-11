@@ -75,10 +75,10 @@ class Editor final : public Engine {
     void ShowMainMenuBar() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("New Scene", "Ctrl+N")) { }
-                if (ImGui::MenuItem("Open Scene", "Ctrl+O")) { }
-                if (ImGui::MenuItem("Save", "Ctrl+S")) { }
-                if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) { }
+                if (ImGui::MenuItem("New Scene", "Ctrl+N", false, false)) { }
+                if (ImGui::MenuItem("Open Scene", "Ctrl+O", false, false)) { }
+                if (ImGui::MenuItem("Save", "Ctrl+S", false, false)) { }
+                if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S", false, false)) { }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit")) {
                     stop();
@@ -87,8 +87,8 @@ class Editor final : public Engine {
             }
 
             if (ImGui::BeginMenu("Edit")) {
-                if (ImGui::MenuItem("Undo", "Ctrl+Z")) { }
-                if (ImGui::MenuItem("Redo", "Ctrl+Y")) { }
+                if (ImGui::MenuItem("Undo", "Ctrl+Z", false, false)) { }
+                if (ImGui::MenuItem("Redo", "Ctrl+Y", false, false)) { }
                 ImGui::EndMenu();
             }
 
@@ -113,6 +113,21 @@ class Editor final : public Engine {
                     auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
                     meshRenderer->mesh = Mesh::createPlane();
                     meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
+                }
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("Component")) {
+                bool allowAdd = selectedObject != nullptr;
+
+                if (ImGui::MenuItem("MeshRenderer", nullptr, false, allowAdd)) {
+                    selectedObject->addComponent<MeshRendererComponent>();
+                }
+                if (ImGui::MenuItem("Camera", nullptr, false, allowAdd)) {
+                    selectedObject->addComponent<CameraComponent>();
+                }
+                if (ImGui::MenuItem("Script", nullptr, false, allowAdd)) {
+                    selectedObject->addComponent<ScriptComponent>();
                 }
                 ImGui::EndMenu();
             }
@@ -248,6 +263,12 @@ class Editor final : public Engine {
         if (selectedObject->hasComponent<MeshRendererComponent>()) {
             auto* meshRenderer = selectedObject->getComponent<MeshRendererComponent>();
             if (ImGui::CollapsingHeader("MeshRendererComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                if (ImGui::BeginPopupContextItem("MeshRendererContext")) {
+                    if (ImGui::MenuItem("Delete")) {
+                        selectedObject->removeComponent<MeshRendererComponent>();
+                    }
+                    ImGui::EndPopup();
+                }
                 ImGui::Checkbox("Enabled", &meshRenderer->enabled);
                 ImGui::ColorEdit3("Base Color", &meshRenderer->material.baseColor.r);
             }
@@ -258,8 +279,13 @@ class Editor final : public Engine {
         if (selectedObject->hasComponent<CameraComponent>()) {
             auto* camera = selectedObject->getComponent<CameraComponent>();
             if (ImGui::CollapsingHeader("CameraComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                if (ImGui::BeginPopupContextItem("CameraContext")) {
+                    if (ImGui::MenuItem("Delete")) {
+                        selectedObject->removeComponent<CameraComponent>();
+                    }
+                    ImGui::EndPopup();
+                }
                 ImGui::Checkbox("Enabled", &camera->enabled);
-
                 const char *projectionTypes[] = { "Perspective", "Orthographic" };
                 int currentProjection = static_cast<int>(camera->projectionType);
                 if (ImGui::Combo("Projection Type", &currentProjection, projectionTypes, IM_ARRAYSIZE(projectionTypes))) {
@@ -279,6 +305,12 @@ class Editor final : public Engine {
 
         if (selectedObject->hasComponent<ScriptComponent>()) {
             if (ImGui::CollapsingHeader("ScriptComponent", ImGuiTreeNodeFlags_DefaultOpen)) {
+                if (ImGui::BeginPopupContextItem("ScriptContext")) {
+                    if (ImGui::MenuItem("Delete")) {
+                        selectedObject->removeComponent<ScriptComponent>();
+                    }
+                    ImGui::EndPopup();
+                }
                 ImGui::Checkbox("Enabled", &selectedObject->getComponent<ScriptComponent>()->enabled);
                 ImGui::InputText("Script Path", &selectedObject->getComponent<ScriptComponent>()->scriptPath);
             }
