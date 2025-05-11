@@ -54,8 +54,6 @@ bool Window::create(int width, int height, const char* title) {
     );
     Logger::debug("Window created");
 
-    m_size = { static_cast<float>(width), static_cast<float>(height) };
-
     return true;
 }
 
@@ -120,9 +118,13 @@ GLFWwindow* Window::getHandle() const {
 }
 
 Vector2 Window::getSize() const {
-    return m_size;
+    int width, height;
+    glfwGetWindowSize(p_window, &width, &height);
+    return { static_cast<float>(width), static_cast<float>(height) };
 }
 
 void Window::applyThisViewportSize() const {
-    glViewport(0, 0, static_cast<int>(m_size.x), static_cast<int>(m_size.y));
+    int width, height;
+    glfwGetWindowSize(p_window, &width, &height);
+    glViewport(0, 0, width, height);
 }

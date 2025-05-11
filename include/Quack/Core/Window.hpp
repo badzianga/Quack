@@ -153,7 +153,6 @@ private:
     void clear() const;
 
     GLFWwindow* p_window;
-    Vector2 m_size;
 
     static constexpr int DEFAULT_WIDTH = 1024;
     static constexpr int DEFAULT_HEIGHT = 768;
