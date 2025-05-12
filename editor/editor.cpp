@@ -30,7 +30,7 @@ class Editor final : public Engine {
 
         Logger::setMinLogLevel(Logger::LogLevel::Debug);
 
-        // Create Assets folder in the same directory as editor executable
+        // Create Assets folder in the same directory as editor executable if not exists
         if (!fs::exists("Assets")) {
             try {
                 fs::create_directory("Assets");
@@ -184,7 +184,7 @@ class Editor final : public Engine {
         ImGui::End();
     }
 
-    void ShowEngineStatsWindow() const {
+    static void ShowEngineStatsWindow() {
         ImGui::Begin("Engine Stats");
 
         const ImGuiIO& io = ImGui::GetIO();
@@ -266,6 +266,13 @@ class Editor final : public Engine {
         if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::DragFloat3("Position", &transform.position.x, 0.1f);
             ImGui::DragFloat3("Rotation", &transform.rotation.x, 1.f);
+            // TODO: this should probably be in core instead of editor
+            while (transform.rotation.x > 360.f) {
+                transform.rotation.x -= 360.f;
+            }
+            while (transform.rotation.y < -360.f) {
+                transform.rotation.y += 360.f;
+            }
             ImGui::DragFloat3("Scale", &transform.scale.x, 0.1f);
         }
 
@@ -322,8 +329,14 @@ class Editor final : public Engine {
                     }
                     ImGui::EndPopup();
                 }
-                ImGui::Checkbox("Enabled", &selectedObject->getComponent<ScriptComponent>()->enabled);
+                // TODO: without '#' there is a name conflict with previous "Enabled" checkbox label
+                ImGui::Checkbox("#Enabled", &selectedObject->getComponent<ScriptComponent>()->enabled);
                 ImGui::InputText("Script Path", &selectedObject->getComponent<ScriptComponent>()->scriptPath);
+                // TODO: temporary
+                if (ImGui::Button("Start")) {
+                    auto* script = selectedObject->getComponent<ScriptComponent>();
+                    script->start();
+                }
             }
         }
 
@@ -345,7 +358,7 @@ class Editor final : public Engine {
         }
     }
 
-    void ShowContentBrowserWindow() const {
+    static void ShowContentBrowserWindow() {
         ImGui::Begin("Content Browser");
 
         fs::path rootPath = fs::current_path() / "Assets";
