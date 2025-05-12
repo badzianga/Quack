@@ -2,6 +2,8 @@
 
 Quack Engine is a currently developed small 3D game engine created using C++ and OpenGL.
 
+![Quack Editor](md/editor.png)
+
 ## Features
 Since Quack Engine is still in development, it doesn't have many features. However, for now, it allows you to:
 - create your own Engine-derived class with auto-called methods
