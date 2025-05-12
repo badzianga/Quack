@@ -3,8 +3,11 @@
 #include "Quack/Scene.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include "ImGuiConfig.hpp"
+#include <filesystem>
 #include <imgui.h>
 #include <imgui_stdlib.h>
+
+namespace fs = std::filesystem;
 
 constexpr auto VERT_SHADER = "resources/shaders/global_light.vert";
 constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
@@ -26,6 +29,16 @@ class Editor final : public Engine {
         GlobalLight::direction = { 0.7f, -1.f, -0.5f };
 
         Logger::setMinLogLevel(Logger::LogLevel::Debug);
+
+        // Create Assets folder in the same directory as editor executable
+        if (!fs::exists("Assets")) {
+            try {
+                fs::create_directory("Assets");
+            }
+            catch (const fs::filesystem_error& e) {
+                Logger::error("Failed to create Assets directory: " + std::string(e.what()));
+            }
+        }
     }
 
     void onUpdate() override {
@@ -193,8 +206,7 @@ class Editor final : public Engine {
     void ShowSceneHierarchyWindow() {
         ImGui::Begin("Scene Hierarchy");
 
-        ImGui::SetNextItemOpen(true);
-        if (ImGui::TreeNode(currentScene.name.c_str())) {
+        if (ImGui::TreeNodeEx(currentScene.name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
             GameObject* toDelete = nullptr;
 
             for (auto &child: currentScene.getAllGameObjects()) {
@@ -318,20 +330,28 @@ class Editor final : public Engine {
         ImGui::End();
     }
 
+    static void ShowDirectoryTree(const fs::path& path) {
+        for (const auto& entry : fs::directory_iterator(path)) {
+            const auto& p = entry.path();
+            if (entry.is_directory()) {
+                if (ImGui::TreeNodeEx(p.filename().string().c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+                    ShowDirectoryTree(p);
+                    ImGui::TreePop();
+                }
+            } else {
+                ImGui::TreeNodeEx(p.filename().string().c_str(), ImGuiTreeNodeFlags_Leaf);
+                ImGui::TreePop();
+            }
+        }
+    }
+
     void ShowContentBrowserWindow() const {
         ImGui::Begin("Content Browser");
 
-        // Example folder structure
-        if (ImGui::TreeNode("Assets")) {
-            if (ImGui::TreeNode("Models")) {
-                ImGui::Text("cube.obj");
-                ImGui::Text("fox.obj");
-                ImGui::TreePop();
-            }
-            if (ImGui::TreeNode("Textures")) {
-                ImGui::Text("logo.png");
-                ImGui::TreePop();
-            }
+        fs::path rootPath = fs::current_path() / "Assets";
+
+        if (ImGui::TreeNodeEx("Assets", ImGuiTreeNodeFlags_DefaultOpen)) {
+            ShowDirectoryTree(rootPath);
             ImGui::TreePop();
         }
 
