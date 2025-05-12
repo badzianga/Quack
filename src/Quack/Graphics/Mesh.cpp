@@ -1,3 +1,4 @@
+#include "Quack/Core/Stats.hpp"
 #include "Quack/Graphics/Mesh.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include <cmath>
@@ -126,6 +127,10 @@ void Mesh::draw() const {
     glBindVertexArray(m_vao);
 
     glDrawElements(GL_TRIANGLES, static_cast<int>(m_indices.size()), GL_UNSIGNED_INT, nullptr);
+
+    ++Stats::drawCalls;
+    Stats::vertices += m_vertices.size();
+    Stats::triangles += m_indices.size() / 3;
 
     glBindVertexArray(0);
 }

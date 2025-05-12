@@ -1,11 +1,6 @@
-#include "Quack/Core/Engine.hpp"
-#include "Quack/Core/Input.hpp"
-#include "Quack/Core/Time.hpp"
+#include "Quack/Core.hpp"
 #include "Quack/Graphics/Framebuffer.hpp"
-#include "Quack/Scene/CameraComponent.hpp"
-#include "Quack/Scene/MeshRendererComponent.hpp"
-#include "Quack/Scene/Scene.hpp"
-#include "Quack/Scene/ScriptComponent.hpp"
+#include "Quack/Scene.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include "ImGuiConfig.hpp"
 #include <imgui.h>
@@ -184,11 +179,15 @@ class Editor final : public Engine {
 
         ImGui::Separator();
 
-        ImGui::Text("Draw Calls: %d", 10);
-        ImGui::Text("Vertices: %d", 648);
-        ImGui::Text("Triangles: %d", 1200);
+        ImGui::Text("Draw Calls: %zu", Stats::drawCalls);
+        ImGui::Text("Vertices: %zu", Stats::vertices);
+        ImGui::Text("Triangles: %zu", Stats::triangles);
 
         ImGui::End();
+
+        Stats::drawCalls = 0;
+        Stats::vertices = 0;
+        Stats::triangles = 0;
     }
 
     void ShowSceneHierarchyWindow() {
