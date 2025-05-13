@@ -126,6 +126,7 @@ cmake --build .
 - Own scripting language
 
 ## Future minor improvements
+- Store model matrices in transforms + dirty update
 - Time scaling
 - Fixed timestep
 - Action mapping

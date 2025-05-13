@@ -5,6 +5,7 @@
 #include <memory>
 #include <typeindex>
 #include <unordered_map>
+#include <vector>
 
 /**
  * @brief Entity representation in the scene.
@@ -18,8 +19,9 @@ public:
      * @brief Construct a new GameObject with an optional name.
      *
      * @param name The name of the GameObject.
+     * @param parent Pointer to the parent.
      */
-    explicit GameObject(const char* name = "GameObject");
+    explicit GameObject(const char* name = "GameObject", GameObject* parent = nullptr);
 
     /**
      * @brief Add a component of type T to this GameObject.
@@ -61,7 +63,7 @@ public:
     void removeComponent();
 
     /**
-     * @brief Call start() on all attached components.
+     * @brief Call start() on all attached components and children components.
      *
      * This method is called by Scene::startAllGameObjects(),
      * so it should not be called by user.
@@ -69,12 +71,37 @@ public:
     void startAllComponents() const;
 
     /**
-     * @brief Call update() on all attached components.
+     * @brief Call update() on all attached components and children components.
      *
      * This method is called by Scene::updateAllGameObjects(),
      * so it should not be called by user.
      */
     void updateAllComponents() const;
+
+    /**
+     * @brief Create and add a new GameObject as a child.
+     *
+     * If GameObject already has a child with the same name as passed,
+     * then suffix is calculated and added.
+     *
+     * @param name Optional name for the game object.
+     * @return Pointer to the created GameObject.
+     */
+    GameObject* addChild(const char* name = "GameObject");
+
+    /**
+     * @brief Remove a GameObject from the children.
+     *
+     * @param child Pointer to the GameObject to remove.
+     */
+    void removeChild(GameObject* child);
+
+    /**
+     * @brief Get all children of this GameObject.
+     *
+     * @return Vector of pointers to the children of this GameObject.
+     */
+    std::vector<std::unique_ptr<GameObject>>& getChildren();
 
     /// Transform pseudo-component which contains transformation-related vectors.
     Transform transform{};
@@ -84,8 +111,12 @@ public:
 
      /// Name assigned to the GameObject.
     std::string name;
+
+    /// Pointer to the parent GameObject in the hierarchy (null if child of scene).
+    GameObject* parent = nullptr;
 private:
     std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
+    std::vector<std::unique_ptr<GameObject>> m_children;
 };
 
 #endif //QUACK_GAME_OBJECT_HPP

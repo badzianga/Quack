@@ -11,7 +11,13 @@ void MeshRendererComponent::start() {}
 void MeshRendererComponent::update() {
     if (!enabled) return;
 
-    Matrix4 model = getModelMatrix(gameObject->transform);
+    Matrix4 model;
+    if (gameObject->parent) {
+        model = getModelMatrix(gameObject->parent->transform) * getModelMatrix(gameObject->transform);
+    }
+    else {
+        model = getModelMatrix(gameObject->transform);
+    }
     Matrix4 mvp = CameraComponent::getStaticProjectionView() * model;
 
     shader.use();
