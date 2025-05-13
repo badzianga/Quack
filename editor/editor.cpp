@@ -102,23 +102,46 @@ class Editor final : public Engine {
 
             if (ImGui::BeginMenu("GameObject")) {
                 if (ImGui::MenuItem("Create Empty")) {
-                    selectedObject = currentScene.createGameObject();
+                    if (selectedObject != nullptr) {
+                        selectedObject = selectedObject->addChild();
+                    }
+                    else {
+                        selectedObject = currentScene.createGameObject();
+                    }
                 }
                 if (ImGui::MenuItem("Create Cube")) {
-                    selectedObject = currentScene.createGameObject("Cube");
-                    auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
+                    MeshRendererComponent* meshRenderer = nullptr;
+                    if (selectedObject != nullptr) {
+                        selectedObject = selectedObject->addChild("Cube");
+                    }
+                    else {
+                        selectedObject = currentScene.createGameObject("Cube");
+                    }
+                    meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
                     meshRenderer->mesh = Mesh::createCube();
                     meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
                 }
                 if (ImGui::MenuItem("Create Sphere")) {
-                    selectedObject = currentScene.createGameObject("Sphere");
-                    auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
+                    MeshRendererComponent* meshRenderer = nullptr;
+                    if (selectedObject != nullptr) {
+                        selectedObject = selectedObject->addChild("Sphere");
+                    }
+                    else {
+                        selectedObject = currentScene.createGameObject("Sphere");
+                    }
+                    meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
                     meshRenderer->mesh = Mesh::createSphere();
                     meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
                 }
                 if (ImGui::MenuItem("Create Plane")) {
-                    selectedObject = currentScene.createGameObject("Plane");
-                    auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
+                    MeshRendererComponent* meshRenderer = nullptr;
+                    if (selectedObject != nullptr) {
+                        selectedObject = selectedObject->addChild("Plane");
+                    }
+                    else {
+                        selectedObject = currentScene.createGameObject("Plane");
+                    }
+                    meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
                     meshRenderer->mesh = Mesh::createPlane();
                     meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
                 }
@@ -203,38 +226,58 @@ class Editor final : public Engine {
         Stats::triangles = 0;
     }
 
+    void ShowChildrenInSceneHierarchy(std::unique_ptr<GameObject>& parent) {
+        int flags = 0;
+        if (parent->getChildren().empty()) {
+            flags |= ImGuiTreeNodeFlags_Leaf;
+        }
+        else {
+            flags |= ImGuiTreeNodeFlags_DefaultOpen;
+            flags |= ImGuiTreeNodeFlags_OpenOnArrow;
+        }
+        if (parent.get() == selectedObject) {
+            flags |= ImGuiTreeNodeFlags_Selected;
+        }
+
+        if (ImGui::TreeNodeEx(parent->name.c_str(), flags)) {
+            if (ImGui::IsItemClicked()) {
+                selectedObject = parent.get();
+            }
+
+            if (ImGui::BeginPopupContextItem()) {
+                if (ImGui::MenuItem("Delete")) {
+                    toDelete = parent.get();
+                    parentOfToDelete = parent->parent;
+                }
+                ImGui::EndPopup();
+            }
+
+            for (auto& child : parent->getChildren()) {
+                ShowChildrenInSceneHierarchy(child);
+            }
+
+            ImGui::TreePop();
+        }
+    }
+
     void ShowSceneHierarchyWindow() {
         ImGui::Begin("Scene Hierarchy");
 
         if (ImGui::TreeNodeEx(currentScene.name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-            GameObject* toDelete = nullptr;
+            if (ImGui::IsItemClicked()) {
+                selectedObject = nullptr;
+            }
 
             for (auto &child: currentScene.getAllGameObjects()) {
-                if (ImGui::TreeNodeEx(child->name.c_str(), ImGuiTreeNodeFlags_Leaf)) {
-                    if (ImGui::IsItemClicked()) {
-                        selectedObject = child.get();
-                    }
+                ShowChildrenInSceneHierarchy(child);
 
-                    if (ImGui::BeginPopupContextItem()) {
-                        if (ImGui::MenuItem("Delete")) {
-                            toDelete = child.get();
 
-                            ImGui::EndPopup();
-                            ImGui::TreePop();
-                            continue; // Skip rendering deleted object
-                        }
-                        ImGui::EndPopup();
-                    }
-
-                    ImGui::TreePop();
-                }
             }
             ImGui::TreePop();
 
             if (toDelete != nullptr) {
-                if (selectedObject == toDelete) {
-                    selectedObject = nullptr;
-                }
+                // for now, always unset selected object when deleting
+                selectedObject = nullptr;
 
                 // TODO: temporary, destroy MeshRendererComponent resources
                 if (toDelete->hasComponent<MeshRendererComponent>()) {
@@ -243,7 +286,15 @@ class Editor final : public Engine {
                     meshRenderer->shader.destroy();
                 }
 
-                currentScene.removeGameObject(toDelete);
+                // TODO: I don't know if this method of deleting is good, but it works
+                if (parentOfToDelete != nullptr) {
+                    parentOfToDelete->removeChild(toDelete);
+                    parentOfToDelete = nullptr;
+                }
+                else {
+                    currentScene.removeGameObject(toDelete);
+                }
+                toDelete = nullptr;
             }
         }
 
@@ -376,6 +427,8 @@ class Editor final : public Engine {
     GameObject editorCamera;
     CameraComponent* editorCameraComponent = nullptr;
     GameObject* selectedObject = nullptr;
+    GameObject* toDelete = nullptr;
+    GameObject* parentOfToDelete = nullptr;
 };
 
 int main() {
