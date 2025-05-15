@@ -64,7 +64,19 @@ class Editor final : public Engine {
                 auto* meshRenderer = object->getComponent<MeshRendererComponent>();
                 meshRenderer->mesh.destroy();
                 meshRenderer->shader.destroy();
+
+                DestroyChildren(object);
             }
+        }
+    }
+
+    static void DestroyChildren(const std::unique_ptr<GameObject>& parent) {
+        for (auto& child : parent->getChildren()) {
+            auto* meshRenderer = child->getComponent<MeshRendererComponent>();
+            meshRenderer->mesh.destroy();
+            meshRenderer->shader.destroy();
+
+            DestroyChildren(child);
         }
     }
 
