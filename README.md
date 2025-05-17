@@ -7,15 +7,17 @@ Quack Engine is a currently developed small 3D game engine created using C++ and
 ## Features
 Since Quack Engine is still in development, it doesn't have many features. However, for now, it allows you to:
 - create your own Engine-derived class with auto-called methods
-- create a scene with objects to which you can connect components (Mesh, Camera)
+- create a scene with objects to which you can connect components (MeshRenderer, Camera, Script)
 - render pre-defined meshes (plane, cube, sphere)
 - transform objects on the scene
 - use global direction light applied to all objects
 - load .obj files as meshes to render
+- attach scripts written in Lua to the objects
+- prototype your scene in editor (scenes can't be saved/loaded yet)
 
 ## Usage Example
-Code below shows a small example how to use the engine. Simple, work-in-progress documentation with described classes
-is available [here](https://quackengine.netlify.app/annotated.html).
+Code below shows a small example how to use the engine without editor.
+Simple, work-in-progress documentation with described classes is available [here](https://quackengine.netlify.app/annotated.html).
 ```C++
 #include <Quack/Core/Engine.hpp>
 #include <Quack/Core/Time.hpp>
@@ -46,8 +48,9 @@ public:
 
         // Add a cube mesh to the MeshRenderer object
         meshRendererComponent->mesh = Mesh::createCube(); 
-
+ 
         // Create a shader program in the MeshRenderer object
+        // global_light.vert/frag shader is also available
         meshRendererComponent->shader.create("resources/shaders/unlit.vert", "resources/shaders/unlit.frag");
 
         // Set the blue color of the created object
@@ -101,6 +104,7 @@ downloads all necessary libs. Build folder will contain two main outputs - `Quac
 executable and `Quack` static library.
 
 ### Windows
+Currently unavailable when building with MSVC (missing includes). Will be fixed soon.
 ```bash
 mkdir build && cd build
 cmake ..
@@ -120,7 +124,6 @@ cmake --build .
 - Save/load scenes to/from file
 - Save/load prefabs to/from file
 - Light component with directional, point and spot light
-- ScriptComponent and scripting (with Python or Lua)
 - RigidBodyComponent with basic physics
 - 2D support
 - Own scripting language
