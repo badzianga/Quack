@@ -50,7 +50,12 @@ void ScriptComponent::loadScript() {
     InputBinding iBinding;
     iBinding.registerLua(m_lua);
 
-    script();
+    sol::protected_function_result result = script();
+    if (!result.valid()) {
+        sol::error err = result;
+        Logger::error("Script error: " + std::string(err.what()));
+        return;
+    }
 
     m_onStart = m_lua["onStart"];
     m_onUpdate = m_lua["onUpdate"];
