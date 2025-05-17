@@ -395,6 +395,15 @@ class Editor final : public Engine {
                 // TODO: without '#' there is a name conflict with previous "Enabled" checkbox label
                 ImGui::Checkbox("#Enabled", &selectedObject->getComponent<ScriptComponent>()->enabled);
                 ImGui::InputText("Script Path", &selectedObject->getComponent<ScriptComponent>()->scriptPath);
+
+                if (ImGui::BeginDragDropTarget()) {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PATH")) {
+                        auto* droppedPath = static_cast<const char*>(payload->Data);
+                        selectedObject->getComponent<ScriptComponent>()->scriptPath = droppedPath;
+                    }
+                    ImGui::EndDragDropTarget();
+                }
+
                 // TODO: temporary
                 if (ImGui::Button("Start")) {
                     auto* script = selectedObject->getComponent<ScriptComponent>();
@@ -416,6 +425,14 @@ class Editor final : public Engine {
                 }
             } else {
                 ImGui::TreeNodeEx(p.filename().string().c_str(), ImGuiTreeNodeFlags_Leaf);
+
+                if (ImGui::BeginDragDropSource()) {
+                    std::string relativePath = "Assets/" + fs::relative(p, fs::current_path() / "Assets").string();
+                    ImGui::SetDragDropPayload("CONTENT_BROWSER_PATH", relativePath.c_str(), relativePath.size() + 1);
+                    ImGui::Text("%s", relativePath.c_str());
+                    ImGui::EndDragDropSource();
+                }
+
                 ImGui::TreePop();
             }
         }
