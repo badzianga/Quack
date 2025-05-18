@@ -59,7 +59,7 @@ class Editor final : public Engine {
         ImGuiConfig::Shutdown();
 
         // TODO: temporary, destroy scene resources
-        for (auto& object : currentScene.getAllGameObjects()) {
+        for (auto& object : sceneManager.currentScene.getAllGameObjects()) {
             if (object->hasComponent<MeshRendererComponent>()) {
                 auto* meshRenderer = object->getComponent<MeshRendererComponent>();
                 meshRenderer->mesh.destroy();
@@ -86,7 +86,7 @@ class Editor final : public Engine {
         sceneFramebuffer.clear();
 
         editorCamera.updateAllComponents();
-        currentScene.updateAllGameObjects();
+        sceneManager.currentScene.updateAllGameObjects();
 
         sceneFramebuffer.unbind();
         accessWindow().applyThisViewportSize();
@@ -96,8 +96,12 @@ class Editor final : public Engine {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("New Scene", "Ctrl+N", false, false)) { }
-                if (ImGui::MenuItem("Open Scene", "Ctrl+O", false, false)) { }
-                if (ImGui::MenuItem("Save", "Ctrl+S", false, false)) { }
+                if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
+                    sceneManager.loadScene("Assets/Scenes/test.json");
+                }
+                if (ImGui::MenuItem("Save", "Ctrl+S")) {
+                    sceneManager.saveScene("Assets/Scenes/test.json");
+                }
                 if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S", false, false)) { }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit")) {
@@ -118,7 +122,7 @@ class Editor final : public Engine {
                         selectedObject = selectedObject->addChild();
                     }
                     else {
-                        selectedObject = currentScene.createGameObject();
+                        selectedObject = sceneManager.currentScene.createGameObject();
                     }
                 }
                 if (ImGui::MenuItem("Create Cube")) {
@@ -127,7 +131,7 @@ class Editor final : public Engine {
                         selectedObject = selectedObject->addChild("Cube");
                     }
                     else {
-                        selectedObject = currentScene.createGameObject("Cube");
+                        selectedObject = sceneManager.currentScene.createGameObject("Cube");
                     }
                     meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
                     meshRenderer->mesh = Mesh::createCube();
@@ -139,7 +143,7 @@ class Editor final : public Engine {
                         selectedObject = selectedObject->addChild("Sphere");
                     }
                     else {
-                        selectedObject = currentScene.createGameObject("Sphere");
+                        selectedObject = sceneManager.currentScene.createGameObject("Sphere");
                     }
                     meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
                     meshRenderer->mesh = Mesh::createSphere();
@@ -151,7 +155,7 @@ class Editor final : public Engine {
                         selectedObject = selectedObject->addChild("Plane");
                     }
                     else {
-                        selectedObject = currentScene.createGameObject("Plane");
+                        selectedObject = sceneManager.currentScene.createGameObject("Plane");
                     }
                     meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
                     meshRenderer->mesh = Mesh::createPlane();
@@ -275,12 +279,12 @@ class Editor final : public Engine {
     void ShowSceneHierarchyWindow() {
         ImGui::Begin("Scene Hierarchy");
 
-        if (ImGui::TreeNodeEx(currentScene.name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+        if (ImGui::TreeNodeEx(sceneManager.currentScene.name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
             if (ImGui::IsItemClicked()) {
                 selectedObject = nullptr;
             }
 
-            for (auto &child: currentScene.getAllGameObjects()) {
+            for (auto &child: sceneManager.currentScene.getAllGameObjects()) {
                 ShowChildrenInSceneHierarchy(child);
 
 
@@ -304,7 +308,7 @@ class Editor final : public Engine {
                     parentOfToDelete = nullptr;
                 }
                 else {
-                    currentScene.removeGameObject(toDelete);
+                    sceneManager.currentScene.removeGameObject(toDelete);
                 }
                 toDelete = nullptr;
             }
@@ -452,7 +456,7 @@ class Editor final : public Engine {
     }
 
     Framebuffer sceneFramebuffer;
-    Scene currentScene;
+    SceneManager sceneManager;
     GameObject editorCamera;
     CameraComponent* editorCameraComponent = nullptr;
     GameObject* selectedObject = nullptr;
