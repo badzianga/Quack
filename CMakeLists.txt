@@ -39,6 +39,12 @@ if (NOT sol2_POPULATED)
     FetchContent_MakeAvailable(sol2)
 endif()
 
+FetchContent_Declare(json GIT_REPOSITORY https://github.com/nlohmann/json.git GIT_TAG v3.12.0)
+FetchContent_GetProperties(json)
+if (NOT json_POPULATED)
+    FetchContent_MakeAvailable(json)
+endif()
+
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
         "${CMAKE_SOURCE_DIR}/src/Quack/*/*.cpp"
         "${CMAKE_SOURCE_DIR}/include/Quack/*/*.hpp"
@@ -49,7 +55,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 add_library(Quack STATIC ${SRC_FILES})
 
 target_include_directories(Quack PUBLIC include external)
-target_link_libraries(Quack PUBLIC libglew_static glfw lua sol2)
+target_link_libraries(Quack PUBLIC libglew_static glfw lua sol2 nlohmann_json::nlohmann_json)
 
 file(COPY resources DESTINATION "${CMAKE_BINARY_DIR}")
 
