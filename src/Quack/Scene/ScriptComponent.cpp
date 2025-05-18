@@ -1,9 +1,8 @@
 #include "Quack/Core/Time.hpp"
-#include "Quack/Scene/ScriptComponent.hpp"
 #include "Quack/Bindings.hpp"
+#include "Quack/Scene/ScriptComponent.hpp"
+#include "Quack/Scene/GameObject.hpp"
 #include "Quack/Utils/Logger.hpp"
-#include "Quack/Scripting/Bindings/Vector2Binding.hpp"
-#include "Quack/Scripting/Bindings/Vector3Binding.hpp"
 
 void ScriptComponent::start() {
     loadScript();
