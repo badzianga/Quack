@@ -71,7 +71,7 @@ public:
     ProjectionType projectionType = ProjectionType::Perspective;
 
     /// Field of view in degrees.
-    float fieldOfView = 60.f;
+    float fieldOfView = 45.f;
 
     /// Near clipping plane distance.
     float nearClip = 0.3f;
