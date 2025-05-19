@@ -1,5 +1,6 @@
 #ifndef QUACK_SCENE_HPP
 #define QUACK_SCENE_HPP
+#include "Quack/Scene/IJsonSerializable.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include <memory>
 #include <vector>
@@ -10,7 +11,7 @@
  * Manages the lifecycle of all game objects.
  * Handles creation, removal, initialization, and per-frame updates.
  */
-class Scene {
+class Scene : public IJsonSerializable {
 public:
     /**
      * @brief Create and add a new GameObject to the scene.
@@ -50,6 +51,13 @@ public:
      * @return Vector of pointers to the GameObjects on the scene.
      */
     std::vector<std::unique_ptr<GameObject>>& getAllGameObjects();
+
+    // TODO: temporary solution for scene switching
+    void clear();
+
+    nlohmann::json serialize() override;
+
+    void deserialize(const nlohmann::json& json) override;
 
     /// Displayed name of the scene.
     std::string name = "SampleScene";

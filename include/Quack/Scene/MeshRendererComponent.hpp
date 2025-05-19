@@ -28,6 +28,10 @@ public:
      */
     void update() override;
 
+    nlohmann::json serialize() override;
+
+    void deserialize(const nlohmann::json& json) override;
+
     /// The mesh to be rendered.
     Mesh mesh;
 

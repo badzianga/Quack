@@ -9,6 +9,9 @@ public:
     void start() override;
     void update() override;
 
+    nlohmann::json serialize() override;
+    void deserialize(const nlohmann::json& json) override;
+
     std::string scriptPath;
 private:
     void loadScript();

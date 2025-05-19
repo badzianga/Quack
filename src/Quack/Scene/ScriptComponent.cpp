@@ -3,6 +3,7 @@
 #include "Quack/Scene/ScriptComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Utils/Logger.hpp"
+#include <nlohmann/json.hpp>
 
 void ScriptComponent::start() {
     loadScript();
@@ -59,4 +60,19 @@ void ScriptComponent::loadScript() {
     m_onStart = m_lua["onStart"];
     m_onUpdate = m_lua["onUpdate"];
     m_lua["gameObject"] = gameObject;
+}
+
+nlohmann::json ScriptComponent::serialize() {
+    nlohmann::json json;
+
+    json["componentType"] = "Script";
+    json["enabled"] = enabled;
+    json["scriptPath"] = scriptPath;
+
+    return json;
+}
+
+void ScriptComponent::deserialize(const nlohmann::json& json) {
+    enabled = json["enabled"];
+    scriptPath = json["scriptPath"].get<std::string>();
 }

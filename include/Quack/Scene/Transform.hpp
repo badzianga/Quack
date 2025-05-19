@@ -1,5 +1,6 @@
 #ifndef QUACK_TRANSFORM_HPP
 #define QUACK_TRANSFORM_HPP
+#include "Quack/Scene/IJsonSerializable.hpp"
 #include "Quack/Math/Vector3.hpp"
 
 /**
@@ -8,7 +9,7 @@
  * This pseudo-component is essential for spatial transformations and orientation in the 3D world.
  * It is added to every created GameObject by default.
  */
-class Transform {
+class Transform : public IJsonSerializable {
 public:
     /**
      * @brief Get the forward direction vector.
@@ -37,6 +38,10 @@ public:
      * @return 3D vector with normalized up direction.
      */
     [[nodiscard]] Vector3 getUp() const;
+
+    nlohmann::json serialize() override;
+
+    void deserialize(const nlohmann::json& json) override;
 
     /// Position of the GameObject in world space.
     Vector3 position{0.f};

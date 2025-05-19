@@ -1,6 +1,7 @@
 #ifndef QUACK_GAME_OBJECT_HPP
 #define QUACK_GAME_OBJECT_HPP
 #include "Quack/Scene/Component.hpp"
+#include "Quack/Scene/IJsonSerializable.hpp"
 #include "Quack/Scene/Transform.hpp"
 #include <memory>
 #include <typeindex>
@@ -13,7 +14,7 @@
  * A GameObject is a container for components that define its behavior.
  * Supports runtime composition using templated methods.
  */
-class GameObject {
+class GameObject : IJsonSerializable {
 public:
     /**
      * @brief Construct a new GameObject with an optional name.
@@ -102,6 +103,10 @@ public:
      * @return Vector of pointers to the children of this GameObject.
      */
     std::vector<std::unique_ptr<GameObject>>& getChildren();
+
+    nlohmann::json serialize() override;
+
+    void deserialize(const nlohmann::json& json) override;
 
     /// Transform pseudo-component which contains transformation-related vectors.
     Transform transform{};

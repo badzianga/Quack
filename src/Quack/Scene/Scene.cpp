@@ -1,5 +1,6 @@
 #include "Quack/Scene/Scene.hpp"
 #include <algorithm>
+#include <nlohmann/json.hpp>
 
 GameObject* Scene::createGameObject(const char* name) {
     // set unique name for game object (add a number) if name already exists
@@ -50,4 +51,29 @@ void Scene::updateAllGameObjects() const {
 
 std::vector<std::unique_ptr<GameObject>>& Scene::getAllGameObjects() {
     return m_gameObjects;
+}
+
+void Scene::clear() {
+    name.clear();
+    m_gameObjects.clear();
+}
+
+nlohmann::json Scene::serialize() {
+    nlohmann::json json;
+
+    json["name"] = name;
+    json["gameObjects"] = nlohmann::json::array();
+    for (auto& gameObject : m_gameObjects) {
+        json["gameObjects"].push_back(gameObject->serialize());
+    }
+
+    return json;
+}
+
+void Scene::deserialize(const nlohmann::json& json) {
+    name = json["name"].get<std::string>();
+    for (auto& gameObjectJson : json["gameObjects"]) {
+        GameObject* gameObject = createGameObject(gameObjectJson["name"].get<std::string>().c_str());
+        gameObject->deserialize(gameObjectJson);
+    }
 }

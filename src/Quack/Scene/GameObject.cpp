@@ -1,5 +1,10 @@
 #include "Quack/Scene/GameObject.hpp"
+#include "Quack/Scene/CameraComponent.hpp"
+#include "Quack/Scene/MeshRendererComponent.hpp"
+#include "Quack/Scene/ScriptComponent.hpp"
+#include "Quack/Utils/Logger.hpp"
 #include <algorithm>
+#include <nlohmann/json.hpp>
 
 GameObject::GameObject(const char* name, GameObject* parent) : name(name), parent(parent) {}
 
@@ -65,4 +70,45 @@ void GameObject::removeChild(GameObject* child) {
 
 std::vector<std::unique_ptr<GameObject>>& GameObject::getChildren() {
     return m_children;
+}
+
+nlohmann::json GameObject::serialize() {
+    nlohmann::json json;
+
+    json["transform"] = transform.serialize();
+    json["active"] = active;
+    json["name"] = name;
+    json["components"] = nlohmann::json::array();
+    for (auto& component : m_components) {
+        json["components"].push_back(component.second->serialize());
+    }
+    json["children"] = nlohmann::json::array();
+    for (auto& child : m_children) {
+        json["children"].push_back(child->serialize());
+    }
+
+    return json;
+}
+
+void GameObject::deserialize(const nlohmann::json& json) {
+    transform.deserialize(json["transform"]);
+    active = json["active"];
+    // name = json["name"].get<std::string>();  // name is set during object creation
+    for (auto& componentJson : json["components"]) {
+        std::string componentType = componentJson["componentType"].get<std::string>();
+        Component* component = nullptr;
+        if (componentType == "MeshRenderer") component = addComponent<MeshRendererComponent>();
+        else if (componentType == "Camera") component = addComponent<CameraComponent>();
+        else if (componentType == "Script") component = addComponent<ScriptComponent>();
+        else Logger::error("Unknown component type: " + componentType);
+        if (component != nullptr) {
+            component->gameObject = this;
+            component->deserialize(componentJson);
+        }
+    }
+    for (auto& childJson : json["children"]) {
+        GameObject* child = addChild(childJson["name"].get<std::string>().c_str());
+        child->parent = this;
+        child->deserialize(childJson);
+    }
 }

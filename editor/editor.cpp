@@ -56,10 +56,7 @@ class Editor final : public Engine {
         ImGuiConfig::EndFrame();
     }
 
-    void onDestroy() override {
-        ImGuiConfig::Shutdown();
-
-        // TODO: temporary, destroy scene resources
+    void DestroySceneGameObjects() {
         for (auto& object : sceneManager.currentScene.getAllGameObjects()) {
             if (object->hasComponent<MeshRendererComponent>()) {
                 auto* meshRenderer = object->getComponent<MeshRendererComponent>();
@@ -69,6 +66,13 @@ class Editor final : public Engine {
                 DestroyChildren(object);
             }
         }
+    }
+
+    void onDestroy() override {
+        ImGuiConfig::Shutdown();
+
+        // TODO: temporary, destroy scene resources
+        DestroySceneGameObjects();
     }
 
     static void DestroyChildren(const std::unique_ptr<GameObject>& parent) {
@@ -146,6 +150,10 @@ class Editor final : public Engine {
             if (ImGuiFileDialog::Instance()->Display("LoadFileDlg", ImGuiWindowFlags_NoCollapse, { 800, 500 })) {
                 if (ImGuiFileDialog::Instance()->IsOk()) {
                     std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+                    // TODO: not a great solution, but it will work for now
+                    DestroySceneGameObjects();
+                    sceneManager.currentScene.clear();
 
                     sceneManager.loadScene(filePathName.c_str());
                 }

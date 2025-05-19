@@ -19,10 +19,9 @@ bool SceneManager::saveScene(const char* filepath) {
         return false;
     }
 
-    nlohmann::json json;
-    json["name"] = currentScene.name;
+    nlohmann::json json = currentScene.serialize();
 
-    file << json.dump(4);
+    file << json.dump(2);
     file.close();
 
     Logger::debug("Saved scene to file: " + std::string(m_sceneFilePath));
@@ -40,7 +39,7 @@ bool SceneManager::loadScene(const char* filepath) {
     file >> json;
     file.close();
 
-    currentScene.name = json["name"];
+    currentScene.deserialize(json);
     m_sceneFilePath.assign(filepath);
 
     Logger::debug("Loaded scene from file: " + std::string(filepath));

@@ -3,6 +3,7 @@
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
+#include <nlohmann/json.hpp>
 
 // TODO: mesh and shader are not destroyed, even after closing window
 
@@ -53,4 +54,30 @@ Matrix4 MeshRendererComponent::getModelMatrix(const Transform& transform) {
     model.scale(transform.scale);
 
     return model;
+}
+
+nlohmann::json MeshRendererComponent::serialize() {
+    nlohmann::json json;
+
+    json["componentType"] = "MeshRenderer";
+    json["enabled"] = enabled;
+    // TODO: serialize which model and shader is used (ModelManager and ShaderManager will be needed I think)
+    // TODO: material should be IJsonSerializable
+    json["material"] = nlohmann::json::object();
+    json["material"]["baseColor"] = nlohmann::json::array({ material.baseColor.r, material.baseColor.g, material.baseColor.b, material.baseColor.a });
+
+    return json;
+}
+
+void MeshRendererComponent::deserialize(const nlohmann::json& json) {
+    enabled = json["enabled"];
+    // TODO: model and shader are not serialized, so always use Cube model and global_light shader
+    mesh = Mesh::createCube();
+    shader.create("resources/shaders/global_light.vert", "resources/shaders/global_light.frag");
+
+    // TODO: material should be IJsonSerializable
+    material.baseColor.r = json["material"]["baseColor"][0];
+    material.baseColor.g = json["material"]["baseColor"][1];
+    material.baseColor.b = json["material"]["baseColor"][2];
+    material.baseColor.a = json["material"]["baseColor"][3];
 }

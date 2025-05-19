@@ -1,5 +1,6 @@
 #ifndef QUACK_COMPONENT_HPP
 #define QUACK_COMPONENT_HPP
+#include "Quack/Scene/IJsonSerializable.hpp"
 
 class GameObject;
 
@@ -9,7 +10,7 @@ class GameObject;
  * A component adds behavior or data to a GameObject.
  * Derived classes implements start() and update().
  */
-class Component {
+class Component : public virtual IJsonSerializable {
 public:
     /**
      * @brief Virtual destructor.

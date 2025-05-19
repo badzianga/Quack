@@ -63,6 +63,10 @@ public:
      */
     [[nodiscard]] static Matrix4 getStaticProjectionView();
 
+    nlohmann::json serialize() override;
+
+    void deserialize(const nlohmann::json& json) override;
+
     /// Projection type of the camera.
     ProjectionType projectionType = ProjectionType::Perspective;
 
