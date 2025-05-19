@@ -19,7 +19,7 @@ class Editor final : public Engine {
 
         sceneFramebuffer.create(1280, 720);
         accessWindow().setClearColor({ 0.1f, 0.1f, 0.2f, 1.f });
-        accessWindow().setVSyncEnabled(true);
+        accessWindow().setVSyncEnabled(false);
 
         editorCameraComponent = editorCamera.addComponent<CameraComponent>();
         editorCamera.transform.position = Vector3(-2.f, 2.f / 1.5f, 2.f);
@@ -45,6 +45,7 @@ class Editor final : public Engine {
     void onUpdate() override {
         ImGuiConfig::BeginFrame();
 
+        HandleKeyboardShortcuts();
         RenderScene();
         ShowMainMenuBar();
         ShowSceneWindow();
@@ -54,6 +55,40 @@ class Editor final : public Engine {
         ShowContentBrowserWindow();
 
         ImGuiConfig::EndFrame();
+    }
+
+    void onDestroy() override {
+        ImGuiConfig::Shutdown();
+
+        // TODO: temporary, destroy scene resources
+        DestroySceneGameObjects();
+    }
+
+    void HandleKeyboardShortcuts() {
+        if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
+            if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
+                if (ImGui::IsKeyPressed(ImGuiKey_S)) {
+                    OpenSaveSceneFileDialog();
+                }
+            }
+            if (ImGui::IsKeyPressed(ImGuiKey_S)) {
+                if (sceneManager.isFileSpecified()) {
+                    sceneManager.saveScene();
+                }
+                else {
+                    OpenSaveSceneFileDialog();
+                }
+            }
+            if (ImGui::IsKeyPressed(ImGuiKey_O)) {
+                OpenLoadSceneFileDialog();
+            }
+            if (ImGui::IsKeyPressed(ImGuiKey_N)) {
+                sceneManager.clear();
+                selectedObject = nullptr;
+                toDelete = nullptr;
+                parentOfToDelete = nullptr;
+            }
+        }
     }
 
     void DestroySceneGameObjects() {
@@ -66,13 +101,6 @@ class Editor final : public Engine {
                 DestroyChildren(object);
             }
         }
-    }
-
-    void onDestroy() override {
-        ImGuiConfig::Shutdown();
-
-        // TODO: temporary, destroy scene resources
-        DestroySceneGameObjects();
     }
 
     static void DestroyChildren(const std::unique_ptr<GameObject>& parent) {
@@ -116,7 +144,12 @@ class Editor final : public Engine {
     void ShowMainMenuBar() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("New Scene", "Ctrl+N", false, false)) { }
+                if (ImGui::MenuItem("New Scene", "Ctrl+N")) {
+                    sceneManager.clear();
+                    selectedObject = nullptr;
+                    toDelete = nullptr;
+                    parentOfToDelete = nullptr;
+                }
                 if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
                     OpenLoadSceneFileDialog();
                 }
@@ -153,7 +186,10 @@ class Editor final : public Engine {
 
                     // TODO: not a great solution, but it will work for now
                     DestroySceneGameObjects();
-                    sceneManager.currentScene.clear();
+                    sceneManager.clear();
+                    selectedObject = nullptr;
+                    toDelete = nullptr;
+                    parentOfToDelete = nullptr;
 
                     sceneManager.loadScene(filePathName.c_str());
                 }
@@ -384,11 +420,13 @@ class Editor final : public Engine {
             ImGui::DragFloat3("Position", &transform.position.x, 0.1f);
             ImGui::DragFloat3("Rotation", &transform.rotation.x, 1.f);
             // TODO: this should probably be in core instead of editor
-            while (transform.rotation.x > 360.f) {
-                transform.rotation.x -= 360.f;
-            }
-            while (transform.rotation.y < -360.f) {
-                transform.rotation.y += 360.f;
+            for (int i = 0; i < 3; ++i) {
+                while (transform.rotation[i] > 360.f) {
+                    transform.rotation[i] -= 360.f;
+                }
+                while (transform.rotation[i] < 360.f) {
+                    transform.rotation[i] += 360.f;
+                }
             }
             ImGui::DragFloat3("Scale", &transform.scale.x, 0.1f);
         }

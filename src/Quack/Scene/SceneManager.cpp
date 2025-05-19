@@ -50,3 +50,9 @@ bool SceneManager::loadScene(const char* filepath) {
 bool SceneManager::isFileSpecified() const {
     return !m_sceneFilePath.empty();
 }
+
+void SceneManager::clear() {
+    currentScene.clear();
+    currentScene.name = "Untitled";
+    m_sceneFilePath.clear();
+}

@@ -9,6 +9,9 @@ public:
     bool loadScene(const char* filepath);
     [[nodiscard]] bool isFileSpecified() const;
 
+    // TODO: temporary
+    void clear();
+
     Scene currentScene;
 private:
     std::string m_sceneFilePath;
