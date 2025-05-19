@@ -329,7 +329,7 @@ class Editor final : public Engine {
     void ShowSceneHierarchyWindow() {
         ImGui::Begin("Scene Hierarchy");
 
-        if (ImGui::TreeNodeEx(sceneManager.currentScene.name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+        if (ImGui::TreeNodeEx(sceneManager.currentScene.name.c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_OpenOnArrow)) {
             if (ImGui::IsItemClicked()) {
                 selectedObject = nullptr;
             }
