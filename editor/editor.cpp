@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <imgui.h>
 #include <imgui_stdlib.h>
+#include <ImGuiFileDialog.h>
 
 namespace fs = std::filesystem;
 
@@ -92,22 +93,63 @@ class Editor final : public Engine {
         accessWindow().applyThisViewportSize();
     }
 
+    static void OpenSaveSceneFileDialog() {
+        IGFD::FileDialogConfig config;
+        config.path = ".";
+        config.countSelectionMax = 1;
+        config.flags = ImGuiFileDialogFlags_Modal;
+        ImGuiFileDialog::Instance()->OpenDialog("SaveFileDlg", "Save Scene", ".json", config);
+    }
+
+    static void OpenLoadSceneFileDialog() {
+        IGFD::FileDialogConfig config;
+        config.path = ".";
+        config.countSelectionMax = 1;
+        config.flags = ImGuiFileDialogFlags_Modal;
+        ImGuiFileDialog::Instance()->OpenDialog("LoadFileDlg", "Open Scene", ".json", config);
+    }
+
     void ShowMainMenuBar() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("New Scene", "Ctrl+N", false, false)) { }
                 if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
-                    sceneManager.loadScene("Assets/Scenes/test.json");
+                    OpenLoadSceneFileDialog();
                 }
                 if (ImGui::MenuItem("Save", "Ctrl+S")) {
-                    sceneManager.saveScene("Assets/Scenes/test.json");
+                    if (sceneManager.isFileSpecified()) {
+                        sceneManager.saveScene();
+                    }
+                    else {
+                        OpenSaveSceneFileDialog();
+                    }
                 }
-                if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S", false, false)) { }
+                if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
+                    OpenSaveSceneFileDialog();
+                }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit")) {
                     stop();
                 }
                 ImGui::EndMenu();
+            }
+
+            if (ImGuiFileDialog::Instance()->Display("SaveFileDlg", ImGuiWindowFlags_NoCollapse, { 800, 500 })) {
+                if (ImGuiFileDialog::Instance()->IsOk()) {
+                    std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+                    sceneManager.saveScene(filePathName.c_str());
+                }
+                ImGuiFileDialog::Instance()->Close();
+            }
+
+            if (ImGuiFileDialog::Instance()->Display("LoadFileDlg", ImGuiWindowFlags_NoCollapse, { 800, 500 })) {
+                if (ImGuiFileDialog::Instance()->IsOk()) {
+                    std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+
+                    sceneManager.loadScene(filePathName.c_str());
+                }
+                ImGuiFileDialog::Instance()->Close();
             }
 
             if (ImGui::BeginMenu("Edit")) {

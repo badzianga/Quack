@@ -7,6 +7,7 @@ class SceneManager {
 public:
     bool saveScene(const char* filepath = nullptr);
     bool loadScene(const char* filepath);
+    [[nodiscard]] bool isFileSpecified() const;
 
     Scene currentScene;
 private:

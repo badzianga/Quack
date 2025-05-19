@@ -66,14 +66,16 @@ target_link_libraries(QuackSandbox PRIVATE Quack)
 
 
 
-FetchContent_Declare(
-        imgui
-        GIT_REPOSITORY https://github.com/ocornut/imgui.git
-        GIT_TAG docking
-)
+FetchContent_Declare(imgui GIT_REPOSITORY https://github.com/ocornut/imgui.git GIT_TAG docking)
 FetchContent_GetProperties(imgui)
 if(NOT imgui_POPULATED)
     FetchContent_MakeAvailable(imgui)
+endif()
+
+FetchContent_Declare(ImGuiFileDialog GIT_REPOSITORY https://github.com/aiekick/ImGuiFileDialog.git GIT_TAG master)
+FetchContent_GetProperties(ImGuiFileDialog)
+if(NOT ImGuiFileDialog_POPULATED)
+    FetchContent_MakeAvailable(ImGuiFileDialog)
 endif()
 
 find_package(OpenGL REQUIRED)
@@ -97,6 +99,16 @@ target_include_directories(imgui_lib PUBLIC
 
 target_link_libraries(imgui_lib PRIVATE glfw OpenGL::GL)
 
+add_library(ImGuiFileDialog_lib
+        ${ImGuiFileDialog_SOURCE_DIR}/ImGuiFileDialog.cpp
+)
+
+target_include_directories(ImGuiFileDialog_lib PUBLIC
+        ${ImGuiFileDialog_SOURCE_DIR}
+)
+
+target_link_libraries(ImGuiFileDialog_lib PRIVATE imgui_lib glfw OpenGL::GL)
+
 add_executable(QuackEditor editor/editor.cpp
         editor/src/ImGuiConfig.cpp
         editor/include/ImGuiConfig.hpp
@@ -106,7 +118,8 @@ target_include_directories(QuackEditor PRIVATE
         editor/include
         ${imgui_SOURCE_DIR}
         ${imgui_SOURCE_DIR}/backends
+        ${ImGuiFileDialog_SOURCE_DIR}
 )
-target_link_libraries(QuackEditor PUBLIC glfw imgui_lib Quack)
+target_link_libraries(QuackEditor PUBLIC glfw imgui_lib ImGuiFileDialog_lib Quack)
 
 configure_file(imgui.ini ${CMAKE_BINARY_DIR}/imgui.ini COPYONLY)
