@@ -72,9 +72,9 @@ std::vector<std::unique_ptr<GameObject>>& GameObject::getChildren() {
     return m_children;
 }
 
-UUID GameObject::getUUID() const {
-    return m_uuid;
-}
+// UUID GameObject::getUUID() const {
+//     return m_uuid;
+// }
 
 nlohmann::json GameObject::serialize() {
     nlohmann::json json;
