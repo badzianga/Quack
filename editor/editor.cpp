@@ -424,15 +424,6 @@ class Editor final : public Engine {
         if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen)) {
             ImGui::DragFloat3("Position", &transform.position.x, 0.1f);
             ImGui::DragFloat3("Rotation", &transform.rotation.x, 1.f);
-            // TODO: this should probably be in core instead of editor
-            for (int i = 0; i < 3; ++i) {
-                while (transform.rotation[i] > 360.f) {
-                    transform.rotation[i] -= 360.f;
-                }
-                while (transform.rotation[i] < 360.f) {
-                    transform.rotation[i] += 360.f;
-                }
-            }
             ImGui::DragFloat3("Scale", &transform.scale.x, 0.1f);
         }
 
