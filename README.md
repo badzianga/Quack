@@ -8,12 +8,12 @@ Quack Engine is a currently developed small 3D game engine created using C++ and
 Since Quack Engine is still in development, it doesn't have many features. However, for now, it allows you to:
 - create your own Engine-derived class with auto-called methods
 - create a scene with objects to which you can connect components (MeshRenderer, Camera, Script)
-- render pre-defined meshes (plane, cube, sphere)
+- render pre-defined meshes (plane, cube, sphere) or meshes from .obj files
 - transform objects on the scene
 - use global direction light applied to all objects
-- load .obj files as meshes to render
 - attach scripts written in Lua to the objects
-- prototype your scene in editor (scenes can't be saved/loaded yet)
+- prototype your scene in editor
+- save/load your scenes
 
 ## Usage Example
 Code below shows a small example how to use the engine without editor.
@@ -97,6 +97,7 @@ int main() {
     return 0;
 }
 ```
+Another usage method is by creating a scene in editor but not yet play it.
 
 ## Build Instructions
 The project can be built using CMake. No external dependencies are needed since CMakeLists.txt
@@ -117,21 +118,3 @@ mkdir build && cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 cmake --build .
 ```
-
-## Future features
-- Mesh/Shader/Texture Manager
-- Better shader abstraction compatible with materials
-- Save/load scenes to/from file
-- Save/load prefabs to/from file
-- Light component with directional, point and spot light
-- RigidBodyComponent with basic physics
-- 2D support
-- Own scripting language
-
-## Future minor improvements
-- Store model matrices in transforms + dirty update
-- Time scaling
-- Fixed timestep
-- Action mapping
-- Mouse delta
-- Gamepad support
