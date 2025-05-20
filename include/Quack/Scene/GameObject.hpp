@@ -3,6 +3,7 @@
 #include "Quack/Scene/Component.hpp"
 #include "Quack/Scene/IJsonSerializable.hpp"
 #include "Quack/Scene/Transform.hpp"
+// #include "Quack/Utils/UUID.hpp"
 #include <memory>
 #include <typeindex>
 #include <unordered_map>
@@ -104,6 +105,8 @@ public:
      */
     std::vector<std::unique_ptr<GameObject>>& getChildren();
 
+    // [[nodiscard]] UUID getUUID() const;
+
     nlohmann::json serialize() override;
 
     void deserialize(const nlohmann::json& json) override;
@@ -120,6 +123,7 @@ public:
     /// Pointer to the parent GameObject in the hierarchy (null if child of scene).
     GameObject* parent = nullptr;
 private:
+    // UUID m_uuid;
     std::unordered_map<std::type_index, std::unique_ptr<Component>> m_components;
     std::vector<std::unique_ptr<GameObject>> m_children;
 };

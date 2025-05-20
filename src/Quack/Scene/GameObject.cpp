@@ -72,9 +72,14 @@ std::vector<std::unique_ptr<GameObject>>& GameObject::getChildren() {
     return m_children;
 }
 
+UUID GameObject::getUUID() const {
+    return m_uuid;
+}
+
 nlohmann::json GameObject::serialize() {
     nlohmann::json json;
 
+    // json["uuid"] = static_cast<uint64_t>(getUUID());
     json["transform"] = transform.serialize();
     json["active"] = active;
     json["name"] = name;
@@ -91,6 +96,8 @@ nlohmann::json GameObject::serialize() {
 }
 
 void GameObject::deserialize(const nlohmann::json& json) {
+    // Creating a new GameObject generates UUID for it which will be immediately overwritten, but it's the cleanest solution
+    // m_uuid = UUID(json["uuid"].get<uint64_t>());
     transform.deserialize(json["transform"]);
     active = json["active"];
     // name = json["name"].get<std::string>();  // name is set during object creation
