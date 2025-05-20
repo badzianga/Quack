@@ -18,8 +18,8 @@ class Editor final : public Engine {
         ImGuiConfig::Init(accessWindow().getHandle());
 
         sceneFramebuffer.create(1280, 720);
-        accessWindow().setClearColor({ 0.1f, 0.1f, 0.2f, 1.f });
-        accessWindow().setVSyncEnabled(false);
+        accessWindow().setClearColor(clearColor);
+        accessWindow().setVSyncEnabled(vSyncEnabled);
 
         editorCameraComponent = editorCamera.addComponent<CameraComponent>();
         editorCamera.transform.position = Vector3(-2.f, 2.f / 1.5f, 2.f);
@@ -53,6 +53,8 @@ class Editor final : public Engine {
         ShowSceneHierarchyWindow();
         ShowPropertiesWindow();
         ShowContentBrowserWindow();
+
+        ShowSettingsWindow();
 
         ImGuiConfig::EndFrame();
     }
@@ -163,6 +165,9 @@ class Editor final : public Engine {
                 }
                 if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
                     OpenSaveSceneFileDialog();
+                }
+                if (ImGui::MenuItem("Settings")) {
+                    settingsWindowVisible = true;
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit")) {
@@ -543,6 +548,25 @@ class Editor final : public Engine {
         ImGui::End();
     }
 
+    void ShowSettingsWindow() {
+        if (!settingsWindowVisible) return;
+
+        int flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoDocking;
+        ImGui::Begin("Settings", &settingsWindowVisible, flags);
+
+        ImGui::Checkbox("VSync", &vSyncEnabled);
+        accessWindow().setVSyncEnabled(vSyncEnabled);
+
+        static bool wireframeMode = false;
+        ImGui::Checkbox("Wireframe Mode", &wireframeMode);
+        accessWindow().setWireframeModeEnabled(wireframeMode);
+
+        ImGui::ColorEdit4("Clear Color", &clearColor.r);
+        accessWindow().setClearColor(clearColor);
+
+        ImGui::End();
+    }
+
     Framebuffer sceneFramebuffer;
     SceneManager sceneManager;
     GameObject editorCamera;
@@ -550,6 +574,9 @@ class Editor final : public Engine {
     GameObject* selectedObject = nullptr;
     GameObject* toDelete = nullptr;
     GameObject* parentOfToDelete = nullptr;
+    bool settingsWindowVisible = false;
+    bool vSyncEnabled = true;
+    Color clearColor = { 0.1f, 0.1f, 0.2f, 1.f };
 };
 
 int main() {
