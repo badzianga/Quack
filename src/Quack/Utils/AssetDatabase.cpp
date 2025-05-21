@@ -6,7 +6,7 @@
 
 namespace fs = std::filesystem;
 
-static std::unordered_map<UUID, std::filesystem::path> s_metas;
+std::unordered_map<UUID, fs::path> AssetDatabase::s_metas;
 
 void AssetDatabase::init() {
     generateAndLoadMetas();
