@@ -4,6 +4,7 @@
 #include "Quack/Math/Matrix4.hpp"
 #include "Quack/Scene/Component.hpp"
 #include "Quack/Scene/Transform.hpp"
+#include "Quack/Utils/UUID.hpp"
 
 /**
  * @brief %Component responsible for rendering a 3D mesh.
@@ -33,7 +34,7 @@ public:
     void deserialize(const nlohmann::json& json) override;
 
     /// The mesh to be rendered.
-    Mesh mesh;
+    UUID meshUUID{ 0 };
 
     /// The shader used to render the mesh.
     Shader shader;

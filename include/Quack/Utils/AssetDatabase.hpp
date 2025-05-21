@@ -6,7 +6,14 @@
 
 class AssetDatabase {
 public:
+    /// Load meta files and generate not existing ones.
     static void init();
+
+    /// Get path to asset by UUID.
+    static std::filesystem::path getPath(UUID uuid);
+
+    /// Get UUID of asset by path to asset.
+    static UUID getUUID(const std::filesystem::path& path);
 private:
     static void generateAndLoadMetas();
 

@@ -3,6 +3,7 @@
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
+#include "Quack/Utils/MeshManager.hpp"
 #include <nlohmann/json.hpp>
 
 // TODO: mesh and shader are not destroyed, even after closing window
@@ -39,7 +40,7 @@ void MeshRendererComponent::update() {
     Matrix3 normalMatrix = Matrix3(model).inversed().transposed();
     shader.set("u_normalMatrix", normalMatrix);
 
-    mesh.draw();
+    MeshManager::get(meshUUID)->draw();
 
     // TODO: consider unbinding texture
 }
@@ -61,6 +62,7 @@ nlohmann::json MeshRendererComponent::serialize() {
 
     json["componentType"] = "MeshRenderer";
     json["enabled"] = enabled;
+    json["uuid"] = static_cast<uint64_t>(meshUUID);
     // TODO: serialize which model and shader is used (ModelManager and ShaderManager will be needed I think)
     // TODO: material should be IJsonSerializable
     json["material"] = nlohmann::json::object();
@@ -71,8 +73,8 @@ nlohmann::json MeshRendererComponent::serialize() {
 
 void MeshRendererComponent::deserialize(const nlohmann::json& json) {
     enabled = json["enabled"];
-    // TODO: model and shader are not serialized, so always use Cube model and global_light shader
-    mesh = Mesh::createCube();
+    meshUUID = UUID(json["uuid"].get<uint64_t>());
+    // TODO: shader is not serialized, so always use global_light shader
     shader.create("resources/shaders/global_light.vert", "resources/shaders/global_light.frag");
 
     // TODO: material should be IJsonSerializable

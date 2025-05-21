@@ -3,6 +3,7 @@
 #include "Quack/Scene.hpp"
 #include "Quack/Utils/AssetDatabase.hpp"
 #include "Quack/Utils/Logger.hpp"
+#include "Quack/Utils/MeshManager.hpp"
 #include "ImGuiConfig.hpp"
 #include <filesystem>
 #include <imgui.h>
@@ -42,6 +43,7 @@ class Editor final : public Engine {
             }
         }
 
+        MeshManager::init();
         AssetDatabase::init();
     }
 
@@ -64,6 +66,8 @@ class Editor final : public Engine {
 
     void onDestroy() override {
         ImGuiConfig::Shutdown();
+
+        MeshManager::destroy();
 
         // TODO: temporary, destroy scene resources
         DestroySceneGameObjects();
@@ -100,7 +104,7 @@ class Editor final : public Engine {
         for (auto& object : sceneManager.currentScene.getAllGameObjects()) {
             if (object->hasComponent<MeshRendererComponent>()) {
                 auto* meshRenderer = object->getComponent<MeshRendererComponent>();
-                meshRenderer->mesh.destroy();
+                // meshRenderer->mesh.destroy();  // Meshes are destroyed by MeshManager
                 meshRenderer->shader.destroy();
 
                 DestroyChildren(object);
@@ -111,7 +115,7 @@ class Editor final : public Engine {
     static void DestroyChildren(const std::unique_ptr<GameObject>& parent) {
         for (auto& child : parent->getChildren()) {
             auto* meshRenderer = child->getComponent<MeshRendererComponent>();
-            meshRenderer->mesh.destroy();
+            // meshRenderer->mesh.destroy();  // Meshes are destroyed by MeshManager
             meshRenderer->shader.destroy();
 
             DestroyChildren(child);
@@ -228,7 +232,7 @@ class Editor final : public Engine {
                         selectedObject = sceneManager.currentScene.createGameObject("Cube");
                     }
                     meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
-                    meshRenderer->mesh = Mesh::createCube();
+                    meshRenderer->meshUUID = UUID(UUID::Internal::Cube);
                     meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
                 }
                 if (ImGui::MenuItem("Create Sphere")) {
@@ -240,7 +244,7 @@ class Editor final : public Engine {
                         selectedObject = sceneManager.currentScene.createGameObject("Sphere");
                     }
                     meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
-                    meshRenderer->mesh = Mesh::createSphere();
+                    meshRenderer->meshUUID = UUID(UUID::Internal::Sphere);
                     meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
                 }
                 if (ImGui::MenuItem("Create Plane")) {
@@ -252,7 +256,7 @@ class Editor final : public Engine {
                         selectedObject = sceneManager.currentScene.createGameObject("Plane");
                     }
                     meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
-                    meshRenderer->mesh = Mesh::createPlane();
+                    meshRenderer->meshUUID = UUID(UUID::Internal::Plane);
                     meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
                 }
                 ImGui::EndMenu();
@@ -313,6 +317,25 @@ class Editor final : public Engine {
             { 0.f, 1.f },
             { 1.f, 0.f }
         );
+
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PATH")) {
+                auto* droppedPath = static_cast<const char*>(payload->Data);
+                if (std::string(droppedPath).ends_with(".obj")) {
+                    UUID modelUUID = AssetDatabase::getUUID(droppedPath);
+                    if (selectedObject != nullptr) {
+                        selectedObject = selectedObject->addChild();
+                    }
+                    else {
+                        selectedObject = sceneManager.currentScene.createGameObject();
+                    }
+                    auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
+                    meshRenderer->meshUUID = modelUUID;
+                    meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
+                }
+            }
+            ImGui::EndDragDropTarget();
+        }
 
         ImGui::End();
     }
@@ -392,7 +415,6 @@ class Editor final : public Engine {
                 // TODO: temporary, destroy MeshRendererComponent resources
                 if (toDelete->hasComponent<MeshRendererComponent>()) {
                     auto* meshRenderer = toDelete->getComponent<MeshRendererComponent>();
-                    meshRenderer->mesh.destroy();
                     meshRenderer->shader.destroy();
                 }
 
@@ -490,7 +512,9 @@ class Editor final : public Engine {
                 if (ImGui::BeginDragDropTarget()) {
                     if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PATH")) {
                         auto* droppedPath = static_cast<const char*>(payload->Data);
-                        selectedObject->getComponent<ScriptComponent>()->scriptPath = droppedPath;
+                        if (std::string(droppedPath).ends_with(".lua")) {
+                            selectedObject->getComponent<ScriptComponent>()->scriptPath = droppedPath;
+                        }
                     }
                     ImGui::EndDragDropTarget();
                 }
@@ -519,9 +543,9 @@ class Editor final : public Engine {
                 ImGui::TreeNodeEx(p.filename().string().c_str(), ImGuiTreeNodeFlags_Leaf);
 
                 if (ImGui::BeginDragDropSource()) {
-                    std::string relativePath = "Assets/" + fs::relative(p, fs::current_path() / "Assets").string();
-                    ImGui::SetDragDropPayload("CONTENT_BROWSER_PATH", relativePath.c_str(), relativePath.size() + 1);
-                    ImGui::Text("%s", relativePath.c_str());
+                    std::string pathStr = entry.path().string();
+                    ImGui::SetDragDropPayload("CONTENT_BROWSER_PATH", pathStr.c_str(), pathStr.size() + 1);
+                    ImGui::Text("%s", pathStr.c_str());
                     ImGui::EndDragDropSource();
                 }
 
@@ -533,7 +557,7 @@ class Editor final : public Engine {
     static void ShowContentBrowserWindow() {
         ImGui::Begin("Content Browser");
 
-        fs::path rootPath = fs::current_path() / "Assets";
+        fs::path rootPath = "./Assets";
 
         if (ImGui::TreeNodeEx("Assets", ImGuiTreeNodeFlags_DefaultOpen)) {
             ShowDirectoryTree(rootPath);
