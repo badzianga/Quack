@@ -12,3 +12,7 @@ UUID::UUID(uint64_t uuid) : m_uuid(uuid) {}
 UUID::operator uint64_t() const {
     return m_uuid;
 }
+
+bool UUID::operator==(const UUID& other) const {
+    return m_uuid == other.m_uuid;
+}

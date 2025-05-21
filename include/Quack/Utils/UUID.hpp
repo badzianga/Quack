@@ -8,6 +8,7 @@ public:
     UUID();
     explicit UUID(uint64_t uuid);
     explicit operator uint64_t() const;
+    bool operator==(const UUID& other) const;
 private:
     uint64_t m_uuid;
 };

@@ -1,6 +1,7 @@
 #include "Quack/Core.hpp"
 #include "Quack/Graphics/Framebuffer.hpp"
 #include "Quack/Scene.hpp"
+#include "Quack/Utils/AssetDatabase.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include "ImGuiConfig.hpp"
 #include <filesystem>
@@ -40,6 +41,8 @@ class Editor final : public Engine {
                 Logger::error("Failed to create Assets directory: " + std::string(e.what()));
             }
         }
+
+        AssetDatabase::init();
     }
 
     void onUpdate() override {
@@ -129,7 +132,7 @@ class Editor final : public Engine {
 
     static void OpenSaveSceneFileDialog() {
         IGFD::FileDialogConfig config;
-        config.path = ".";
+        config.path = "./Assets";
         config.countSelectionMax = 1;
         config.flags = ImGuiFileDialogFlags_Modal;
         ImGuiFileDialog::Instance()->OpenDialog("SaveFileDlg", "Save Scene", ".json", config);
@@ -137,7 +140,7 @@ class Editor final : public Engine {
 
     static void OpenLoadSceneFileDialog() {
         IGFD::FileDialogConfig config;
-        config.path = ".";
+        config.path = "./Assets";
         config.countSelectionMax = 1;
         config.flags = ImGuiFileDialogFlags_Modal;
         ImGuiFileDialog::Instance()->OpenDialog("LoadFileDlg", "Open Scene", ".json", config);
@@ -512,6 +515,7 @@ class Editor final : public Engine {
                     ImGui::TreePop();
                 }
             } else {
+                if (entry.path().extension() == ".meta") continue;
                 ImGui::TreeNodeEx(p.filename().string().c_str(), ImGuiTreeNodeFlags_Leaf);
 
                 if (ImGui::BeginDragDropSource()) {
