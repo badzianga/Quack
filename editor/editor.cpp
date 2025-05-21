@@ -285,9 +285,9 @@ class Editor final : public Engine {
         ImGui::Begin("Scene");
 
         if (ImGui::IsWindowHovered(ImGuiHoveredFlags_RootAndChildWindows)) {
-            constexpr float scrollSensitivity = 4.f;
-            editorCameraComponent->fieldOfView -= ImGui::GetIO().MouseWheel * scrollSensitivity;
-            editorCameraComponent->fieldOfView = Math::clamp(editorCameraComponent->fieldOfView, 1.f, 179.f);
+            // TODO: scroll with speed calculated by difference between camera pos and looked at object pos
+            constexpr float scrollSensitivity = 0.25f;
+            editorCamera.transform.position += editorCamera.transform.getForward() * ImGui::GetIO().MouseWheel * scrollSensitivity;
 
             if (Input::isButtonPressed(Mouse::Button::Right)) {
                 constexpr float mouseSensitivity = 0.25f;
@@ -433,7 +433,7 @@ class Editor final : public Engine {
         ImGui::End();
     }
 
-    void ShowPropertiesWindow() const {
+    void ShowPropertiesWindow() {
         ImGui::Begin("Properties");
 
         if (selectedObject == nullptr) {
@@ -464,6 +464,19 @@ class Editor final : public Engine {
                     ImGui::EndPopup();
                 }
                 ImGui::Checkbox("Enabled", &meshRenderer->enabled);
+                ImGui::InputScalar("Model Reference", ImGuiDataType_U64, &meshRenderer->meshUUID, nullptr, nullptr, "%llu", ImGuiInputTextFlags_ReadOnly);
+                // TODO: support creating GameObject, attaching MeshRendererComponent to it and setting model from file
+                // for now, only creating pre-defined GameObject with mesh and changing model works
+                if (ImGui::BeginDragDropTarget()) {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PATH")) {
+                        auto* droppedPath = static_cast<const char*>(payload->Data);
+                        if (std::string(droppedPath).ends_with(".obj")) {
+                            UUID modelUUID = AssetDatabase::getUUID(droppedPath);
+                            meshRenderer->meshUUID = modelUUID;
+                        }
+                    }
+                    ImGui::EndDragDropTarget();
+                }
                 ImGui::ColorEdit3("Base Color", &meshRenderer->material.baseColor.r);
             }
         }
