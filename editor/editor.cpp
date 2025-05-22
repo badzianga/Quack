@@ -5,10 +5,15 @@
 #include "Quack/Utils/Logger.hpp"
 #include "Quack/Utils/MeshManager.hpp"
 #include "ImGuiConfig.hpp"
+#include "SettingsWindow.hpp"
+#include "StatsWindow.hpp"
 #include <filesystem>
 #include <imgui.h>
 #include <imgui_stdlib.h>
 #include <ImGuiFileDialog.h>
+
+#include "ContentBrowserWindow.hpp"
+#include "src/FileDialog.hpp"
 
 namespace fs = std::filesystem;
 
@@ -20,8 +25,8 @@ class Editor final : public Engine {
         ImGuiConfig::Init(accessWindow().getHandle());
 
         sceneFramebuffer.create(1280, 720);
-        accessWindow().setClearColor(clearColor);
-        accessWindow().setVSyncEnabled(vSyncEnabled);
+        accessWindow().setClearColor(settingsWindow.clearColor);
+        accessWindow().setVSyncEnabled(settingsWindow.vSyncEnabled);
 
         editorCameraComponent = editorCamera.addComponent<CameraComponent>();
         editorCamera.transform.position = Vector3(-2.f, 2.f / 1.5f, 2.f);
@@ -54,12 +59,12 @@ class Editor final : public Engine {
         RenderScene();
         ShowMainMenuBar();
         ShowSceneWindow();
-        ShowEngineStatsWindow();
+        statsWindow.show();
         ShowSceneHierarchyWindow();
         ShowPropertiesWindow();
-        ShowContentBrowserWindow();
+        contentBrowserWindow.show();
 
-        ShowSettingsWindow();
+        settingsWindow.show(accessWindow());
 
         ImGuiConfig::EndFrame();
     }
@@ -77,7 +82,7 @@ class Editor final : public Engine {
         if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
             if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
                 if (ImGui::IsKeyPressed(ImGuiKey_S)) {
-                    OpenSaveSceneFileDialog();
+                    FileDialog::open("SaveFileDlg", "Save Scene", ".json");
                 }
             }
             if (ImGui::IsKeyPressed(ImGuiKey_S)) {
@@ -85,11 +90,11 @@ class Editor final : public Engine {
                     sceneManager.saveScene();
                 }
                 else {
-                    OpenSaveSceneFileDialog();
+                    FileDialog::open("SaveFileDlg", "Save Scene", ".json");
                 }
             }
             if (ImGui::IsKeyPressed(ImGuiKey_O)) {
-                OpenLoadSceneFileDialog();
+                FileDialog::open("LoadFileDlg", "Open Scene", ".json");
             }
             if (ImGui::IsKeyPressed(ImGuiKey_N)) {
                 sceneManager.clear();
@@ -134,22 +139,6 @@ class Editor final : public Engine {
         accessWindow().applyThisViewportSize();
     }
 
-    static void OpenSaveSceneFileDialog() {
-        IGFD::FileDialogConfig config;
-        config.path = "./Assets";
-        config.countSelectionMax = 1;
-        config.flags = ImGuiFileDialogFlags_Modal;
-        ImGuiFileDialog::Instance()->OpenDialog("SaveFileDlg", "Save Scene", ".json", config);
-    }
-
-    static void OpenLoadSceneFileDialog() {
-        IGFD::FileDialogConfig config;
-        config.path = "./Assets";
-        config.countSelectionMax = 1;
-        config.flags = ImGuiFileDialogFlags_Modal;
-        ImGuiFileDialog::Instance()->OpenDialog("LoadFileDlg", "Open Scene", ".json", config);
-    }
-
     void ShowMainMenuBar() {
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::BeginMenu("File")) {
@@ -160,21 +149,22 @@ class Editor final : public Engine {
                     parentOfToDelete = nullptr;
                 }
                 if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
-                    OpenLoadSceneFileDialog();
+                    FileDialog::open("LoadFileDlg", "Open Scene", ".json");
                 }
                 if (ImGui::MenuItem("Save", "Ctrl+S")) {
                     if (sceneManager.isFileSpecified()) {
                         sceneManager.saveScene();
                     }
                     else {
-                        OpenSaveSceneFileDialog();
+                        FileDialog::open("SaveFileDlg", "Save Scene", ".json");
                     }
                 }
                 if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
-                    OpenSaveSceneFileDialog();
+                    FileDialog::open("SaveFileDlg", "Save Scene", ".json");
+
                 }
                 if (ImGui::MenuItem("Settings")) {
-                    settingsWindowVisible = true;
+                    settingsWindow.visible = true;
                 }
                 ImGui::Separator();
                 if (ImGui::MenuItem("Exit")) {
@@ -319,44 +309,23 @@ class Editor final : public Engine {
         );
 
         if (ImGui::BeginDragDropTarget()) {
-            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PATH")) {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("path.obj")) {
                 auto* droppedPath = static_cast<const char*>(payload->Data);
-                if (std::string(droppedPath).ends_with(".obj")) {
-                    UUID modelUUID = AssetDatabase::getUUID(droppedPath);
-                    if (selectedObject != nullptr) {
-                        selectedObject = selectedObject->addChild();
-                    }
-                    else {
-                        selectedObject = sceneManager.currentScene.createGameObject();
-                    }
-                    auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
-                    meshRenderer->meshUUID = modelUUID;
-                    meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
+                UUID modelUUID = AssetDatabase::getUUID(droppedPath);
+                if (selectedObject != nullptr) {
+                    selectedObject = selectedObject->addChild();
                 }
+                else {
+                    selectedObject = sceneManager.currentScene.createGameObject();
+                }
+                auto* meshRenderer = selectedObject->addComponent<MeshRendererComponent>();
+                meshRenderer->meshUUID = modelUUID;
+                meshRenderer->shader.create(VERT_SHADER, FRAG_SHADER);
             }
             ImGui::EndDragDropTarget();
         }
 
         ImGui::End();
-    }
-
-    static void ShowEngineStatsWindow() {
-        ImGui::Begin("Engine Stats");
-
-        const ImGuiIO& io = ImGui::GetIO();
-        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-
-        ImGui::Separator();
-
-        ImGui::Text("Draw Calls: %zu", Stats::drawCalls);
-        ImGui::Text("Vertices: %zu", Stats::vertices);
-        ImGui::Text("Triangles: %zu", Stats::triangles);
-
-        ImGui::End();
-
-        Stats::drawCalls = 0;
-        Stats::vertices = 0;
-        Stats::triangles = 0;
     }
 
     void ShowChildrenInSceneHierarchy(std::unique_ptr<GameObject>& parent) {
@@ -468,12 +437,10 @@ class Editor final : public Engine {
                 // TODO: support creating GameObject, attaching MeshRendererComponent to it and setting model from file
                 // for now, only creating pre-defined GameObject with mesh and changing model works
                 if (ImGui::BeginDragDropTarget()) {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PATH")) {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("path.obj")) {
                         auto* droppedPath = static_cast<const char*>(payload->Data);
-                        if (std::string(droppedPath).ends_with(".obj")) {
-                            UUID modelUUID = AssetDatabase::getUUID(droppedPath);
-                            meshRenderer->meshUUID = modelUUID;
-                        }
+                        UUID modelUUID = AssetDatabase::getUUID(droppedPath);
+                        meshRenderer->meshUUID = modelUUID;
                     }
                     ImGui::EndDragDropTarget();
                 }
@@ -523,11 +490,9 @@ class Editor final : public Engine {
                 ImGui::InputText("Script Path", &selectedObject->getComponent<ScriptComponent>()->scriptPath);
 
                 if (ImGui::BeginDragDropTarget()) {
-                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PATH")) {
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("path.lua")) {
                         auto* droppedPath = static_cast<const char*>(payload->Data);
-                        if (std::string(droppedPath).ends_with(".lua")) {
-                            selectedObject->getComponent<ScriptComponent>()->scriptPath = droppedPath;
-                        }
+                        selectedObject->getComponent<ScriptComponent>()->scriptPath = droppedPath;
                     }
                     ImGui::EndDragDropTarget();
                 }
@@ -543,62 +508,9 @@ class Editor final : public Engine {
         ImGui::End();
     }
 
-    static void ShowDirectoryTree(const fs::path& path) {
-        for (const auto& entry : fs::directory_iterator(path)) {
-            const auto& p = entry.path();
-            if (entry.is_directory()) {
-                if (ImGui::TreeNodeEx(p.filename().string().c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
-                    ShowDirectoryTree(p);
-                    ImGui::TreePop();
-                }
-            } else {
-                if (entry.path().extension() == ".meta") continue;
-                ImGui::TreeNodeEx(p.filename().string().c_str(), ImGuiTreeNodeFlags_Leaf);
-
-                if (ImGui::BeginDragDropSource()) {
-                    std::string pathStr = entry.path().string();
-                    ImGui::SetDragDropPayload("CONTENT_BROWSER_PATH", pathStr.c_str(), pathStr.size() + 1);
-                    ImGui::Text("%s", pathStr.c_str());
-                    ImGui::EndDragDropSource();
-                }
-
-                ImGui::TreePop();
-            }
-        }
-    }
-
-    static void ShowContentBrowserWindow() {
-        ImGui::Begin("Content Browser");
-
-        fs::path rootPath = "./Assets";
-
-        if (ImGui::TreeNodeEx("Assets", ImGuiTreeNodeFlags_DefaultOpen)) {
-            ShowDirectoryTree(rootPath);
-            ImGui::TreePop();
-        }
-
-        ImGui::End();
-    }
-
-    void ShowSettingsWindow() {
-        if (!settingsWindowVisible) return;
-
-        int flags = ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoDocking;
-        ImGui::Begin("Settings", &settingsWindowVisible, flags);
-
-        ImGui::Checkbox("VSync", &vSyncEnabled);
-        accessWindow().setVSyncEnabled(vSyncEnabled);
-
-        static bool wireframeMode = false;
-        ImGui::Checkbox("Wireframe Mode", &wireframeMode);
-        accessWindow().setWireframeModeEnabled(wireframeMode);
-
-        ImGui::ColorEdit4("Clear Color", &clearColor.r);
-        accessWindow().setClearColor(clearColor);
-
-        ImGui::End();
-    }
-
+    SettingsWindow settingsWindow;
+    StatsWindow statsWindow;
+    ContentBrowserWindow contentBrowserWindow;
     Framebuffer sceneFramebuffer;
     SceneManager sceneManager;
     GameObject editorCamera;
@@ -606,9 +518,6 @@ class Editor final : public Engine {
     GameObject* selectedObject = nullptr;
     GameObject* toDelete = nullptr;
     GameObject* parentOfToDelete = nullptr;
-    bool settingsWindowVisible = false;
-    bool vSyncEnabled = true;
-    Color clearColor = { 0.1f, 0.1f, 0.2f, 1.f };
 };
 
 int main() {

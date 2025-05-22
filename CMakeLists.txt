@@ -112,6 +112,14 @@ target_link_libraries(ImGuiFileDialog_lib PRIVATE imgui_lib glfw OpenGL::GL)
 add_executable(QuackEditor editor/editor.cpp
         editor/src/ImGuiConfig.cpp
         editor/include/ImGuiConfig.hpp
+        editor/src/SettingsWindow.cpp
+        editor/include/SettingsWindow.hpp
+        editor/src/StatsWindow.cpp
+        editor/include/StatsWindow.hpp
+        editor/src/ContentBrowserWindow.cpp
+        editor/include/ContentBrowserWindow.hpp
+        editor/src/FileDialog.cpp
+        editor/src/FileDialog.hpp
 )
 
 target_include_directories(QuackEditor PRIVATE
