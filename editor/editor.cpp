@@ -4,16 +4,18 @@
 #include "Quack/Utils/AssetDatabase.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include "Quack/Utils/MeshManager.hpp"
+
+#include "ContentBrowserWindow.hpp"
+#include "FileDialog.hpp"
 #include "ImGuiConfig.hpp"
+#include "ProjectManager.hpp"
 #include "SettingsWindow.hpp"
 #include "StatsWindow.hpp"
+
 #include <filesystem>
 #include <imgui.h>
 #include <imgui_stdlib.h>
 #include <ImGuiFileDialog.h>
-
-#include "ContentBrowserWindow.hpp"
-#include "src/FileDialog.hpp"
 
 namespace fs = std::filesystem;
 
@@ -520,11 +522,53 @@ class Editor final : public Engine {
     GameObject* parentOfToDelete = nullptr;
 };
 
-int main() {
+void runProjectManager(const char* executablePath) {
+    ProjectManager projectManager;
+    if (projectManager.create(800, 600, "Quack Engine - Project Manager")) {
+        projectManager.start();
+    }
+    fs::path path = projectManager.getPathToProject();
+    projectManager.destroy();
+
+    if (path.empty()) {
+        return;
+    }
+
+    std::string command = std::string(executablePath) + " \"" + path.string() + "\" &";
+    if (std::system(command.c_str()) == -1) {
+        Logger::error("Failed to open project from Project Manager.");
+    } else {
+        Logger::debug("Successfully opened project form Project Manager.");
+    }
+}
+
+void runEditor() {
     Editor editor;
     if (editor.create(1600, 900, "Quack Editor")) {
         editor.start();
     }
     editor.destroy();
+}
+
+int main(int argc, char** argv) {
+    Logger::setMinLogLevel(Logger::LogLevel::Debug);
+    if (argc == 1) {
+        Logger::debug("No arguments passed to executable - opening Project Manager");
+        runProjectManager(argv[0]);
+        return 0;
+    }
+    if (argc == 2) {
+        Logger::debug("One argument passed to executable - verifying path to project...");
+        fs::path path = argv[1];
+        if (fs::exists(path) && fs::is_regular_file(path)) {
+            Logger::debug("Path to project is proper - opening Editor");
+            // TODO: import project dir to editor (`path` is path to .qscn)
+            runEditor();
+            return 0;
+        }
+    }
+
+    Logger::debug("Too many arguments passed to executable or invalid path - opening Project Manager");
+    runProjectManager(argv[0]);
     return 0;
 }

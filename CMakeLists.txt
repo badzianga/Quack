@@ -119,7 +119,9 @@ add_executable(QuackEditor editor/editor.cpp
         editor/src/ContentBrowserWindow.cpp
         editor/include/ContentBrowserWindow.hpp
         editor/src/FileDialog.cpp
-        editor/src/FileDialog.hpp
+        editor/include/FileDialog.hpp
+        editor/src/ProjectManager.cpp
+        editor/include/ProjectManager.hpp
 )
 
 target_include_directories(QuackEditor PRIVATE
