@@ -8,8 +8,8 @@ namespace fs = std::filesystem;
 
 std::unordered_map<UUID, fs::path> AssetDatabase::s_metas;
 
-void AssetDatabase::init() {
-    generateAndLoadMetas();
+void AssetDatabase::init(const fs::path& rootDir) {
+    generateAndLoadMetas(rootDir);
 }
 
 fs::path AssetDatabase::getPath(UUID uuid) {
@@ -31,8 +31,8 @@ UUID AssetDatabase::getUUID(const std::filesystem::path& path) {
     return UUID(0);
 }
 
-void AssetDatabase::generateAndLoadMetas() {
-    for (const auto& entry : fs::recursive_directory_iterator("./Assets")) {
+void AssetDatabase::generateAndLoadMetas(const fs::path& rootDir) {
+    for (const auto& entry : fs::recursive_directory_iterator(rootDir)) {
         if (!entry.is_regular_file()) continue;
 
         const fs::path& filePath = entry.path();

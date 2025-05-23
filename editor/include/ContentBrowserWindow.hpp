@@ -4,7 +4,7 @@
 
 class ContentBrowserWindow {
 public:
-    void show();
+    void show(const std::filesystem::path& rootDir);
 private:
     void showDirectoryTree(const std::filesystem::path& path);
 };

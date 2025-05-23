@@ -24,6 +24,7 @@ constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
 
 class Editor final : public Engine {
     void onCreate() override {
+        Logger::setMinLogLevel(Logger::LogLevel::Debug);
         ImGuiConfig::Init(accessWindow().getHandle());
 
         sceneFramebuffer.create(1280, 720);
@@ -38,12 +39,11 @@ class Editor final : public Engine {
 
         GlobalLight::direction = { 0.7f, -1.f, -0.5f };
 
-        Logger::setMinLogLevel(Logger::LogLevel::Debug);
-
-        // Create Assets folder in the same directory as editor executable if not exists
-        if (!fs::exists("Assets")) {
+        Logger::debug("Project root dir: " + rootDir.string());
+        if (!fs::exists(rootDir / "Assets")) {
             try {
-                fs::create_directory("Assets");
+                fs::create_directory(rootDir / "Assets");
+                Logger::debug("Created Assets directory");
             }
             catch (const fs::filesystem_error& e) {
                 Logger::error("Failed to create Assets directory: " + std::string(e.what()));
@@ -51,7 +51,7 @@ class Editor final : public Engine {
         }
 
         MeshManager::init();
-        AssetDatabase::init();
+        AssetDatabase::init(rootDir);
     }
 
     void onUpdate() override {
@@ -64,7 +64,7 @@ class Editor final : public Engine {
         statsWindow.show();
         ShowSceneHierarchyWindow();
         ShowPropertiesWindow();
-        contentBrowserWindow.show();
+        contentBrowserWindow.show(rootDir);
 
         settingsWindow.show(accessWindow());
 
@@ -520,6 +520,9 @@ class Editor final : public Engine {
     GameObject* selectedObject = nullptr;
     GameObject* toDelete = nullptr;
     GameObject* parentOfToDelete = nullptr;
+public:
+    fs::path projectPath;
+    fs::path rootDir;
 };
 
 void runProjectManager(const char* executablePath) {
@@ -542,8 +545,10 @@ void runProjectManager(const char* executablePath) {
     }
 }
 
-void runEditor() {
+void runEditor(const fs::path& projectPath) {
     Editor editor;
+    editor.projectPath = projectPath;
+    editor.rootDir = projectPath.parent_path();
     if (editor.create(1600, 900, "Quack Editor")) {
         editor.start();
     }
@@ -563,7 +568,7 @@ int main(int argc, char** argv) {
         if (fs::exists(path) && fs::is_regular_file(path)) {
             Logger::debug("Path to project is proper - opening Editor");
             // TODO: import project dir to editor (`path` is path to .qscn)
-            runEditor();
+            runEditor(path);
             return 0;
         }
     }

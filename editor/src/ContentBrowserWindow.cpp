@@ -3,13 +3,11 @@
 
 namespace fs = std::filesystem;
 
-void ContentBrowserWindow::show() {
+void ContentBrowserWindow::show(const fs::path& rootDir) {
     ImGui::Begin("Content Browser");
 
-    fs::path rootPath = "./Assets";
-
     if (ImGui::TreeNodeEx("Assets", ImGuiTreeNodeFlags_DefaultOpen)) {
-        showDirectoryTree(rootPath);
+        showDirectoryTree(rootDir / "Assets");
         ImGui::TreePop();
     }
 
