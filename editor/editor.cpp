@@ -1,9 +1,7 @@
 #include "Quack/Core.hpp"
 #include "Quack/Graphics/Framebuffer.hpp"
 #include "Quack/Scene.hpp"
-#include "Quack/Utils/AssetDatabase.hpp"
-#include "Quack/Utils/Logger.hpp"
-#include "Quack/Utils/MeshManager.hpp"
+#include "Quack/Utils.hpp"
 
 #include "ContentBrowserWindow.hpp"
 #include "FileDialog.hpp"
@@ -51,6 +49,7 @@ class Editor final : public Engine {
         }
 
         MeshManager::init();
+        TextureManager::init();
         AssetDatabase::init(rootDir);
     }
 
@@ -447,6 +446,19 @@ class Editor final : public Engine {
                     ImGui::EndDragDropTarget();
                 }
                 ImGui::ColorEdit3("Base Color", &meshRenderer->material.baseColor.r);
+                // TODO: source for InputText is necessary
+                static std::string unusedTextField;
+                ImGui::InputText("Base Map", &unusedTextField, ImGuiInputTextFlags_ReadOnly);
+                if (ImGui::BeginDragDropTarget()) {
+                    // TODO: only files with .png extension are supported for now
+                    if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("path.png")) {
+                        auto* droppedPath = static_cast<const char*>(payload->Data);
+                        UUID textureUUID = AssetDatabase::getUUID(droppedPath);
+                        meshRenderer->material.baseMap = TextureManager::get(textureUUID);
+                        unusedTextField = std::to_string(static_cast<uint64_t>(textureUUID));
+                    }
+                    ImGui::EndDragDropTarget();
+                }
             }
         }
 

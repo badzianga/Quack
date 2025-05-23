@@ -6,5 +6,6 @@
 #include "Quack/Utils/Logger.hpp"
 #include "Quack/Utils/MeshManager.hpp"
 #include "Quack/Utils/UUID.hpp"
+#include "Quack/Utils/TextureManager.hpp"
 
 #endif //QUACK_UTILS_HPP
