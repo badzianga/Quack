@@ -549,11 +549,9 @@ void runProjectManager(const char* executablePath) {
         return;
     }
 
-    std::string command = std::string(executablePath) + " \"" + path.string() + "\" &";
+    std::string command = std::string(executablePath) + " \"" + path.string() + '\"';
     if (std::system(command.c_str()) == -1) {
-        Logger::error("Failed to open project from Project Manager.");
-    } else {
-        Logger::debug("Successfully opened project form Project Manager.");
+        Logger::error("Failed to open project from Project Manager");
     }
 }
 

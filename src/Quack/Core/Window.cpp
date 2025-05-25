@@ -43,7 +43,7 @@ bool Window::create(int width, int height, const char* title) {
     }
 
     glViewport(0, 0, width, height);
-    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST | GL_FRAMEBUFFER_SRGB);
 
     Logger::info(std::string("OpenGL API ") + std::string(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
     Logger::info(

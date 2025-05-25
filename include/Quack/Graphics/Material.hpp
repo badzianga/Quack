@@ -20,6 +20,7 @@ struct Material {
      */
     Color baseColor = Color::White;
 
+    // TODO: this might be UUID of the texture?
     /**
      * @brief Texture of the material.
      *

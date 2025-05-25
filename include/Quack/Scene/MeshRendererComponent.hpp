@@ -33,6 +33,7 @@ public:
 
     void deserialize(const nlohmann::json& json) override;
 
+    // TODO: consider if meshRenderer has to store UUID or pointer
     /// The mesh to be rendered.
     UUID meshUUID{ 0 };
 
