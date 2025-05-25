@@ -5,7 +5,8 @@
 #include "Quack/Scene/Transform.hpp"
 #include <nlohmann/json.hpp>
 
-Matrix4 CameraComponent::s_projectionView{1.f};
+Matrix4 CameraComponent::s_projectionView{ 1.f };
+Vector3 CameraComponent::s_position{ 0.f };
 
 void CameraComponent::start() {}
 
@@ -13,6 +14,7 @@ void CameraComponent::update() {
     if (!enabled) return;
 
     s_projectionView = getProjectionViewMatrix();
+    s_position = gameObject->transform.position;
 }
 
 Matrix4 CameraComponent::getViewMatrix() const {
@@ -38,6 +40,10 @@ Matrix4 CameraComponent::getProjectionViewMatrix() const {
 
 Matrix4 CameraComponent::getStaticProjectionView() {
     return s_projectionView;
+}
+
+Vector3 CameraComponent::getStaticPosition() {
+    return s_position;
 }
 
 nlohmann::json CameraComponent::serialize() {

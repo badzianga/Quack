@@ -39,6 +39,8 @@ void MeshRendererComponent::update() {
     shader.set("u_lightDirection", GlobalLight::direction);
     Matrix3 normalMatrix = Matrix3(model).inversed().transposed();
     shader.set("u_normalMatrix", normalMatrix);
+    shader.set("u_viewPosition", CameraComponent::getStaticPosition());
+    shader.set("u_modelMatrix", model);
 
     MeshManager::get(meshUUID)->draw();
 

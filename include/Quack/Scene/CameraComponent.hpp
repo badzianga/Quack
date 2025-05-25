@@ -63,6 +63,8 @@ public:
      */
     [[nodiscard]] static Matrix4 getStaticProjectionView();
 
+    [[nodiscard]] static Vector3 getStaticPosition();
+
     nlohmann::json serialize() override;
 
     void deserialize(const nlohmann::json& json) override;
@@ -86,6 +88,7 @@ public:
     float orthoSize = 5.0f;
 private:
     static Matrix4 s_projectionView;
+    static Vector3 s_position;
 };
 
 #endif //QUACK_CAMERA_COMPONENT_HPP
