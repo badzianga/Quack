@@ -1,4 +1,5 @@
 #include "Quack/Scene/Scene.hpp"
+#include "Quack/Utils/Logger.hpp"
 #include <algorithm>
 #include <nlohmann/json.hpp>
 
@@ -24,6 +25,7 @@ GameObject* Scene::createGameObject(const char* name) {
     } while (nameExists);
 
     m_gameObjects.emplace_back(std::make_unique<GameObject>(nameStr.c_str()));
+    Logger::debug() << "GameObject created on the scene";
     return m_gameObjects.back().get();
 }
 
@@ -35,6 +37,7 @@ void Scene::removeGameObject(GameObject* gameObject) {
             return obj.get() == gameObject;
         });
     m_gameObjects.erase(it, m_gameObjects.end());
+    Logger::debug() << "GameObject removed from the scene";
 }
 
 void Scene::startAllGameObjects() const {

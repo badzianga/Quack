@@ -3,12 +3,15 @@
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/Transform.hpp"
+#include "Quack/Utils/Logger.hpp"
 #include <nlohmann/json.hpp>
 
 Matrix4 CameraComponent::s_projectionView{ 1.f };
 Vector3 CameraComponent::s_position{ 0.f };
 
-void CameraComponent::start() {}
+void CameraComponent::start() {
+    Logger::debug() << "CameraComponent started";
+}
 
 void CameraComponent::update() {
     if (!enabled) return;

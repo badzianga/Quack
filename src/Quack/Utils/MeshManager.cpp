@@ -1,6 +1,7 @@
 #include "Quack/Graphics/Mesh.hpp"
-#include "Quack/Utils/MeshManager.hpp"
 #include "Quack/Utils/AssetDatabase.hpp"
+#include "Quack/Utils/MeshManager.hpp"
+#include "Quack/Utils/Logger.hpp"
 
 std::unordered_map<UUID, Mesh*> MeshManager::s_meshes;
 
@@ -16,6 +17,8 @@ void MeshManager::init() {
     const auto planeMesh = new Mesh();
     *planeMesh = Mesh::createPlane();
     s_meshes[UUID(UUID::Internal::Plane)] = planeMesh;
+
+    Logger::debug() << "MeshManager initialized - loaded internal meshes";
 }
 
 void MeshManager::destroy() {
@@ -24,6 +27,7 @@ void MeshManager::destroy() {
         mesh->destroy();
         delete mesh;
     }
+    Logger::debug() << "MeshManager destroyed - destroyed all meshes";
 }
 
 const Mesh* MeshManager::get(UUID uuid) {

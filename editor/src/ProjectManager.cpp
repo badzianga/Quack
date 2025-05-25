@@ -134,7 +134,7 @@ std::filesystem::path ProjectManager::getPathToProject() const {
 
 void ProjectManager::createQuackConfigDir() const {
     fs::create_directory(m_quackConfigDir);
-    Logger::debug("Created config directory in home dir");
+    Logger::debug() << "Created config directory in home dir";
 }
 
 void ProjectManager::createRecentProjectsFile() const {
@@ -143,7 +143,7 @@ void ProjectManager::createRecentProjectsFile() const {
 
     recentProjectsFile << recentProjectsJson.dump();
     recentProjectsFile.close();
-    Logger::debug("Created empty recent projects file");
+    Logger::debug() << "Created empty recent projects file";
 }
 
 void ProjectManager::loadRecentProjects() {
@@ -155,7 +155,7 @@ void ProjectManager::loadRecentProjects() {
     for (auto& recentProjectJson : recentProjectsJson) {
         m_recentProjects.push_back({ recentProjectJson["name"], recentProjectJson["path"] });
     }
-    Logger::debug("Loaded recent projects file");
+    Logger::debug() << "Loaded recent projects file";
 }
 
 void ProjectManager::saveRecentProjects() const {
@@ -169,5 +169,5 @@ void ProjectManager::saveRecentProjects() const {
     }
     recentProjectsFile << recentProjectsJson.dump(2);
     recentProjectsFile.close();
-    Logger::debug("Saved recent projects file");
+    Logger::debug() << "Saved recent projects file";
 }

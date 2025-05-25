@@ -22,7 +22,6 @@ constexpr auto FRAG_SHADER = "resources/shaders/global_light.frag";
 
 class Editor final : public Engine {
     void onCreate() override {
-        Logger::setMinLogLevel(Logger::LogLevel::Debug);
         ImGuiConfig::Init(accessWindow().getHandle());
 
         sceneFramebuffer.create(1280, 720);
@@ -37,14 +36,14 @@ class Editor final : public Engine {
 
         GlobalLight::direction = { 0.7f, -1.f, -0.5f };
 
-        Logger::debug("Project root dir: " + rootDir.string());
+        Logger::debug() << "Project root dir: " << rootDir.c_str();
         if (!fs::exists(rootDir / "Assets")) {
             try {
                 fs::create_directory(rootDir / "Assets");
-                Logger::debug("Created Assets directory");
+                Logger::debug() << "Created Assets directory";
             }
             catch (const fs::filesystem_error& e) {
-                Logger::error("Failed to create Assets directory: " + std::string(e.what()));
+                Logger::error() << "Failed to create Assets directory: " << e.what();
             }
         }
 
@@ -551,7 +550,7 @@ void runProjectManager(const char* executablePath) {
 
     std::string command = std::string(executablePath) + " \"" + path.string() + '\"';
     if (std::system(command.c_str()) == -1) {
-        Logger::error("Failed to open project from Project Manager");
+        Logger::error() << "Failed to open project from Project Manager";
     }
 }
 
@@ -566,24 +565,24 @@ void runEditor(const fs::path& projectPath) {
 }
 
 int main(int argc, char** argv) {
-    Logger::setMinLogLevel(Logger::LogLevel::Debug);
+    Logger::minLogLevel = Logger::LogLevel::Debug;
     if (argc == 1) {
-        Logger::debug("No arguments passed to executable - opening Project Manager");
+        Logger::debug() << "No arguments passed to executable - opening Project Manager";
         runProjectManager(argv[0]);
         return 0;
     }
     if (argc == 2) {
-        Logger::debug("One argument passed to executable - verifying path to project...");
+        Logger::debug() << "One argument passed to executable - verifying path to project...";
         fs::path path = argv[1];
         if (fs::exists(path) && fs::is_regular_file(path)) {
-            Logger::debug("Path to project is proper - opening Editor");
+            Logger::debug() << "Path to project is proper - opening Editor";
             // TODO: import project dir to editor (`path` is path to .qscn)
             runEditor(path);
             return 0;
         }
     }
 
-    Logger::debug("Too many arguments passed to executable or invalid path - opening Project Manager");
+    Logger::debug() << "Too many arguments passed to executable or invalid path - opening Project Manager";
     runProjectManager(argv[0]);
     return 0;
 }

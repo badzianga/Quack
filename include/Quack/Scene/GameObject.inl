@@ -1,6 +1,7 @@
 #ifndef QUACK_GAME_OBJECT_INL
 #define QUACK_GAME_OBJECT_INL
 #include "Quack/Scene/GameObject.hpp"
+#include "Quack/Utils/Logger.hpp"
 
 template <typename T, typename... Args>
 T* GameObject::addComponent(Args&&... args) {
@@ -15,6 +16,7 @@ T* GameObject::addComponent(Args&&... args) {
     component->gameObject = this;
     T* rawPtr = component.get();
     m_components[typeIdx] = std::move(component);
+    Logger::debug() << "Added component " << typeid(T).name() << " to GameObject";
     return rawPtr;
 }
 
@@ -41,6 +43,7 @@ void GameObject::removeComponent() {
 
     auto typeIdx = std::type_index(typeid(T));
     m_components.erase(typeIdx);
+    Logger::debug() << "Removed component " << typeid(T).name() << " from GameObject";
 }
 
 #endif //QUACK_GAME_OBJECT_INL

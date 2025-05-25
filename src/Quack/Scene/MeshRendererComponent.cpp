@@ -3,12 +3,15 @@
 #include "Quack/Scene/CameraComponent.hpp"
 #include "Quack/Scene/GameObject.hpp"
 #include "Quack/Scene/MeshRendererComponent.hpp"
+#include "Quack/Utils/Logger.hpp"
 #include "Quack/Utils/MeshManager.hpp"
 #include <nlohmann/json.hpp>
 
 // TODO: mesh and shader are not destroyed, even after closing window
 
-void MeshRendererComponent::start() {}
+void MeshRendererComponent::start() {
+    Logger::debug() << "MeshRendererComponent started";
+}
 
 void MeshRendererComponent::update() {
     if (!enabled) return;

@@ -11,6 +11,8 @@ void ScriptComponent::start() {
     if (m_onStart.valid()) {
         m_onStart();
     }
+
+    Logger::debug() << "ScriptComponent started";
 }
 
 void ScriptComponent::update() {
@@ -25,7 +27,7 @@ void ScriptComponent::loadScript() {
     sol::load_result script = m_lua.load_file(scriptPath);
     if (!script.valid()) {
         sol::error err = script;
-        Logger::error("Script error: " + std::string(err.what()));
+        Logger::error() << "Script error: " << err.what();
         return;
     }
 
@@ -53,13 +55,15 @@ void ScriptComponent::loadScript() {
     sol::protected_function_result result = script();
     if (!result.valid()) {
         sol::error err = result;
-        Logger::error("Script error: " + std::string(err.what()));
+        Logger::error() << "Script error: " << err.what();
         return;
     }
 
     m_onStart = m_lua["onStart"];
     m_onUpdate = m_lua["onUpdate"];
     m_lua["gameObject"] = gameObject;
+
+    Logger::debug() << "Script " << scriptPath << " loaded";
 }
 
 nlohmann::json ScriptComponent::serialize() {

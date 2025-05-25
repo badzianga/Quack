@@ -9,7 +9,7 @@ Input::Input() : p_window(nullptr) {}
 void Input::init(GLFWwindow* window) {
     s_instance.p_window = window;
 
-    Logger::debug("Input initialized");
+    Logger::debug() << "Input initialized";
 }
 
 bool Input::isKeyPressed(Keyboard::Key key) {

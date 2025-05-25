@@ -37,12 +37,13 @@ bool Framebuffer::create(int width, int height) {
     glEnable(GL_DEPTH_TEST);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        Logger::error("Framebuffer is incomplete");
+        Logger::error() << "Framebuffer is incomplete";
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         return false;
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    Logger::debug() << "Framebuffer created with size " << width << "x" << height;
     return true;
 }
 
@@ -50,6 +51,7 @@ bool Framebuffer::destroy() {
     glDeleteFramebuffers(1, &m_fbo);
     glDeleteRenderbuffers(1, &m_rbo);
     m_texture.destroy();
+    Logger::debug() << "Framebuffer destroyed";
     return true;
 }
 

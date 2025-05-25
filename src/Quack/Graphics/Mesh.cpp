@@ -22,7 +22,7 @@ Mesh::Mesh(Mesh&& other) noexcept
     other.m_vertices.clear();
     other.m_indices.clear();
 
-    Logger::debug("Mesh object moved using constructor");
+    Logger::debug() << "Mesh object moved using constructor";
 }
 
 Mesh& Mesh::operator=(Mesh&& other) noexcept {
@@ -36,7 +36,7 @@ Mesh& Mesh::operator=(Mesh&& other) noexcept {
     other.m_vertices.clear();
     other.m_indices.clear();
 
-    Logger::debug("Mesh object moved using assignment operator");
+    Logger::debug() << "Mesh object moved using assignment operator";
     return *this;
 }
 
@@ -98,14 +98,8 @@ bool Mesh::create(const std::vector<Vertex>& vertices, const std::vector<uint32_
 
     glBindVertexArray(0);
 
-    Logger::debug(
-        "Mesh created with "
-        + std::to_string(m_vertices.size())
-        + " vertices and "
-        + std::to_string(m_indices.size() / 3)
-        + " triangles"
-    );
-
+    Logger::debug() << "Mesh created with " << m_vertices.size() << " vertices and "
+                    << m_indices.size() / 3 << " triangles";
     return true;
 }
 
@@ -118,7 +112,7 @@ bool Mesh::destroy() {
     m_vbo = 0;
     m_ebo = 0;
 
-    Logger::debug("Mesh destroyed");
+    Logger::debug() << "Mesh destroyed";
 
     return true;
 }
@@ -151,6 +145,7 @@ Mesh Mesh::createPlane() {
         }
     );
 
+    Logger::debug() << "Plane mesh created";
     return mesh;
 }
 
@@ -205,6 +200,7 @@ Mesh Mesh::createCube() {
         }
     );
 
+    Logger::debug() << "Cube mesh created";
     return mesh;
 }
 
@@ -254,6 +250,8 @@ Mesh Mesh::createSphere() {
 
     Mesh mesh;
     mesh.create(vertices, indices);
+
+    Logger::debug() << "Sphere mesh created";
     return mesh;
 }
 
@@ -261,7 +259,7 @@ Mesh Mesh::createSphere() {
 Mesh Mesh::loadObj(const char* filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        Logger::error("Failed to load file: " + std::string(filename));
+        Logger::error() << "Failed to load file: " + std::string(filename);
         return {};
     }
 
@@ -318,5 +316,6 @@ Mesh Mesh::loadObj(const char* filename) {
 
     Mesh mesh;
     mesh.create(vertices, indices);
+    Logger::debug() << "Loaded mesh from file: " + std::string(filename);
     return mesh;
 }

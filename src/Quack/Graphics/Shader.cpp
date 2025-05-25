@@ -13,7 +13,7 @@ Shader::Shader(Shader&& other) noexcept
 
     other.m_uniformLocationCache.clear();
 
-    Logger::debug("Shader object moved using constructor");
+    Logger::debug() << "Shader object moved using constructor";
 }
 
 Shader& Shader::operator=(Shader&& other) noexcept {
@@ -22,7 +22,7 @@ Shader& Shader::operator=(Shader&& other) noexcept {
 
     other.m_uniformLocationCache.clear();
 
-    Logger::debug("Shader object moved using assignment operator");
+    Logger::debug() << "Shader object moved using assignment operator";
     return *this;
 }
 
@@ -33,7 +33,7 @@ bool Shader::create(const char* vertexPath, const char* fragmentPath) {
     glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     glCompileShader(vertexShader);
     if (checkCompileErrors(vertexShader, "Vertex")) {
-        Logger::debug("Vertex shader compiled successfully");
+        Logger::debug() << "Vertex shader compiled successfully";
     }
 
     std::string fragmentShaderString = FileIO::read(fragmentPath);
@@ -42,7 +42,7 @@ bool Shader::create(const char* vertexPath, const char* fragmentPath) {
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
     glCompileShader(fragmentShader);
     if (checkCompileErrors(vertexShader, "Fragment")) {
-        Logger::debug("Fragment shader compiled successfully");
+        Logger::debug() << "Fragment shader compiled successfully";
     }
 
     m_id = glCreateProgram();
@@ -51,7 +51,7 @@ bool Shader::create(const char* vertexPath, const char* fragmentPath) {
     glAttachShader(m_id, fragmentShader);
     glLinkProgram(m_id);
     if (checkLinkErrors(m_id)) {
-        Logger::debug("Shader program linked successfully");
+        Logger::debug() << "Shader program linked successfully";
     }
 
     glDeleteShader(vertexShader);
@@ -64,8 +64,7 @@ bool Shader::destroy() {
     glDeleteProgram(m_id);
     m_id = 0;
 
-    Logger::debug("Shader program destroyed");
-
+    Logger::debug() << "Shader program destroyed";
     return true;
 }
 
@@ -121,7 +120,7 @@ bool Shader::checkCompileErrors(uint32_t shaderID, const std::string& type) {
     if (!success) {
         char infoLog[1024];
         glGetShaderInfoLog(shaderID, 1024, nullptr, infoLog);
-        Logger::error(type + " shader compilation error: " + std::string(infoLog));
+        Logger::error() << type << " shader compilation error: " << infoLog;
         return false;
     }
     return true;
@@ -133,7 +132,7 @@ bool Shader::checkLinkErrors(uint32_t programID) {
     if (!success) {
         char infoLog[1024];
         glGetProgramInfoLog(programID, 1024, nullptr, infoLog);
-        Logger::error("Shader program compilation error: " + std::string(infoLog));
+        Logger::error() << "Shader program linkage error: " << infoLog;
         return false;
     }
     return true;

@@ -1,9 +1,12 @@
 #include "Quack/Utils/TextureManager.hpp"
 #include "Quack/Utils/AssetDatabase.hpp"
+#include "Quack/Utils/Logger.hpp"
 
 std::unordered_map<UUID, Texture*> TextureManager::s_textures;
 
-void TextureManager::init() {}
+void TextureManager::init() {
+    Logger::debug() << "TextureManager initialized";
+}
 
 void TextureManager::destroy() {
     for (auto& [uuid, texture] : s_textures) {
@@ -11,6 +14,7 @@ void TextureManager::destroy() {
         texture->destroy();
         delete texture;
     }
+    Logger::debug() << "TextureManager destroyed - destroyed all textures";
 }
 
 Texture* TextureManager::get(UUID uuid) {

@@ -13,7 +13,7 @@ std::string FileIO::read(const char* filename) {
         file.close();
     }
     catch (std::ifstream::failure&) {
-        Logger::error("Failed to open file: " + std::string(filename));
+        Logger::error() << "Failed to open file: " << filename;
     }
     return stream.str();
 }

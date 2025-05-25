@@ -15,7 +15,7 @@ void AssetDatabase::init(const fs::path& rootDir) {
 fs::path AssetDatabase::getPath(UUID uuid) {
     const auto it = s_metas.find(uuid);
     if (it == s_metas.end()) {
-        Logger::error("Failed to find asset with UUID: " + std::to_string(static_cast<uint64_t>(uuid)));
+        Logger::error() << "Failed to find asset with UUID: " << std::to_string(static_cast<uint64_t>(uuid));
         return {};
     }
     return it->second;
@@ -27,7 +27,7 @@ UUID AssetDatabase::getUUID(const std::filesystem::path& path) {
             return uuid;
         }
     }
-    Logger::error("Failed to find UUID for asset: " + path.string());
+    Logger::error() << "Failed to find UUID for asset: " << path.string();
     return UUID(0);
 }
 
@@ -43,7 +43,7 @@ void AssetDatabase::generateAndLoadMetas(const fs::path& rootDir) {
             if (!fs::exists(assetPath)) {
                 // remove this .meta file
                 fs::remove(filePath);
-                Logger::debug("Removed .meta file: " + filePath.string());
+                Logger::debug() << "Removed unused .meta file: " << filePath.c_str();
                 continue;
             }
 
@@ -53,7 +53,7 @@ void AssetDatabase::generateAndLoadMetas(const fs::path& rootDir) {
             metaFile >> json;
             metaFile.close();
             s_metas[UUID(json["uuid"].get<uint64_t>())] = assetPath;
-            Logger::debug("Loaded .meta file: " + filePath.string());
+            Logger::debug() << "Loaded .meta file: " << filePath.c_str();
         }
         else {
             // check if corresponding .meta file exists
@@ -70,7 +70,7 @@ void AssetDatabase::generateAndLoadMetas(const fs::path& rootDir) {
 
                 // add this meta file and connect assetPath to corresponding UUID
                 s_metas[uuid] = filePath;
-                Logger::debug("Created .meta file and loaded it: " + metaPath.string());
+                Logger::debug() << "Created .meta file and loaded it: " << metaPath.c_str();
             }
         }
     }

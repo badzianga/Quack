@@ -55,6 +55,8 @@ GameObject* GameObject::addChild(const char* name) {
 
     m_children.emplace_back(std::make_unique<GameObject>(nameStr.c_str(), this));
 
+    Logger::debug() << "Child added to GameObject";
+
     return m_children.back().get();
 }
 
@@ -66,6 +68,8 @@ void GameObject::removeChild(GameObject* child) {
                 return obj.get() == child;
             });
     m_children.erase(it, m_children.end());
+
+    Logger::debug() << "Child removed from GameObject";
 }
 
 std::vector<std::unique_ptr<GameObject>>& GameObject::getChildren() {
@@ -107,7 +111,7 @@ void GameObject::deserialize(const nlohmann::json& json) {
         if (componentType == "MeshRenderer") component = addComponent<MeshRendererComponent>();
         else if (componentType == "Camera") component = addComponent<CameraComponent>();
         else if (componentType == "Script") component = addComponent<ScriptComponent>();
-        else Logger::error("Unknown component type: " + componentType);
+        else Logger::error() << "Unknown component type passed during deserialization: " + componentType;
         if (component != nullptr) {
             component->gameObject = this;
             component->deserialize(componentJson);

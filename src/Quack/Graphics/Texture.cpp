@@ -3,7 +3,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <GL/glew.h>
-#include <oneapi/tbb/task_group.h>
 
 Texture::Texture() : m_id(0) {}
 
@@ -12,7 +11,7 @@ bool Texture::create(const char* filename, WrapMode wrapMode, FilterMode filterM
     int width, height, nrChannels;
     uint8_t* data = stbi_load(filename, &width, &height, &nrChannels, 0);
     if (!data) {
-        Logger::error("Texture " + std::string(filename) + " not found");
+        Logger::error() << "Failed to load texture from " << filename;
         return false;
     }
 
@@ -28,7 +27,7 @@ bool Texture::create(const char* filename, WrapMode wrapMode, FilterMode filterM
             format = GL_RGBA;
         } break;
         default:
-            Logger::error("Unsupported number of channels");
+            Logger::error() << "Unsupported number of texture channels";
         return false;
     }
 
@@ -39,6 +38,7 @@ bool Texture::create(const char* filename, WrapMode wrapMode, FilterMode filterM
 
     stbi_image_free(data);
     m_size = { static_cast<float>(width), static_cast<float>(height) };
+    Logger::debug() << "Texture of size " << width << 'x' << height << " created from " << filename;
     return true;
 }
 
@@ -92,6 +92,8 @@ void Texture::initialize(WrapMode wrap, FilterMode filter) const {
     if (filter == FilterMode::Linear) {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
+
+    Logger::debug() << "Texture initialized with wrap mode " << wrapMode << " and filter mode " << filterMode;
 }
 
 uint32_t Texture::getId() const {

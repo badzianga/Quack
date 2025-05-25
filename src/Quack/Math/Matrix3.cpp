@@ -37,7 +37,7 @@ Matrix3 Matrix3::inversed() const {
         a02 * (a10 * a21 - a11 * a20);
 
     if (det == 0.f) {
-        Logger::error("Matrix3::inversed(): Matrix is singular");
+        Logger::error() << "Matrix3::inversed(): Matrix is singular";
         return {};
     }
 

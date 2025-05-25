@@ -1,43 +1,41 @@
 #include "Quack/Utils/Logger.hpp"
 #include <iostream>
 
-std::mutex Logger::s_mutex;
-Logger::LogLevel Logger::s_minLogLevel = LogLevel::Info;
+Logger::LogLevel Logger::minLogLevel = LogLevel::Info;
+std::ostringstream Logger::LogStream::s_stream;
 
-void Logger::log(LogLevel level, const std::string& message) {
-    if (level < s_minLogLevel) {
-        return;
+std::string Logger::LogStream::toString() const {
+    switch (m_level) {
+        case LogLevel::Debug:   return "[DEBUG]";
+        case LogLevel::Info:    return "[INFO]";
+        case LogLevel::Warning: return "[WARNING]";
+        case LogLevel::Error:   return "[ERROR]";
+        default:                return "[UNKNOWN]";
     }
+}
 
-    std::lock_guard lock(s_mutex);
+Logger::LogStream::LogStream(LogLevel level) : m_level(level) {}
 
-    switch (level) {
-        case LogLevel::Debug:    std::cout << "[DEBUG] "; break;
-        case LogLevel::Info:     std::cout << "[INFO] "; break;
-        case LogLevel::Warning:  std::cout << "[WARNING] "; break;
-        case LogLevel::Error:    std::cout << "[ERROR] "; break;
+Logger::LogStream::~LogStream() {
+    if (m_level >= minLogLevel) {
+        std::cout << toString() << ' ' << s_stream.str() << '\n';
+        s_stream.str("");
+        s_stream.clear();
     }
-
-    std::cout << message << '\n';
 }
 
-void Logger::debug(const std::string& message) {
-    log(LogLevel::Debug, message);
+Logger::LogStream Logger::debug() {
+    return LogStream(LogLevel::Debug);
 }
 
-void Logger::info(const std::string& message) {
-    log(LogLevel::Info, message);
+Logger::LogStream Logger::info() {
+    return LogStream(LogLevel::Info);
 }
 
-void Logger::warn(const std::string& message) {
-    log(LogLevel::Warning, message);
+Logger::LogStream Logger::warning() {
+    return LogStream(LogLevel::Warning);
 }
 
-void Logger::error(const std::string& message) {
-    log(LogLevel::Error, message);
-}
-
-void Logger::setMinLogLevel(LogLevel level) {
-    std::lock_guard lock(s_mutex);
-    s_minLogLevel = level;
+Logger::LogStream Logger::error() {
+    return LogStream(LogLevel::Error);
 }
