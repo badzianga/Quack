@@ -50,6 +50,8 @@ class Editor final : public Engine {
         MeshManager::init();
         TextureManager::init();
         AssetDatabase::init(rootDir);
+
+        assetsDir = rootDir / "Assets";
     }
 
     void onUpdate() override {
@@ -82,7 +84,7 @@ class Editor final : public Engine {
         if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl)) {
             if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
                 if (ImGui::IsKeyPressed(ImGuiKey_S)) {
-                    FileDialog::open("SaveFileDlg", "Save Scene", ".json");
+                    FileDialog::open("SaveFileDlg", "Save Scene", ".json", assetsDir.string());
                 }
             }
             if (ImGui::IsKeyPressed(ImGuiKey_S)) {
@@ -90,11 +92,11 @@ class Editor final : public Engine {
                     sceneManager.saveScene();
                 }
                 else {
-                    FileDialog::open("SaveFileDlg", "Save Scene", ".json");
+                    FileDialog::open("SaveFileDlg", "Save Scene", ".json", assetsDir.string());
                 }
             }
             if (ImGui::IsKeyPressed(ImGuiKey_O)) {
-                FileDialog::open("LoadFileDlg", "Open Scene", ".json");
+                FileDialog::open("LoadFileDlg", "Open Scene", ".json", assetsDir.string());
             }
             if (ImGui::IsKeyPressed(ImGuiKey_N)) {
                 sceneManager.clear();
@@ -149,18 +151,18 @@ class Editor final : public Engine {
                     parentOfToDelete = nullptr;
                 }
                 if (ImGui::MenuItem("Open Scene", "Ctrl+O")) {
-                    FileDialog::open("LoadFileDlg", "Open Scene", ".json");
+                    FileDialog::open("LoadFileDlg", "Open Scene", ".json", assetsDir.string());
                 }
                 if (ImGui::MenuItem("Save", "Ctrl+S")) {
                     if (sceneManager.isFileSpecified()) {
                         sceneManager.saveScene();
                     }
                     else {
-                        FileDialog::open("SaveFileDlg", "Save Scene", ".json");
+                        FileDialog::open("SaveFileDlg", "Save Scene", ".json", assetsDir.string());
                     }
                 }
                 if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S")) {
-                    FileDialog::open("SaveFileDlg", "Save Scene", ".json");
+                    FileDialog::open("SaveFileDlg", "Save Scene", ".json", assetsDir.string());
 
                 }
                 if (ImGui::MenuItem("Settings")) {
@@ -531,6 +533,7 @@ class Editor final : public Engine {
     GameObject* selectedObject = nullptr;
     GameObject* toDelete = nullptr;
     GameObject* parentOfToDelete = nullptr;
+    fs::path assetsDir;
 public:
     fs::path projectPath;
     fs::path rootDir;
