@@ -5,6 +5,7 @@
 #include "Quack/Scene/MeshRendererComponent.hpp"
 #include "Quack/Utils/Logger.hpp"
 #include "Quack/Utils/MeshManager.hpp"
+#include "Quack/Utils/TextureManager.hpp"
 #include <nlohmann/json.hpp>
 
 // TODO: mesh and shader are not destroyed, even after closing window
@@ -16,21 +17,22 @@ void MeshRendererComponent::start() {
 void MeshRendererComponent::update() {
     if (!enabled) return;
 
-    Matrix4 model;
-    if (gameObject->parent) {
-        model = getModelMatrix(gameObject->parent->transform) * getModelMatrix(gameObject->transform);
+    Matrix4 model = getModelMatrix(gameObject->transform);
+    GameObject* parent = gameObject->parent;
+    while (parent) {
+        model = getModelMatrix(parent->transform) * model;
+        parent = parent->parent;
     }
-    else {
-        model = getModelMatrix(gameObject->transform);
-    }
+
     Matrix4 mvp = CameraComponent::getStaticProjectionView() * model;
 
     shader.use();
     shader.set("u_mvp", mvp);
     shader.set("u_baseColor", material.baseColor);
-    if (material.baseMap != nullptr) {
+    if (static_cast<uint64_t>(material.baseMap) != 0) {
+        Texture* texture = TextureManager::get(material.baseMap);
         shader.set("u_hasBaseMap", true);
-        material.baseMap->bind();
+        texture->bind();
     }
     else {
         shader.set("u_hasBaseMap", false);
@@ -67,8 +69,8 @@ nlohmann::json MeshRendererComponent::serialize() {
 
     json["componentType"] = "MeshRenderer";
     json["enabled"] = enabled;
-    json["uuid"] = static_cast<uint64_t>(meshUUID);
-    // TODO: serialize which model and shader is used (ModelManager and ShaderManager will be needed I think)
+    json["meshUUID"] = static_cast<uint64_t>(meshUUID);
+    json["textureUUID"] = static_cast<uint64_t>(material.baseMap);
     // TODO: material should be IJsonSerializable
     json["material"] = nlohmann::json::object();
     json["material"]["baseColor"] = nlohmann::json::array({ material.baseColor.r, material.baseColor.g, material.baseColor.b, material.baseColor.a });
@@ -78,7 +80,8 @@ nlohmann::json MeshRendererComponent::serialize() {
 
 void MeshRendererComponent::deserialize(const nlohmann::json& json) {
     enabled = json["enabled"];
-    meshUUID = UUID(json["uuid"].get<uint64_t>());
+    meshUUID = UUID(json["meshUUID"].get<uint64_t>());
+    material.baseMap = UUID(json["textureUUID"].get<uint64_t>());
     // TODO: shader is not serialized, so always use global_light shader
     shader.create("resources/shaders/global_light.vert", "resources/shaders/global_light.frag");
 

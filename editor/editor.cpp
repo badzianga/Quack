@@ -455,7 +455,7 @@ class Editor final : public Engine {
                     if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("path.png")) {
                         auto* droppedPath = static_cast<const char*>(payload->Data);
                         UUID textureUUID = AssetDatabase::getUUID(droppedPath);
-                        meshRenderer->material.baseMap = TextureManager::get(textureUUID);
+                        meshRenderer->material.baseMap = textureUUID;
                         unusedTextField = std::to_string(static_cast<uint64_t>(textureUUID));
                     }
                     ImGui::EndDragDropTarget();

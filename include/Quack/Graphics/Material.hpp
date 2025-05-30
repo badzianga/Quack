@@ -1,13 +1,13 @@
 #ifndef QUACK_MATERIAL_HPP
 #define QUACK_MATERIAL_HPP
 #include "Quack/Graphics/Color.hpp"
-#include "Quack/Graphics/Texture.hpp"
+#include "Quack/Utils/UUID.hpp"
 
 /**
  * @brief Simple structure representing a material's visual properties.
  *
- * Currently, it only includes a base color (color map), but will be extended
- * to include textures, shininess, specular highlights, etc.
+ * Currently, it only includes a base color (color map), and texture but will be extended
+ * to include shininess, specular highlights, normals, etc.
  */
 struct Material {
     /**
@@ -20,16 +20,12 @@ struct Material {
      */
     Color baseColor = Color::White;
 
-    // TODO: this might be UUID of the texture?
     /**
-     * @brief Texture of the material.
+     * @brief UUID of the texture of the material.
      *
      * If it is not specified, then only color is used for the material.
-     *
-     * Valid texture should be created somewhere else and address of it
-     * should be set to this pointer to properly access it during rendering.
      */
-    Texture* baseMap = nullptr;
+    UUID baseMap{ 0 };
 };
 
 #endif //QUACK_MATERIAL_HPP
